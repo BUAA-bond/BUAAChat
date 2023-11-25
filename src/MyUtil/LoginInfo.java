@@ -1,8 +1,7 @@
 package MyUtil;
 
+import ClientMember.ClientServer;
 import ClientMember.User;
-
-import java.sql.SQLException;
 
 /**
  * @author 西西弗
@@ -38,6 +37,7 @@ public class LoginInfo {
         }else{
             User user=MyUtil.logIn(Integer.parseInt(account),password);
             System.out.println("登录成功，欢迎用户"+user.getName());
+            new Thread(new ClientServer(user)).start();
             //TODO
         }
     }

@@ -4,7 +4,13 @@ import ClientMember.Photo;
 import ClientMember.Text;
 import ClientMember.User;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.Random;
+
+import static Constant.Constant.*;
+
 /**
  * @author 西西弗
  * @Description:
@@ -16,6 +22,12 @@ public class MyUtil {
     public static void main(String[] args) {
         createUsersTable();
     }
+
+    /**
+     * 判断账号是否合法
+     * @param account
+     * @return
+     */
     public static boolean judgeAccount(String account){
         String account_pattern="^1\\d{5}$";
         return account.matches(account_pattern);
@@ -53,9 +65,7 @@ public class MyUtil {
     }
 
 
-    static final String jdbcUrl="jdbc:mysql://182.92.202.183:3306/BUAAChat";
-    static final String username="root";
-    static final String password="Buaachat123";
+
     /**
      * 连接数据库
      * @return
@@ -66,10 +76,10 @@ public class MyUtil {
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(jdbcUrl, username, password);
         } catch (ClassNotFoundException e) {
-            System.out.println("MySQL JDBC Driver not found");
+            e.printStackTrace();
             return null;
         }catch (SQLException e){
-            System.out.println("getConnection");
+            e.printStackTrace();
             return null;
         }
     }
@@ -82,8 +92,8 @@ public class MyUtil {
     public static boolean isTableExist(String tableName) {
         try (Connection connection = getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
-            // 获取数据库中的表信息
-            ResultSet tables = metaData.getTables("buaachat", null, tableName, null);
+            // 获取数据库中的表信息//TODO
+            ResultSet tables = metaData.getTables("BUAAChat", null, tableName, null);
             return tables.next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,11 +119,12 @@ public class MyUtil {
                     "account INT AUTO_INCREMENT PRIMARY KEY," +
                     "name VARCHAR(15)," +
                     "password VARCHAR(16)," +
-                    "avatarPath VARCHAR(255)" +
-                    ")AUTO_INCREMENT = 100001;";
+                    "avatarPath VARCHAR(255)," +
+                    "salt VARCHAR(255)"+
+                    ")AUTO_INCREMENT = 100000;";
             statement.executeUpdate(createTable);
         }catch (SQLException e){
-            System.out.println("createUsersTable");
+            e.printStackTrace();
         }finally {
             //关闭资源
             try {
@@ -122,9 +133,73 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("createUsersTable close");
+                e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * generate a random salt string (HEX).
+     * @param len length of salt
+     * @return salt string
+     */
+    public static String randomSalt(int len){
+
+        if( len <= 0 ) return "";
+
+        Random rand = new Random();
+        StringBuilder salt = new StringBuilder();
+        for( int i=0; i<len; i++ ){
+            salt.append( hexCharSet.charAt(rand.nextInt(16)) );
+        }
+
+        return salt.toString();
+    }
+
+    /**
+     * append salt to string.
+     * @param str string to append salt
+     * @param len length of salt
+     * @return result string
+     */
+    public static String appendSalt(String str,int len){
+        if( str == null ) return null;
+        return str + randomSalt(len);
+    }
+
+    /**
+     * parse byte[] to hex string.
+     * @param by byte[] to be parsed
+     * @return result hex string
+     */
+    public static String byteToHex(byte[] by){
+        StringBuffer sb = new StringBuffer();
+        for (byte b : by) {
+            String str = Integer.toHexString(b & 0xFF).toUpperCase();
+            if(str.length()<2) sb.append('0');
+            sb.append(str);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * to append salt and encrypt using SHA-256.
+     * @param str string to encrypt
+     * @param salt salt
+     * @return encrypted string.
+     */
+    public static String encryptString(String str,String salt){
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        String str_salt = str + salt ;
+        String res = byteToHex( md.digest(str_salt.getBytes()) );
+
+        return res;
     }
     /**
      * 将新用户保存到数据库
@@ -138,11 +213,14 @@ public class MyUtil {
         int account = 0;
         try {
             connection = getConnection();
-            String insertQuery = "INSERT INTO users (name, password, avatarPath) VALUES (?, ?, ?)";
+            String insertQuery = "INSERT INTO users (name, password, avatarPath, salt) VALUES (?, ?, ?, ?)";
+            String salt=randomSalt(password.length());//生成盐
+            password=encryptString(password, salt);//加密
             insertStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
             insertStatement.setString(1, name);
             insertStatement.setString(2, password);
             insertStatement.setString(3, avatarPath);
+            insertStatement.setString(4, salt);
             insertStatement.executeUpdate();
 
             rs = insertStatement.getGeneratedKeys();
@@ -150,7 +228,7 @@ public class MyUtil {
             //创建他的朋友表
             createFriendTable(account);
         }catch (SQLException e){
-            System.out.println("insertUser");
+            e.printStackTrace();
         }finally {
             //关闭资源
             try {
@@ -159,7 +237,7 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("insertUser close");
+                e.printStackTrace();
             }
         }
         return account;
@@ -180,13 +258,13 @@ public class MyUtil {
             statement = connection.createStatement();
             //创建表
             String createTable = "CREATE TABLE " + tableName + " (" +
-                    "account INT AUTO_INCREMENT PRIMARY KEY," +
+                    "account INT PRIMARY KEY," +
                     "name VARCHAR(15)," +
                     "avatarPath VARCHAR(255)" +
                     ");";
             statement.executeUpdate(createTable);
         }catch (SQLException e){
-            System.out.println("createFriendTable");
+            e.printStackTrace();
         }finally {
             //关闭资源
             try {
@@ -195,7 +273,7 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("createFriendTable close");
+                e.printStackTrace();
             }
         }
     }
@@ -221,7 +299,7 @@ public class MyUtil {
                     "type INT";
             statement.executeUpdate(createTable);
         }catch (SQLException e){
-            System.out.println("createMessageTable");
+            e.printStackTrace();
         }finally {
             try {
                 //关闭资源
@@ -230,7 +308,7 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("createMessageTable close");
+                e.printStackTrace();
             }
         }
     }
@@ -254,7 +332,7 @@ public class MyUtil {
             insertStatement.setString(3, avatarPath);
             insertStatement.executeUpdate();
         }catch (SQLException e){
-            System.out.println("insertFriend");
+            e.printStackTrace();
         }finally {
             try {
                 //关闭资源
@@ -263,7 +341,7 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("insertFriend close");
+                e.printStackTrace();
             }
         }
     }
@@ -288,7 +366,7 @@ public class MyUtil {
             insertStatement.setInt(2, type);
             insertStatement.executeUpdate();
         }catch (SQLException e){
-            System.out.println("insertMessage");
+            e.printStackTrace();
         }finally {
             try {
                 if (insertStatement != null)
@@ -296,7 +374,7 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("insertMessage close");
+                e.printStackTrace();
             }
         }
 
@@ -310,14 +388,6 @@ public class MyUtil {
      */
     public static int register(String name,String password,String avatarPath){
         return insertUser(name,password,avatarPath);
-//        try {
-//            int account=insertUser(name,password,avatarPath);
-//            //TODO
-//            return new User(account,name,password,avatarPath);
-//        } catch (SQLException e) {
-//            System.out.println("register");
-//        }
-//        return null;
     }
     /**
      * 判断用户是否已经注册
@@ -335,7 +405,7 @@ public class MyUtil {
                 return resultSet.next();
             }
         }catch (SQLException e){
-            System.out.println("queryUser");
+            e.printStackTrace();
             return false;
         }
     }
@@ -348,23 +418,22 @@ public class MyUtil {
      * @throws SQLException
      */
     public static boolean confirmAccountAndPassword(int account,String password){
-        //需要先判断存不存在
-        //if(!queryUser(ID)) return false;//在最外面判断可以，这里只是标志性写一下，到时候删了
         Connection connection=null;
         PreparedStatement preparedStatement=null;
         ResultSet resultSet=null;
         try {
             connection = getConnection();
-            String selectQuery = "SELECT account, name, password, avatarPath FROM users WHERE account = ?";
+            String selectQuery = "SELECT account, password, salt FROM users WHERE account = ?";
             preparedStatement = connection.prepareStatement(selectQuery);
             preparedStatement.setInt(1, account);
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-                String tmppassword = resultSet.getString("password");
-                return tmppassword.equals(password);
+                String sqlpassword = resultSet.getString("password");
+                String sqlsalt=resultSet.getString("salt");
+                return sqlpassword.equals(encryptString(password,sqlsalt));
             }
         }catch (SQLException e){
-            System.out.println("confirmAccountAndPassword");
+            e.printStackTrace();
             return false;
         }finally {
             try {
@@ -375,7 +444,7 @@ public class MyUtil {
                 if (connection != null)
                     connection.close();
             }catch (SQLException e){
-                System.out.println("confirmAccountAndPassword close");
+                e.printStackTrace();
             }
         }
         return false;
@@ -401,7 +470,7 @@ public class MyUtil {
                 return new User(account, resultSet.getString("name"), password, resultSet.getString("avatarPath"));
             }
         }catch (SQLException e){
-            System.out.println("logIn");
+            e.printStackTrace();
         }
         return null;
     }
