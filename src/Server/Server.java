@@ -1,37 +1,71 @@
 package Server;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import Server.ServiceException.*;
 
 /**
- * @author 西西弗
- * @Description:
- * @date 2023/11/9 20:08
+ * Server.
+ * @author WnRock
+ * @version 0.1
  */
-public class Server implements Runnable{
-    private ServerSocket serverSocket;
-    private ArrayList<Socket> sockets=new ArrayList<>();
-    public static void main(String[] args) {
+public class Server {
 
+    /**
+     * Temp. For test.
+     * @param args
+     */
+    public static void main(String[] args) {
+        start();
     }
-    public Server(){
+
+    private static int PORT = 10005;
+    private static Map<String,Link> allLinks = new HashMap<>();
+    private static ServerSocket ss = null;
+    private static Socket s = null;
+
+    /**
+     * Start a server (with specified port).
+     */
+    public static void start(){
+        init();
+        listen();
+    }
+    public static void start(int port){
+        PORT = port;
+        init();
+        listen();
+    }
+    
+    private static void init(){
         try {
-            serverSocket=new ServerSocket(15000);
-        } catch (IOException e) {
+            ss = new ServerSocket(PORT);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    @Override
-    public void run() {
-        while (true){
+
+    private static void listen(){
+        while (true) {
             try {
-                Socket socket=serverSocket.accept();
-                sockets.add(socket);
-            } catch (IOException e) {
+                s = ss.accept();
+                Link l = new Link(s);
+                allLinks.put(l.getID(), l);
+                new Thread(l).start();
+            } catch (LinkInitFailException e) {
+                System.err.println(e.getMessage());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
+
+    /**
+     * get all links maintained currently.
+     * @return AllLinks
+     */
+    public static Map<String,Link> getAllLinks(){ return allLinks; }
 }
+

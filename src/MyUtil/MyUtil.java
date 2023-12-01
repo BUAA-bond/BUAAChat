@@ -1,8 +1,6 @@
 package MyUtil;
-import ClientMember.Message;
-import ClientMember.Photo;
-import ClientMember.Text;
-import ClientMember.User;
+import Message.*;
+import Client.User;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -29,7 +27,7 @@ public class MyUtil {
      * @return
      */
     public static boolean judgeAccount(String account){
-        String account_pattern="^1\\d{5}$";
+        String account_pattern="^\\d{1,15}$";
         return account.matches(account_pattern);
     }
     /**
@@ -116,12 +114,13 @@ public class MyUtil {
             metaData = connection.getMetaData();
             //创建表
             String createTable = "CREATE TABLE " + "users" + " (" +
-                    "account INT AUTO_INCREMENT PRIMARY KEY," +
+                    //"sequence INT AUTO_INCREMENT PRIMARY KEY,"+
+                    "account VARCHAR(15) PRIMARY KEY," +
                     "name VARCHAR(15)," +
-                    "password VARCHAR(16)," +
+                    "password VARCHAR(255)," +
                     "avatarPath VARCHAR(255)," +
                     "salt VARCHAR(255)"+
-                    ")AUTO_INCREMENT = 100000;";
+                    ");";
             statement.executeUpdate(createTable);
         }catch (SQLException e){
             e.printStackTrace();
@@ -206,25 +205,23 @@ public class MyUtil {
      * @param user
      * @throws SQLException
      */
-    public static int insertUser(String name,String password,String avatarPath){
+    public static void insertUser(String account,String name,String password,String avatarPath){
         Connection connection=null;
         PreparedStatement insertStatement=null;
         ResultSet rs=null;
-        int account = 0;
         try {
             connection = getConnection();
-            String insertQuery = "INSERT INTO users (name, password, avatarPath, salt) VALUES (?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO users (account, name, password, avatarPath, salt) VALUES (?,?, ?, ?, ?)";
             String salt=randomSalt(password.length());//生成盐
             password=encryptString(password, salt);//加密
             insertStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
-            insertStatement.setString(1, name);
-            insertStatement.setString(2, password);
-            insertStatement.setString(3, avatarPath);
-            insertStatement.setString(4, salt);
+            insertStatement.setString(1,account);
+            insertStatement.setString(2, name);
+            insertStatement.setString(3, password);
+            insertStatement.setString(4, avatarPath);
+            insertStatement.setString(5, salt);
             insertStatement.executeUpdate();
 
-            rs = insertStatement.getGeneratedKeys();
-            if (rs.next()) account = rs.getInt(1);
             //创建他的朋友表
             createFriendTable(account);
         }catch (SQLException e){
@@ -240,7 +237,6 @@ public class MyUtil {
                 e.printStackTrace();
             }
         }
-        return account;
     }
 
     /**
@@ -248,7 +244,7 @@ public class MyUtil {
      * @param ownerAccount
      * @throws SQLException
      */
-    public static void createFriendTable(int ownerAccount){
+    public static void createFriendTable(String ownerAccount){
         String tableName=ownerAccount+"_friends";
         if(isTableExist(tableName))return ;
         Connection connection=null;
@@ -258,7 +254,7 @@ public class MyUtil {
             statement = connection.createStatement();
             //创建表
             String createTable = "CREATE TABLE " + tableName + " (" +
-                    "account INT PRIMARY KEY," +
+                    "account VARCHAR(15) PRIMARY KEY," +
                     "name VARCHAR(15)," +
                     "avatarPath VARCHAR(255)" +
                     ");";
@@ -284,7 +280,7 @@ public class MyUtil {
      * @param toAccount
      * @throws SQLException
      */
-    public static void createMessageTable(int fromAccount ,int toAccount){
+    public static void createMessageTable(String fromAccount ,String toAccount){
         String tableName="from_"+fromAccount+"_to_"+toAccount;
         if(isTableExist(tableName)) return;
         Connection connection=null;
@@ -296,7 +292,8 @@ public class MyUtil {
             String createTable = "CREATE TABLE " + tableName + " (" +
                     "sequence INT AUTO_INCREMENT PRIMARY KEY," +
                     "content VARCHAR(255)," +
-                    "type INT";
+                    "type INT"+
+                    ");";
             statement.executeUpdate(createTable);
         }catch (SQLException e){
             e.printStackTrace();
@@ -319,7 +316,7 @@ public class MyUtil {
      * @param friendName
      * @throws SQLException
      */
-    public static void insertFriend(int ownerAccount,int friendAccount,String friendName,String avatarPath){
+    public static void insertFriend(String ownerAccount,String friendAccount,String friendName,String avatarPath){
         Connection connection=null;
         PreparedStatement insertStatement=null;
         try {
@@ -327,7 +324,7 @@ public class MyUtil {
             //插入
             String insertQuery = "INSERT INTO " + ownerAccount + "_friends" + " (account, name, avatarPath) VALUES (?, ?, ?)";
             insertStatement = connection.prepareStatement(insertQuery);
-            insertStatement.setInt(1, friendAccount);
+            insertStatement.setString(1, friendAccount);
             insertStatement.setString(2, friendName);
             insertStatement.setString(3, avatarPath);
             insertStatement.executeUpdate();
@@ -352,9 +349,12 @@ public class MyUtil {
      * @throws SQLException
      */
     public static void insertMessage(Message message){
-        int fromAccount=message.getFromUser();
-        int toAccount=message.getToUser();
-        int type=message.type;
+        String fromAccount=message.getFromUser();
+        String toAccount=message.getToUser();
+        int type=0;
+        if(message instanceof Text) type=0;
+        else if(message instanceof Photo) type=1;
+
         String content=message.getContent();
         Connection connection=null;
         PreparedStatement insertStatement=null;
@@ -386,8 +386,8 @@ public class MyUtil {
      * @param password
      * @return
      */
-    public static int register(String name,String password,String avatarPath){
-        return insertUser(name,password,avatarPath);
+    public static void register(String account,String name,String password,String avatarPath){
+        insertUser(account,name,password,avatarPath);
     }
     /**
      * 判断用户是否已经注册
@@ -395,12 +395,12 @@ public class MyUtil {
      * @return
      * @throws SQLException
      */
-    public static boolean queryUser(int account){
+    public static boolean queryUser(String account){
         String selectQuery = "SELECT account, name, password, avatarPath FROM users WHERE account = ?";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
         ) {
-            preparedStatement.setInt(1, account);
+            preparedStatement.setString(1, account);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 return resultSet.next();
             }
@@ -417,7 +417,7 @@ public class MyUtil {
      * @return
      * @throws SQLException
      */
-    public static boolean confirmAccountAndPassword(int account,String password){
+    public static boolean confirmAccountAndPassword(String account,String password){
         Connection connection=null;
         PreparedStatement preparedStatement=null;
         ResultSet resultSet=null;
@@ -425,12 +425,13 @@ public class MyUtil {
             connection = getConnection();
             String selectQuery = "SELECT account, password, salt FROM users WHERE account = ?";
             preparedStatement = connection.prepareStatement(selectQuery);
-            preparedStatement.setInt(1, account);
+            preparedStatement.setString(1, account);
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
                 String sqlpassword = resultSet.getString("password");
                 String sqlsalt=resultSet.getString("salt");
                 return sqlpassword.equals(encryptString(password,sqlsalt));
+                //return sqlpassword.equals(password);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -457,13 +458,13 @@ public class MyUtil {
      * @return User返回一个登录的user对象
      * @throws SQLException
      */
-    public static User logIn(int account,String password){
+    public static User logIn(String account,String password){
         try {
             //需要先判断账号密码是否正确
             Connection connection = getConnection();
             String selectSQL = "SELECT account, name, password, avatarPath FROM users WHERE account = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(selectSQL);
-            preparedStatement.setInt(1, account);
+            preparedStatement.setString(1, account);
             preparedStatement.executeQuery();
             ResultSet resultSet = preparedStatement.getResultSet();
             if (resultSet.next()) {

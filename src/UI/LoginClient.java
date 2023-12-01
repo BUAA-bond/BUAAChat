@@ -70,7 +70,7 @@ public class LoginClient extends Application {
             String name = registerGetName();
             String password = registerGetPassword();
             String againPassword = registerGetAgainPassword();
-            String[] messages = {name,password,againPassword};
+            String[] messages = {account,name,password,againPassword};
             registerNotifyCallbackMessage(messages);
         }));
 
