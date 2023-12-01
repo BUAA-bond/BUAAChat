@@ -1,18 +1,20 @@
-import MyUtil.LoginInfo;
+import Message.LoginInfo;
 import MyUtil.MyUtil;
-import MyUtil.RegisterInfo;
+import Message.RegisterInfo;
+import UI.ChatAppClient;
 import UI.LoginClient;
 import UI.RegisterClient;
 import javafx.stage.Stage;
 
 public class Main {
-
     public static void main(String[] args) {
         // 在 JavaFX 主线程中启动应用程序
         javafx.application.Platform.startup(() -> {
             LoginClient loginClient = new LoginClient();
             LoginInfo loginInfo = new LoginInfo();
             RegisterInfo registerInfo = new RegisterInfo();
+            ChatAppClient chatAppClient=new ChatAppClient();
+
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
             //在数据库里创建一个users表
@@ -24,7 +26,14 @@ public class Main {
                 String loginPassword = message[1];   //password
                 loginInfo.setAccount(loginAccount);
                 loginInfo.setPassword(loginPassword);
-                loginInfo.judgeAndLogin();
+                if(loginInfo.judgeAndLogin()){
+                    loginClient.close();
+                    try {
+                        chatAppClient.start(new Stage());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             });
             loginClient.setRegisterClickListener(flag -> {
                 //打开注册界面

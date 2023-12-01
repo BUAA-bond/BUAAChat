@@ -1,6 +1,7 @@
 package UI;
 
 import Box.InputBox;
+import Box.PasswordInputBox;
 import Button.MyButton;
 import MyInterface.LoginButtonClickListener;
 import javafx.application.Application;
@@ -11,8 +12,8 @@ import javafx.stage.Stage;
 
 public class RegisterClient extends Application {
     InputBox nameBox;
-    InputBox passwordBox;
-    InputBox againPasswordBox;
+    PasswordInputBox passwordBox;
+    PasswordInputBox againPasswordBox;
     private LoginButtonClickListener messageListener;
     Group group;
     public void start(Stage stage){
@@ -32,8 +33,8 @@ public class RegisterClient extends Application {
             notifyCallbackMessage(messages);
         }));
         nameBox = new InputBox("昵称",100,120);
-        passwordBox = new InputBox("密码",100,150);
-        againPasswordBox = new InputBox("确认密码",76,180);
+        passwordBox = new PasswordInputBox("密码",100,150);
+        againPasswordBox = new PasswordInputBox("确认密码",76,180);
         //容器添加子组件
         add(againPasswordBox);
         add(nameBox);

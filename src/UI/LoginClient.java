@@ -1,4 +1,5 @@
 package UI;
+import Box.PasswordInputBox;
 import Button.MyButton;
 import Box.InputBox;
 import MyInterface.LoginButtonClickListener;
@@ -17,7 +18,7 @@ public class LoginClient extends Application {
     Stage privateStage;
     Group group;
     InputBox accountBox;
-    InputBox passwordBox;
+    PasswordInputBox passwordBox;
 
     @Override
     public void start(Stage stage) {
@@ -28,11 +29,9 @@ public class LoginClient extends Application {
         add(buttonRegister);
         add(buttonLogin);
         accountBox = new InputBox("账号",100,150);
-        passwordBox = new InputBox("密码",100,180);
-        //设置注册按钮单击事件：弹出注册窗口
-        buttonRegister.setOnAction((event) ->{
-            notifyCallbackRegister();
-        });
+        passwordBox = new PasswordInputBox("密码",100,180);
+        //设置注册按钮单击事件，返回给主程序按钮被点击
+        buttonRegister.setOnAction((event) -> notifyCallbackRegister());
         //设置登录按钮单击事件
         buttonLogin.setOnAction((event -> {
             String account=getAccount();
