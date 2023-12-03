@@ -18,6 +18,11 @@ public class PasswordInputBox extends HBox {
         this.setAlignment(Pos.CENTER);//
         this.setLayoutX(x);
         this.setLayoutY(y);
+        field.setStyle("-fx-opacity: 0.7;");
+        label.setStyle("fx-font-size: 16px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #000000;\n" +
+                "    -fx-background-color: #3ca0d0;\n");
     }
     public String getMessage(){
         return field.getText();

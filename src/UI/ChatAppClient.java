@@ -3,6 +3,7 @@ package UI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -15,7 +16,8 @@ public class ChatAppClient extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("BuaaChat");
+        this.primaryStage.setTitle("缘深");
+        this.primaryStage.getIcons().add(new Image("image/icon/icon_naxida.jpg"));
         initRootLayout();
         //showPersonOverview();
 

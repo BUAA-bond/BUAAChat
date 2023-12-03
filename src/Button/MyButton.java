@@ -10,4 +10,11 @@ public class MyButton extends Button {
         this.setPrefWidth(width);
         this.setPrefHeight(height);
     }
+    public MyButton(double x,double y,double width,double height){
+        super();
+        this.setLayoutX(x);
+        this.setLayoutY(y);
+        this.setPrefWidth(width);
+        this.setPrefHeight(height);
+    }
 }
