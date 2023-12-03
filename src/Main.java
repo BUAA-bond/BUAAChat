@@ -38,10 +38,12 @@ public class Main {
                 String registerName = messages[1];
                 String registerPassword = messages[2];
                 String registerAgainPassword = messages[3];
+                String registerAvatarURL = messages[4];
                 registerInfo.setAccount(registerAccount);
                 registerInfo.setName(registerName);
                 registerInfo.setPassword(registerPassword);
                 registerInfo.setPasswordAgain(registerAgainPassword);
+                System.out.println(registerAvatarURL);
                 if(!registerInfo.judgeAndRegister()){
                     loginClient.throwError("错了喵");
                 }
