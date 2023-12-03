@@ -13,7 +13,6 @@ public class Main {
             LoginInfo loginInfo = new LoginInfo();
             RegisterInfo registerInfo = new RegisterInfo();
             ChatAppClient chatAppClient=new ChatAppClient();
-
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
             //在数据库里创建一个users表
@@ -43,7 +42,9 @@ public class Main {
                 registerInfo.setName(registerName);
                 registerInfo.setPassword(registerPassword);
                 registerInfo.setPasswordAgain(registerAgainPassword);
-                registerInfo.judgeAndRegister();
+                if(!registerInfo.judgeAndRegister()){
+                    loginClient.throwError("错了喵");
+                }
             });
         });
     }

@@ -8,6 +8,9 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -67,10 +70,77 @@ public class LoginClient extends Application {
         Avatar.setFitHeight(60);
         Avatar.setX(180);
         Avatar.setY(40);
-        registerAccountBox = new InputBox("账号",100,110);
-        registerNameBox = new InputBox("昵称",100,140);
-        registerPasswordBox = new PasswordInputBox("密码",100,170);
-        registerAgainPasswordBox = new PasswordInputBox("确认密码",76,200);
+        registerAccountBox = new InputBox("账号",80,110);
+        registerAccountBox.setHint("6-10位数字");
+        TextField accountField = registerAccountBox.getField();
+        Label accountLengthHint = new Label();
+        accountLengthHint.setStyle("-fx-color-label-visible: red");
+        registerAccountBox.getChildren().add(accountLengthHint);
+        accountField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // 根据输入内容做出反馈或高亮显示
+            if (newValue.isEmpty()) {
+                accountLengthHint.setText(""); // 清空提示标签内容
+            } else if (newValue.length() < 6||newValue.length() > 10) {
+                accountLengthHint.setText("6-10位数字");
+                accountLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+            } else {
+                accountLengthHint.setText("√");
+                accountLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+            }
+        });
+        registerNameBox = new InputBox("昵称",80,140);
+        TextField nameField = registerNameBox.getField();
+        Label nameLengthHint = new Label();
+        nameLengthHint.setStyle("-fx-color-label-visible: red");
+        registerNameBox.getChildren().add(nameLengthHint);
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // 根据输入内容做出反馈或高亮显示
+            if (newValue.isEmpty()) {
+                nameLengthHint.setText(""); // 清空提示标签内容
+            } else if (newValue.length() > 10) {
+                nameLengthHint.setText("1-10位字符");
+                nameLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+            } else {
+                nameLengthHint.setText("√");
+                nameLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+            }
+        });
+        registerNameBox.setHint("1-10位任意字符");
+        registerPasswordBox = new PasswordInputBox("密码",80,170);
+        TextField passwordField = registerPasswordBox.getField();
+        Label passwordLengthHint = new Label();
+        passwordLengthHint.setStyle("-fx-color-label-visible: red");
+        registerPasswordBox.getChildren().add(passwordLengthHint);
+        passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // 根据输入内容做出反馈或高亮显示
+            if (newValue.isEmpty()) {
+                passwordLengthHint.setText(""); // 清空提示标签内容
+            } else if (newValue.length() < 8||newValue.length() > 16) {
+                passwordLengthHint.setText("8-16位,英文和数字");
+                passwordLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+            } else {
+                passwordLengthHint.setText("√");
+                passwordLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+            }
+        });
+        registerPasswordBox.setHint("8-16位，至少含有一位数字和一位英文字符，不含中文");
+        registerAgainPasswordBox = new PasswordInputBox("确认密码",56,200);
+        TextField agianPasswordField = registerAgainPasswordBox.getField();
+        Label againPasswordLengthHint = new Label();
+        againPasswordLengthHint.setStyle("-fx-color-label-visible: red");
+        registerAgainPasswordBox.getChildren().add(againPasswordLengthHint);
+        agianPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // 根据输入内容做出反馈或高亮显示
+            if (newValue.isEmpty()) {
+                againPasswordLengthHint.setText(""); // 清空提示标签内容
+            } else if (!newValue.equals(passwordField.getText())) {
+                againPasswordLengthHint.setText("两次输入密码不同");
+                againPasswordLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+            } else {
+                againPasswordLengthHint.setText("√");
+                againPasswordLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+            }
+        });
         //容器添加子组件
         registerAdd(Avatar);
         registerAdd(registerAccountBox);
@@ -265,5 +335,14 @@ public class LoginClient extends Application {
 
     public void close(){
         privateStage.close();
+    }
+    public void throwError(String string){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("注册失败");
+        alert.setContentText(string);
+        alert.showAndWait();
+
     }
 }

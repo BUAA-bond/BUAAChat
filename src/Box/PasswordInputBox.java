@@ -30,4 +30,11 @@ public class PasswordInputBox extends HBox {
     public String getMessage(){
         return field.getText();
     }
+    public void setHint(String string){
+        field.setPromptText(string);
+    }
+
+    public PasswordField getField() {
+        return field;
+    }
 }

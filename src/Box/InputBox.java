@@ -29,4 +29,11 @@ public class InputBox extends HBox {
     public String getMessage(){
         return field.getText();
     }
+    public void setHint(String string){
+        field.setPromptText(string);
+    }
+
+    public TextField getField() {
+        return field;
+    }
 }
