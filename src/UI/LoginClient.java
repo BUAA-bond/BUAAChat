@@ -150,6 +150,14 @@ public class LoginClient extends Application {
         loginAdd(root);
         loginAccountBox = new InputBox("账号",100,150);
         loginPasswordBox = new PasswordInputBox("密码",100,180);
+        loginAccountBox.changeLabelColour("fx-font-size: 16px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #f5c76d;\n" +
+                "    -fx-background-color: #a4710c;\n");
+        loginPasswordBox.changeLabelColour("fx-font-size: 16px;\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-text-fill: #f5c76d;\n" +
+                "    -fx-background-color: #a4710c;\n");
         loginAdd(loginAccountBox);
         loginAdd(loginPasswordBox);
         MyButton buttonLogin = new MyButton(110,200,160,20);//设置登录按钮

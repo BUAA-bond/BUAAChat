@@ -20,10 +20,12 @@ public class InputBox extends HBox {
         field.setStyle("-fx-opacity: 0.7;");
         label.setStyle("fx-font-size: 16px;\n" +
                 "    -fx-font-weight: bold;\n" +
-                "    -fx-text-fill: #000000;\n" +
-                "    -fx-background-color: #3ca0d0;\n");
+                "    -fx-text-fill: #d0dafc;\n" +
+                "    -fx-background-color: #447bd4;\n");
     }
-
+    public void changeLabelColour(String fx){
+        label.setStyle(fx);
+    }
     public String getMessage(){
         return field.getText();
     }
