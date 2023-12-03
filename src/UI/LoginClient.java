@@ -60,11 +60,19 @@ public class LoginClient extends Application {
         backgroundImageView.setFitWidth(400);
         root.setCenter(backgroundImageView);
         registerAdd(root);
+        ImageView Avatar = new ImageView();
+        Image RegisterAvatar = new Image("image/AvatarImage/hutao.png");
+        Avatar.setImage(RegisterAvatar);
+        Avatar.setFitWidth(60);
+        Avatar.setFitHeight(60);
+        Avatar.setX(180);
+        Avatar.setY(40);
         registerAccountBox = new InputBox("账号",100,110);
         registerNameBox = new InputBox("昵称",100,140);
         registerPasswordBox = new PasswordInputBox("密码",100,170);
         registerAgainPasswordBox = new PasswordInputBox("确认密码",76,200);
         //容器添加子组件
+        registerAdd(Avatar);
         registerAdd(registerAccountBox);
         registerAdd(registerNameBox);
         registerAdd(registerPasswordBox);
@@ -131,7 +139,7 @@ public class LoginClient extends Application {
             String name = registerGetName();
             String password = registerGetPassword();
             String againPassword = registerGetAgainPassword();
-            String[] messages = {name,password,againPassword};
+            String[] messages = {account,name,password,againPassword};
             registerNotifyCallbackMessage(messages);
         }));
         registerScene = new Scene(registerGroup, 400,300);//内容长宽
