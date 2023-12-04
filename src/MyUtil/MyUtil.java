@@ -27,7 +27,7 @@ public class MyUtil {
      * @return
      */
     public static boolean judgeAccount(String account){
-        String account_pattern="^\\d{1,15}$";
+        String account_pattern="^\\d{6,10}$";
         return account.matches(account_pattern);
     }
     /**

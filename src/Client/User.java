@@ -1,26 +1,40 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package Client;
 
-import java.awt.*;
+import java.awt.Image;
 import java.util.HashMap;
 
-/**
- * @author 西西弗
- * @Description:
- * @date 2023/11/9 20:50
- */
 public class User {
     private String account;
     private String name;
     private String password;
     private Image avatar;
     private String avatarPath;
-    private HashMap<String,String> friends=new HashMap<>();//ID+用户对象
+    private HashMap<String, UserInfo> friends = new HashMap();
+    private HashMap<String, GroupInfo> groups = new HashMap();
 
-    public User(String account,String name,String password,Image avatar){
-        this.account=account;
-        this.name=name;
-        this.password=password;
-        this.avatar=avatar;
+    public User() {
+    }
+
+    public User(String account, String password) {
+        this.account = account;
+        this.password = password;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public User(String account, String name, String password) {
@@ -29,46 +43,43 @@ public class User {
         this.password = password;
     }
 
-    public User(String account, String name, String password,String avatarPath) {
+    public User(String account, String name, String password, String avatarPath) {
         this.account = account;
         this.name = name;
         this.password = password;
         this.avatarPath = avatarPath;
     }
 
-    //加好友
-    public void makeFriends(String account,String name){
-        friends.put(account,name);
-        //TODO
-    }
-    //删除好友
-    public void deleteFriends(String account,String name){
-        friends.remove(account,name);
-        //TODO
-    }
-
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getAccount() {
-        return account;
+        return this.account;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public Image getAvatar() {
-        return avatar;
+        return this.avatar;
     }
 
     public String getAvatarPath() {
-        return avatarPath;
+        return this.avatarPath;
     }
 
     public void setAvatar(Image avatar) {
         this.avatar = avatar;
+    }
+
+    public void setFriends(HashMap<String, UserInfo> friends) {
+        this.friends = friends;
+    }
+
+    public void setGroups(HashMap<String, GroupInfo> groups) {
+        this.groups = groups;
     }
 
     public void setAvatarPath(String avatarPath) {

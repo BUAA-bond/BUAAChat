@@ -1,127 +1,173 @@
+
 package Client;
 
-import Message.*;
-
-import java.awt.*;
-import java.io.*;
+import Message.SysMsg;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 
-/**
- * @author 西西弗
- * @Description:
- * @date 2023/11/9 20:26
- */
-@SuppressWarnings({"all"})
-public class Client implements Runnable{
+public class Client implements Runnable {
     private Socket socket;
     private InputStream is;
     private OutputStream os;
     private boolean isLive = true;
     private User user;
 
-    //程序主入口
-    public static void main(String[] args) {
-
-    }
-
-    public Client(Socket socket, User user) {
-        this.socket = socket;
-        this.user = user;
-    }
-
-    //发送消息并显示
-    public void send(Message message) {
+    public Client() {
         try {
-            os=socket.getOutputStream();
-            ObjectOutputStream oos=new ObjectOutputStream(os);
-            oos.writeObject(message);
-            oos.flush();
-            oos.close();
-            //处理信息
-            handleMyMessage(message);
+            this.socket = new Socket("182.92.202.183", 10000);
         } catch (IOException e) {
-            System.out.println("发送消息");
+            e.printStackTrace();
         }
+
     }
-    //发送文本
-    public void sendText(String account,String content){
-        Text message=createText(account,content);
-        send(message);
+
+    public boolean register(String account, String name, String password, String avatarPath) {
+        registerSend(account, name, password, avatarPath);
+        return registerReceive();
     }
-    //发送图片
-    public void sentPhoto(String account,String imagePath,Image image){
-        Photo message=createPhoto(account,imagePath,image);
-        send(message);
-    }
-    //创建文本
-    public Text createText(String account, String content){
-        return new Text(user.getAccount(),account,content);
-    }
-    //创建图片
-    public Photo createPhoto(String account, String imagePath, Image image){
-        return new Photo(user.getAccount(),account,imagePath,image);
-    }
-    //接收消息并显示
-    public Message receive(){
-        Message message=null;
+
+    public void registerSend(String account, String name, String password, String avatarPath) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("account", account);
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("password", password);
+        jsonObject.addProperty("avatarPath", avatarPath);
+        Gson gson = new Gson();
+        String content = gson.toJson(jsonObject);
+        SysMsg sysMsg = new SysMsg(account, 2, content);
+        ObjectOutputStream oos = null;
+
         try {
-            is=socket.getInputStream();
-            ObjectInputStream ois=new ObjectInputStream(is);
-            Object o=ois.readObject();
-            message=(Message) o;
-            //处理信息
-            handleFriendMessage(message);
-        } catch (EOFException e){
-            return null;
-        }catch (IOException e) {
-            System.out.println("发送信息1");
-            return null;
-        } catch (ClassNotFoundException e){
-            System.out.println("发送消息2");
-            return null;
-        }
-        return message;
-    }
-    //处理朋友信息
-    public void handleFriendMessage(Message message){
-        if(message==null) return;
-
-    }
-    //处理自己信息
-    public void handleMyMessage(Message message){
-        if(message==null) return;
-
-    }
-    //加好友
-    public void makeFriends(String Account,String name){//TODO
-        user.makeFriends(Account,name);
-    }
-    //删好友
-    public void deleteFriends(String Account,String name){//TODO
-        user.deleteFriends(Account,name);
-    }
-    //建群
-    public void buildGroup(){
-
-    }
-    //关闭
-    public void closeSocket(){
-        isLive=false;
-        if(socket!=null && !socket.isClosed()){
+            this.os = this.socket.getOutputStream();
+            oos = new ObjectOutputStream(this.os);
+            oos.writeObject(sysMsg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                socket.close();
+                oos.close();
             } catch (IOException e) {
-                System.out.println("关闭socket");
+                e.printStackTrace();
             }
+
+        }
+
+    }
+
+    public boolean registerReceive() {
+        SysMsg msg = null;
+        ObjectInputStream ois = null;
+
+        try {
+            is = socket.getInputStream();
+            ois = new ObjectInputStream(is);
+            msg = (SysMsg)ois.readObject();
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jsonObject = jsonParser.parse(msg.getContent()).getAsJsonObject();
+            if (jsonObject.get("code").getAsInt() != 1) return false;
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                ois.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return true;
+    }
+
+    public boolean login(String account, String password) {
+        loginSend(account, password);
+        User tmp = this.loginReceive();
+        if (tmp == null) {
+            return false;
+        } else {
+            this.user = tmp;
+            this.user.setAccount(account);
+            this.user.setPassword(password);
+            return true;
         }
     }
 
-    @Override
-    public void run() {
-        while(isLive){
-            receive();
+    public void loginSend(String account, String password) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("account", account);
+        jsonObject.addProperty("password", password);
+        Gson gson = new Gson();
+        String content = gson.toJson(jsonObject);
+        ObjectOutputStream oos = null;
+        SysMsg msg = new SysMsg(account, 1, content);
 
-            //TODO
+        try {
+            oos = new ObjectOutputStream(this.socket.getOutputStream());
+            oos.writeObject(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (oos != null) {
+                    oos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
+
+    }
+
+    public User loginReceive() {
+        SysMsg msg = null;
+        ObjectInputStream ois = null;
+        try {
+            is = socket.getInputStream();
+            ois = new ObjectInputStream(is);
+            msg = (SysMsg)ois.readObject();
+            String json = msg.getContent();
+            JsonParser jsonParser = new JsonParser();
+            JsonObject jj = jsonParser.parse(json).getAsJsonObject();
+            if (jj.get("code").getAsInt() != 1) return null;
+            User user1 = new User();
+            user1.setName(jj.get("name").getAsString());
+            user1.setAvatarPath(jj.get("avatarPath").getAsString());
+            JsonElement friendElement = jj.getAsJsonObject("friends");
+            JsonElement groupElement = jj.getAsJsonObject("groups");
+            HashMap<String, UserInfo> friendsMap = new Gson().fromJson(friendElement, new TypeToken<HashMap<String, UserInfo>>(){}.getType());
+            user1.setFriends(friendsMap);
+            HashMap<String, GroupInfo> groupsMap = new Gson().fromJson(groupElement, new TypeToken<HashMap<String, GroupInfo>>(){}.getType());
+            user1.setGroups(groupsMap);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ois != null) {
+                    ois.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return null;
+    }
+
+    public void run() {
+        while(this.isLive) {
+        }
+
     }
 }
