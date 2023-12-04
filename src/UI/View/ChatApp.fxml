@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane  minWidth="800.0" prefHeight="674.0" prefWidth="959.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Controller.ChatAppClientController">
+<AnchorPane minWidth="800.0" prefHeight="674.0" prefWidth="959.0" stylesheets="@stely1.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UI.Controller.ChatAppClientController">
    <children>
       <SplitPane dividerPositions="0.29571577847439917" layoutX="155.0" layoutY="137.0" prefHeight="674.0" prefWidth="959.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>

@@ -5,6 +5,7 @@ import Box.InputBox;
 import MyInterface.LoginButtonClickListener;
 import MyInterface.RegisterButtonClickListener;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
@@ -16,7 +17,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.input.KeyCode;
+
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -175,43 +179,43 @@ public class LoginClient extends Application {
         registerNameBox.setHint("1-10位任意字符");
         registerPasswordBox = new PasswordInputBox("密码",100,170);
         TextField passwordField = registerPasswordBox.getField();
-        Label passwordLengthHint = new Label();
+        Label passwordHint = new Label();
         ImageView passwordRightImageView = new ImageView(rightImage);
         passwordRightImageView.setFitHeight(20);
         passwordRightImageView.setFitWidth(20);
         ImageView passwordWrongImageView = new ImageView(wrongImage);
         passwordWrongImageView.setFitHeight(20);
         passwordWrongImageView.setFitWidth(20);
-        registerPasswordBox.getChildren().add(passwordLengthHint);
+        registerPasswordBox.getChildren().add(passwordHint);
         passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                passwordLengthHint.setText(""); // 清空提示标签内容
+                passwordHint.setText(""); // 清空提示标签内容
             } else if (newValue.length() < 8||newValue.length() > 16) {
-                passwordLengthHint.setGraphic(nameWrongImageView);
+                passwordHint.setGraphic(passwordWrongImageView);
             } else {
-                passwordLengthHint.setGraphic(nameRightImageView);
+                passwordHint.setGraphic(passwordRightImageView);
             }
         });
         registerPasswordBox.setHint("8-16位，至少含有一位数字和一位英文字符，不含中文");
         registerAgainPasswordBox = new PasswordInputBox("确认密码",76,200);
         TextField agianPasswordField = registerAgainPasswordBox.getField();
-        Label againPasswordLengthHint = new Label();
+        Label againPasswordHint = new Label();
         ImageView againPasswordRightImageView = new ImageView(rightImage);
         againPasswordRightImageView.setFitHeight(20);
         againPasswordRightImageView.setFitWidth(20);
         ImageView againPasswordWrongImageView = new ImageView(wrongImage);
         againPasswordWrongImageView.setFitHeight(20);
         againPasswordWrongImageView.setFitWidth(20);
-        registerAgainPasswordBox.getChildren().add(againPasswordLengthHint);
+        registerAgainPasswordBox.getChildren().add(againPasswordHint);
         agianPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                againPasswordLengthHint.setText(""); // 清空提示标签内容
+                againPasswordHint.setText(""); // 清空提示标签内容
             } else if (!newValue.equals(passwordField.getText())) {
-                againPasswordLengthHint.setGraphic(againPasswordWrongImageView);
+                againPasswordHint.setGraphic(againPasswordWrongImageView);
             } else {
-                againPasswordLengthHint.setGraphic(againPasswordRightImageView);
+                againPasswordHint.setGraphic(againPasswordRightImageView);
             }
         });
         //容器添加子组件
@@ -312,6 +316,32 @@ public class LoginClient extends Application {
                 "    -fx-font-weight: bold;\n" +
                 "    -fx-text-fill: #f5c76d;\n" +
                 "    -fx-background-color: #a4710c;\n");
+        TextField accountField = loginAccountBox.getField();
+        accountField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    String account=getAccount();
+                    String password=getPassword();
+                    String[] messages = {account,password};
+                    // 调用回调函数，并传递消息
+                    loginNotifyCallbackMessage(messages); //返回account和password
+                }
+            }
+        });
+        TextField passwordField = loginPasswordBox.getField();
+        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    String account=getAccount();
+                    String password=getPassword();
+                    String[] messages = {account,password};
+                    // 调用回调函数，并传递消息
+                    loginNotifyCallbackMessage(messages); //返回account和password
+                }
+            }
+        });
         loginAdd(loginAccountBox);
         loginAdd(loginPasswordBox);
         MyButton buttonLogin = new MyButton(110,200,160,20);//设置登录按钮
@@ -362,14 +392,12 @@ public class LoginClient extends Application {
             // 鼠标进入时更换图像为悬停时的图像
             loginButtonImageView.setImage(clickedImage);
         });
-
         // 设置鼠标离开按钮的事件处理
         buttonLogin.setOnMouseExited(event -> {
             // 鼠标离开时恢复按钮图像为默认图像
             loginButtonImageView.setImage(loginButtonImage);
         });
         //容器添加子组件
-
         loginScene = new Scene(loginGroup, 400,300);//内容长宽
     }
 

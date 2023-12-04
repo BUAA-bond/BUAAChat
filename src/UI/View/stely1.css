@@ -1,0 +1,7 @@
+.custom-button {
+    -fx-background-color: lightblue;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    /* 其他样式属性 */
+}
+
