@@ -47,6 +47,9 @@ public class Main {
                 if(!registerInfo.judgeAndRegister()){
                     loginClient.throwError("错了喵");
                 }
+                else{
+                    loginClient.changeRegisterSuccess();
+                }
             });
         });
     }

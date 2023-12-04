@@ -11,11 +11,15 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -47,6 +51,7 @@ public class LoginClient extends Application {
         privateStage = stage;
         initLoginScene();
         initRegisterScene();
+        initRegisterSuccessScene();
         privateStage.setScene(loginScene);
         privateStage.setTitle("缘深");//设置客户端标题
         privateStage.getIcons().add(new Image("image/icon/icon_naxida.jpg"));
@@ -62,11 +67,14 @@ public class LoginClient extends Application {
         super.init();
     }
     public void initRegisterSuccessScene(){
-        BorderPane root = new BorderPane();
-        Image backgroundImage = new Image("image/RegisterImage/registerSuccessImage.jpg");
+        Group registerSuccesGroup = new Group();
+        Image backgroundImage = new Image("image/RegisterImage/registerSuccessImage.png");
         ImageView backgroundImageView = new ImageView(backgroundImage);
-        root.getChildren().add(backgroundImageView);
-        registerSuccessScene = new Scene(root);
+        backgroundImageView.setFitHeight(300);
+        backgroundImageView.setFitWidth(400);
+        registerSuccesGroup.getChildren().add(backgroundImageView);
+        registerSuccessScene = new Scene(registerSuccesGroup,400,300);
+        registerSuccessScene.setOnMouseClicked((event) -> privateStage.setScene(loginScene));
     }
     public void initRegisterScene()
     {
@@ -119,75 +127,91 @@ public class LoginClient extends Application {
             choosseScene = new Scene(chooseRoot);
             privateStage.setScene(choosseScene);
         });
+        Image rightImage = new Image("image/RegisterImage/yesHint.png");
+        Image wrongImage = new Image("image/RegisterImage/wrongHint.png");
+        ImageView accountRightImageView = new ImageView(rightImage);
+        accountRightImageView.setFitHeight(20);
+        accountRightImageView.setFitWidth(20);
+        ImageView accountWrongImageView = new ImageView(wrongImage);
+        accountWrongImageView.setFitHeight(20);
+        accountWrongImageView.setFitWidth(20);
         registerAccountBox = new InputBox("账号",100,110);
         registerAccountBox.setHint("6-10位数字");
         TextField accountField = registerAccountBox.getField();
-        Label accountLengthHint = new Label();
-        accountLengthHint.setStyle("-fx-color-label-visible: red");
-        registerAccountBox.getChildren().add(accountLengthHint);
+        Label registerAccountHint = new Label();
+        registerAccountBox.getChildren().add(registerAccountHint);
         accountField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                accountLengthHint.setText(""); // 清空提示标签内容
+                registerAccountHint.setText(""); // 清空提示标签内容
             } else if (newValue.length() < 6||newValue.length() > 10) {
-                accountLengthHint.setText("×");
-                accountLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+                registerAccountHint.setGraphic(accountWrongImageView);
+                registerAccountHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
             } else {
-                accountLengthHint.setText("√");
-                accountLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+                registerAccountHint.setGraphic(accountRightImageView);
+                registerAccountHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
             }
         });
         registerNameBox = new InputBox("昵称",100,140);
         TextField nameField = registerNameBox.getField();
-        Label nameLengthHint = new Label();
-        nameLengthHint.setStyle("-fx-color-label-visible: red");
-        registerNameBox.getChildren().add(nameLengthHint);
+        Label nameHint = new Label();
+        ImageView nameRightImageView = new ImageView(rightImage);
+        nameRightImageView.setFitHeight(20);
+        nameRightImageView.setFitWidth(20);
+        ImageView nameWrongImageView = new ImageView(wrongImage);
+        nameWrongImageView.setFitHeight(20);
+        nameWrongImageView.setFitWidth(20);
+        registerNameBox.getChildren().add(nameHint);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                nameLengthHint.setText(""); // 清空提示标签内容
+                nameHint.setText(""); // 清空提示标签内容
             } else if (newValue.length() > 10) {
-                nameLengthHint.setText("×");
-                nameLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+                nameHint.setGraphic(nameWrongImageView);
             } else {
-                nameLengthHint.setText("√");
-                nameLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+                nameHint.setGraphic(nameRightImageView);
             }
         });
         registerNameBox.setHint("1-10位任意字符");
         registerPasswordBox = new PasswordInputBox("密码",100,170);
         TextField passwordField = registerPasswordBox.getField();
         Label passwordLengthHint = new Label();
-        passwordLengthHint.setStyle("-fx-color-label-visible: red");
+        ImageView passwordRightImageView = new ImageView(rightImage);
+        passwordRightImageView.setFitHeight(20);
+        passwordRightImageView.setFitWidth(20);
+        ImageView passwordWrongImageView = new ImageView(wrongImage);
+        passwordWrongImageView.setFitHeight(20);
+        passwordWrongImageView.setFitWidth(20);
         registerPasswordBox.getChildren().add(passwordLengthHint);
         passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
                 passwordLengthHint.setText(""); // 清空提示标签内容
             } else if (newValue.length() < 8||newValue.length() > 16) {
-                passwordLengthHint.setText("×");
-                passwordLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+                passwordLengthHint.setGraphic(nameWrongImageView);
             } else {
-                passwordLengthHint.setText("√");
-                passwordLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+                passwordLengthHint.setGraphic(nameRightImageView);
             }
         });
         registerPasswordBox.setHint("8-16位，至少含有一位数字和一位英文字符，不含中文");
         registerAgainPasswordBox = new PasswordInputBox("确认密码",76,200);
         TextField agianPasswordField = registerAgainPasswordBox.getField();
         Label againPasswordLengthHint = new Label();
-        againPasswordLengthHint.setStyle("-fx-color-label-visible: red");
+        ImageView againPasswordRightImageView = new ImageView(rightImage);
+        againPasswordRightImageView.setFitHeight(20);
+        againPasswordRightImageView.setFitWidth(20);
+        ImageView againPasswordWrongImageView = new ImageView(wrongImage);
+        againPasswordWrongImageView.setFitHeight(20);
+        againPasswordWrongImageView.setFitWidth(20);
         registerAgainPasswordBox.getChildren().add(againPasswordLengthHint);
         agianPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
                 againPasswordLengthHint.setText(""); // 清空提示标签内容
             } else if (!newValue.equals(passwordField.getText())) {
-                againPasswordLengthHint.setText("×");
-                againPasswordLengthHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+                againPasswordLengthHint.setGraphic(againPasswordWrongImageView);
             } else {
-                againPasswordLengthHint.setText("√");
-                againPasswordLengthHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
+                againPasswordLengthHint.setGraphic(againPasswordRightImageView);
             }
         });
         //容器添加子组件
@@ -419,5 +443,7 @@ public class LoginClient extends Application {
                 fileName.endsWith(".png") || fileName.endsWith(".gif") ||
                 fileName.endsWith(".bmp");
     }
-
+    public void changeRegisterSuccess(){
+        privateStage.setScene(registerSuccessScene);
+    }
 }
