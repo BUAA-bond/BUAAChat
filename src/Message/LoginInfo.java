@@ -35,8 +35,6 @@ public class LoginInfo {
             password=account=null;
             System.out.println("密码不正确");
         }else{
-            User user=MyUtil.logIn(account,password);
-            System.out.println("登录成功，欢迎用户"+user.getName());
             return true;
             //new Thread(new ClientServer(user)).start();
             //TODO

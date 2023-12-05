@@ -13,40 +13,26 @@ public class RegisterInfo {
     private String name;
     private String passwordAgain;
     private String avatarPath;
-    public boolean judgeAndRegister(){
+    public String judgeAndRegister(){
         if(account==null){
-            account=password=name=passwordAgain=null;
-            System.out.println("请输入账号");
+            return "请输入账号";
         }if(name==null){
-            //重置
-            account=password=name=passwordAgain=null;
-            //输出信息
-            System.out.println("请输入昵称");
+            return "请输入昵称";
         }else if(password==null){
-            account=password=name=passwordAgain=null;
-            System.out.println("请输入密码");
+            return"请输入密码";
         }else if(passwordAgain==null){
-            account=password=name=passwordAgain=null;
-            System.out.println("请输入确认密码");
+            return "请输入确认密码";
         }else if(!MyUtil.judgeAccount(account)){
-            account=password=name=passwordAgain=null;
-            System.out.println("账号格式不正确");
+            return "账号格式不正确";
         }else if(!MyUtil.judgeName(name)){
-            account=password=name=passwordAgain=null;
-            System.out.println("名字格式不正确");
+            return "名字格式不正确";
         }else if(!MyUtil.judgePassword(password)){
-            account=password=name=passwordAgain=null;
-            System.out.println("密码格式不正确");
+            return "密码格式不正确";
         }else if(!MyUtil.confirmPassword(password,passwordAgain)){
-            account=password=name=passwordAgain=null;
-            System.out.println("确认密码不正确");
+            return "确认密码不正确";
         }else{
-            MyUtil.register(account,name,password,"");
-            System.out.println("注册成功");
-            //TODO
-            return true;
+            return "正确";
         }
-        return false;
     }
 
     public void setAvatarPath(String avatarPath) {

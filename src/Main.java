@@ -12,6 +12,7 @@ public class Main {
         javafx.application.Platform.startup(() -> {
             LoginClient loginClient = new LoginClient();
             ChatAppClient chatAppClient=new ChatAppClient();
+            RegisterInfo registerInfo = new RegisterInfo();
             Client client = new Client();
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
@@ -39,10 +40,17 @@ public class Main {
                 String registerPassword = messages[2];
                 String registerAgainPassword = messages[3];
                 String registerAvatarURL = messages[4];
-                if(!client.register(registerAccount,registerName,registerPassword,registerAvatarURL)){
-                    loginClient.throwError("错了喵");
-                }
-                else{
+                registerInfo.setAccount(registerAccount);
+                registerInfo.setName(registerName);
+                registerInfo.setPassword(registerPassword);
+                registerInfo.setPasswordAgain(registerAgainPassword);
+                registerInfo.setAvatarPath(registerAvatarURL);
+                String info=registerInfo.judgeAndRegister();
+                if(!info.equals("正确")){
+                    loginClient.throwError(info);
+                }else if(!client.register(registerAccount,registerName,registerPassword,registerAvatarURL)){
+                    loginClient.throwError("用户已存在");
+                }else{
                     loginClient.changeRegisterSuccess();
                 }
             });
