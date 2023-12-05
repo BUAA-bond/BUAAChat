@@ -18,7 +18,7 @@ import static Constant.Constant.*;
 public class MyUtil {
     public static int AllID=-1;
     public static void main(String[] args) {
-        createUsersTable();
+        System.out.println(judgeAccount("111"));
     }
 
     /**
@@ -48,7 +48,7 @@ public class MyUtil {
      * @return
      */
     public static boolean judgeName(String name){
-        String name_pattern="^.{1,15}$";
+        String name_pattern="^.{1,10}$";
         return name.matches(name_pattern);
     }
 

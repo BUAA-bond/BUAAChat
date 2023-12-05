@@ -12,7 +12,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.sql.SQLOutput;
 import java.util.HashMap;
 
 public class Client implements Runnable {
@@ -24,11 +26,12 @@ public class Client implements Runnable {
 
     public Client() {
         try {
-            this.socket = new Socket("182.92.202.183", 10000);
+            //this.socket = new Socket("182.92.202.183", 10000);
+            this.socket=new Socket("localhost",9999);
         } catch (IOException e) {
+            System.err.println("连接被拒绝: " + e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     public boolean register(String account, String name, String password, String avatarPath) {
@@ -46,29 +49,24 @@ public class Client implements Runnable {
         String content = gson.toJson(jsonObject);
         SysMsg sysMsg = new SysMsg(account, 2, content);
         ObjectOutputStream oos = null;
-
         try {
-            this.os = this.socket.getOutputStream();
-            oos = new ObjectOutputStream(this.os);
+            if(socket.isClosed()) socket=new Socket("localhost",9999);
+            os = socket.getOutputStream();
+            oos = new ObjectOutputStream(os);
             oos.writeObject(sysMsg);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                oos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
-
     }
 
     public boolean registerReceive() {
         SysMsg msg = null;
         ObjectInputStream ois = null;
-
         try {
+            if(socket.isClosed()){
+                System.out.println("连接中断");
+                return false;
+            }
             is = socket.getInputStream();
             ois = new ObjectInputStream(is);
             msg = (SysMsg)ois.readObject();
@@ -80,13 +78,13 @@ public class Client implements Runnable {
             return false;
         } finally {
             try {
+                if(ois!=null)
                 ois.close();
+                if(!socket.isClosed()) socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
         return true;
     }
 
@@ -94,6 +92,7 @@ public class Client implements Runnable {
         loginSend(account, password);
         User tmp = this.loginReceive();
         if (tmp == null) {
+            System.out.println("登录失败");
             return false;
         } else {
             this.user = tmp;
@@ -111,29 +110,26 @@ public class Client implements Runnable {
         String content = gson.toJson(jsonObject);
         ObjectOutputStream oos = null;
         SysMsg msg = new SysMsg(account, 1, content);
-
         try {
+            if(socket.isClosed()) socket=new Socket("localhost",9999);
             oos = new ObjectOutputStream(this.socket.getOutputStream());
             oos.writeObject(msg);
+            oos.flush();
+            //TODO
+            //这里的oos没有close，因为oos.close，socket也close了，暂时没想到好的解决方法
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (oos != null) {
-                    oos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
-
     }
 
     public User loginReceive() {
         SysMsg msg = null;
         ObjectInputStream ois = null;
         try {
+            if(socket.isClosed()){
+                System.out.println("连接中断");
+                return null;
+            }
             is = socket.getInputStream();
             ois = new ObjectInputStream(is);
             msg = (SysMsg)ois.readObject();
@@ -157,6 +153,7 @@ public class Client implements Runnable {
                 if (ois != null) {
                     ois.close();
                 }
+                if(!socket.isClosed()) socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -164,10 +161,13 @@ public class Client implements Runnable {
         }
         return null;
     }
-
+    public void start() {
+        Thread thread = new Thread(this);
+        thread.start();
+    }
     public void run() {
-        while(this.isLive) {
-        }
+        while(isLive) {
 
+        }
     }
 }

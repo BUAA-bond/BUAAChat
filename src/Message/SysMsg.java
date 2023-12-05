@@ -1,11 +1,13 @@
 package Message;
 
+import java.io.Serializable;
+
 /**
  * Message that carry information to or from server.
  * @author WnRock
  * @version 0.1
  */
-public class SysMsg extends Message{
+public class SysMsg extends Message implements Serializable {
     /**
      * SysMsg type
      *   0 - default Unused
@@ -20,7 +22,7 @@ public class SysMsg extends Message{
 
     /**
      * Construct SysMsg.
-     * @param user
+     * @param
      * @param type
      */
     public SysMsg(String fromUser,int type){
