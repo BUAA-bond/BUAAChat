@@ -4,6 +4,7 @@ import Button.MyButton;
 import Box.InputBox;
 import MyInterface.LoginButtonClickListener;
 import MyInterface.RegisterButtonClickListener;
+import MyUtil.MyUtil;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -72,7 +73,7 @@ public class LoginClient extends Application {
     }
     public void initRegisterSuccessScene(){
         Group registerSuccesGroup = new Group();
-        Image backgroundImage = new Image("image/RegisterImage/registerSuccessImage.png");
+        Image backgroundImage = new Image("image/RegisterImage/registerSuccessImage2.png");
         ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitHeight(300);
         backgroundImageView.setFitWidth(400);
@@ -147,13 +148,11 @@ public class LoginClient extends Application {
         accountField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                registerAccountHint.setText(""); // 清空提示标签内容
-            } else if (newValue.length() < 6||newValue.length() > 10) {
                 registerAccountHint.setGraphic(accountWrongImageView);
-                registerAccountHint.setStyle("-fx-text-fill: red;"); // 设置提示标签颜色
+            } else if (!MyUtil.judgeAccount(newValue)) {
+                registerAccountHint.setGraphic(accountWrongImageView);
             } else {
                 registerAccountHint.setGraphic(accountRightImageView);
-                registerAccountHint.setStyle("-fx-text-fill: green;"); // 设置提示标签颜色
             }
         });
         registerNameBox = new InputBox("昵称",100,140);
@@ -169,8 +168,8 @@ public class LoginClient extends Application {
         nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                nameHint.setText(""); // 清空提示标签内容
-            } else if (newValue.length() > 10) {
+                nameHint.setGraphic(nameWrongImageView);
+            } else if (!MyUtil.judgeName(newValue)) {
                 nameHint.setGraphic(nameWrongImageView);
             } else {
                 nameHint.setGraphic(nameRightImageView);
@@ -190,8 +189,8 @@ public class LoginClient extends Application {
         passwordField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                passwordHint.setText(""); // 清空提示标签内容
-            } else if (newValue.length() < 8||newValue.length() > 16) {
+                passwordHint.setGraphic(passwordWrongImageView);
+            } else if (!MyUtil.judgePassword(newValue)) {
                 passwordHint.setGraphic(passwordWrongImageView);
             } else {
                 passwordHint.setGraphic(passwordRightImageView);
@@ -211,7 +210,7 @@ public class LoginClient extends Application {
         agianPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
             // 根据输入内容做出反馈或高亮显示
             if (newValue.isEmpty()) {
-                againPasswordHint.setText(""); // 清空提示标签内容
+                againPasswordHint.setGraphic(againPasswordWrongImageView);
             } else if (!newValue.equals(passwordField.getText())) {
                 againPasswordHint.setGraphic(againPasswordWrongImageView);
             } else {
@@ -299,7 +298,7 @@ public class LoginClient extends Application {
     {
         loginGroup = new Group();
         BorderPane root = new BorderPane();
-        Image backgroundImage = new Image("image/loginImage/loginImage.jpg");
+        Image backgroundImage = new Image("image/loginImage/loginImage4.png");
         ImageView backgroundImageView = new ImageView();
         backgroundImageView.setImage(backgroundImage);
         backgroundImageView.setFitHeight(350);

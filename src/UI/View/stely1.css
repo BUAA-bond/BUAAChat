@@ -4,4 +4,17 @@
     -fx-font-size: 14px;
     /* 其他样式属性 */
 }
-
+.custom-button:hover {
+    /* 在悬停时的样式设置 */
+    -fx-background-color: #16B3C8; /* 例如，将背景颜色设置为浅蓝色 */
+    /* 其他样式属性 */
+}
+.background {
+    -fx-background-color: #BAF5FF;
+}
+.leftBackground{
+    -fx-background-color: #d9fcf8;
+}
+.transparent-background {
+    -fx-background-color: transparent;
+}
