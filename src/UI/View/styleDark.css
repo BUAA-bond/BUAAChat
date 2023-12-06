@@ -255,4 +255,5 @@
 #changeStyleButton {
     /* 在这里定义按钮的样式 */
     -fx-graphic: url('../../Image/ChatClientImage/darkTheme/changeStyleButton.png');
+    -fx-border-width: 0px; /* 设置边框宽度 */
 }
