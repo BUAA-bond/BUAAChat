@@ -1,11 +1,11 @@
 .background {
-    -fx-background-color: #becbc6;
+    -fx-background-color: #91c3d6;
 }
 .leftBackground{
-    -fx-background-color: #425075;
+    -fx-background-color: #dcfcf9;
 }
 .rightBackground{
-    -fx-background-color: #1c3b5c;
+    -fx-background-color: #c5eee5;
 }
 .transparent-background {
     -fx-background-color: transparent;
@@ -69,8 +69,8 @@
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-border-color: transparent #0f162d transparent #0f162d;
-    -fx-background-color: transparent, derive(#0f162d,20%);
+    -fx-border-color: transparent #91c3d6 transparent #91c3d6;
+    -fx-background-color: transparent, derive(#7dcdd6,20%);
 }
 
 .split-pane {
@@ -78,11 +78,11 @@
 }
 
 .menu-bar {
-    -fx-background-color: derive(#0f162d,20%);
+    -fx-background-color: derive(#91c3d6,20%);
 }
 
 .context-menu {
-    -fx-background-color: derive(#0f162d,50%);
+    -fx-background-color: derive(#91c3d6,50%);
 }
 
 .menu-bar .label {
@@ -93,7 +93,7 @@
 }
 
 .menu .left-container {
-    -fx-background-color: #2a324b;
+    -fx-background-color: #91c3d6;
 }
 
 .text-field {
@@ -113,15 +113,15 @@
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: #0c3654;
+    -fx-background-color: #cefbf8;
 
     -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
+    -fx-text-fill: #192827;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
 }
 
 .button:hover {
-    -fx-background-color: #0f466c;
+    -fx-background-color: #a6d2cf;
 }
 
 .button:pressed, .button:default:hover:pressed {
@@ -152,7 +152,7 @@
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 .text-area {
-    -fx-control-inner-background: #22486f; /* 设置 TextArea 的背景色 */
+    -fx-control-inner-background: #fafff8; /* 设置 TextArea 的背景色 */
     -fx-text-fill: white; /* 设置文本颜色 */
 }
 .scroll-pane {
@@ -175,7 +175,7 @@
 /* 修改顶栏的背景颜色 */
 .tab-pane>*.tab-header-area>*.tab-header-background
 {
-    -fx-background-color: -fx-outer-border, -fx-text-box-border, #1c3b5c;
+    -fx-background-color: -fx-outer-border, -fx-text-box-border, #91c3d6;
 }
 
 
@@ -185,20 +185,20 @@
 }
 /* 子代选择器，Tab选中的时候选择其子元素tab-label */
 .tab:selected .tab-label {
-    -fx-text-fill: #003333ff;
+    -fx-text-fill: #79a2b2ff;
 }
 /* tab选中时设置背景颜色 */
 .tab:selected {
-    -fx-background-color: #487da2ff;
+    -fx-background-color: #79a2b2ff;
 }
 /* Tab选中的时候选中其边框并修改样式 */
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
-    -fx-border-radius: 0px;
+    -fx-border-radius: 2px;
     -fx-border-width: 1px 1px 1px 1px;
-    -fx-border-color: #4d1a4dff;
+    -fx-border-color: transparent;
 }
 .tab-pane #chooseChatTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIcon.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIcon.png');
 
     -fx-scale-shape: true; /* 图标缩放 */
 
@@ -206,18 +206,18 @@
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseChatTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIconHovered.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseChatTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIconClicked.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIconClicked.png');
     -fx-scale-shape: true;
 
 }
 .tab-pane #chooseFriendTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIcon.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/friendIcon.png');
 
     -fx-scale-shape: true; /* 图标缩放 */
 
@@ -225,35 +225,39 @@
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseFriendTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIconHovered.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/friendIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseFriendTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIconClicked.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/friendIconClicked.png');
     -fx-scale-shape: true;
 }
 .tab-pane #chooseGroupTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIcon.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/groupIcon.png');
     -fx-scale-shape: true; /* 图标缩放 */
 
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseGroupTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIconHovered.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/groupIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseGroupTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIconClicked.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/groupIconClicked.png');
     -fx-scale-shape: true;
 
 }
 #changeStyleButton {
     /* 在这里定义按钮的样式 */
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/changeStyleButton.png');
+    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/changeStyleButton.png');
+    -fx-background-color: #91c3d6;
     -fx-border-width: 0px; /* 设置边框宽度 */
+}
+#changeStyleButton:hover {
+    -fx-background-color: #5b8c89;
 }
