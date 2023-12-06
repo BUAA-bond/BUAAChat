@@ -1,5 +1,6 @@
 package UI;
 
+import Client.User;
 import UI.Controller.ChatAppClientController;
 import UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
@@ -11,6 +12,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import javafx.scene.control.Button;
+
+import static Constant.Constant.client;
+
 public class ChatAppClient extends Application {
     private Stage primaryStage;
     private AnchorPane darkRootLayout;
@@ -19,6 +23,7 @@ public class ChatAppClient extends Application {
     private ChatAppClientController whiteController;
     private  Scene darkScene;
     private  Scene whiteScene;
+    private User user;
     Button sendButton;
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -30,7 +35,6 @@ public class ChatAppClient extends Application {
         darkController.setChatAppClient(this);
         whiteController.setChatAppClient(this);
         //showPersonOverview();
-
     }
     /**
      * Initializes the root layout.

@@ -4,7 +4,7 @@ import MyUtil.RegisterInfo;
 import UI.ChatAppClient;
 import UI.LoginClient;
 import javafx.stage.Stage;
-
+import static Constant.Constant.client;
 public class Main {
     public static void main(String[] args) {
         // 在 JavaFX 主线程中启动应用程序
@@ -12,7 +12,7 @@ public class Main {
             LoginClient loginClient = new LoginClient();
             ChatAppClient chatAppClient=new ChatAppClient();
             RegisterInfo registerInfo = new RegisterInfo();
-            Client client = new Client();
+            client = new Client();
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
             //在数据库里创建一个users表

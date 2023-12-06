@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
-
+import static Constant.Constant.client;
 public class ChatAppClientDarkController{
     private ChatAppClient chatAppClient;
 
@@ -64,7 +64,7 @@ public class ChatAppClientDarkController{
         sendMessage.setOnKeyPressed(event -> {
             // 如果按下的是回车键（KeyCode.ENTER）
             if (event.getCode().getName().equals("Enter")) {
-                send(sendMessage.getText());
+                send(sendMessage.getText().replaceAll("[\r\n]", ""));
                 sendMessage.clear(); // 清空 TextArea 内容
             }
         });
@@ -75,7 +75,9 @@ public class ChatAppClientDarkController{
     }
     void send(String message)
     {
-        System.out.println(message);
+        //TODO
+        //需要一个能获取当前聊天对象account的东西
+        if(client!=null) client.sendText(message,"");
     }
     void setFit(ImageView imageView,double width,double height){
         imageView.setFitHeight(height);

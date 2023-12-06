@@ -1,4 +1,6 @@
+import Message.Message;
 import Message.SysMsg;
+import Message.Text;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -22,14 +24,20 @@ public class Server {
             InputStream is=clientSocket.getInputStream();
             ObjectInputStream ois=new ObjectInputStream(is);
             while(clientSocket!=null){
-                SysMsg msg=(SysMsg) ois.readObject();
-                System.out.println(msg.getContent());
-                JsonObject job=new JsonObject();
-                job.addProperty("code",0);
-                String content=new Gson().toJson(job);
-                SysMsg msg1 = new SysMsg("system",1,content);
-                oos.writeObject(msg1);
-                oos.flush();
+                Message msg=(Message) ois.readObject();
+                if(msg instanceof SysMsg) {
+                    SysMsg sysMsg=(SysMsg)msg;
+                    System.out.println(sysMsg.getContent());
+                    JsonObject job = new JsonObject();
+                    job.addProperty("code", 0);
+                    String content = new Gson().toJson(job);
+                    SysMsg msg1 = new SysMsg("system", 1, content);
+                    oos.writeObject(msg1);
+                    oos.flush();
+                }else if(msg instanceof Text){
+                    Text text=(Text) msg;
+                    System.out.println(text.getContent());
+                }
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

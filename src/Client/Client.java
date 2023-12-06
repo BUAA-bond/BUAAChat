@@ -312,4 +312,8 @@ public class Client implements Runnable {
     public void setLogin(boolean login) {
         isLogin = login;
     }
+
+    public User getUser() {
+        return user;
+    }
 }

@@ -1,5 +1,7 @@
 package Constant;
 
+import Client.Client;
+
 /**
  * @author 西西弗
  * @Description:
@@ -12,4 +14,6 @@ public class Constant {
     public static final String host="localhost";
     public static final int port=9999;
     public static String hexCharSet = "0123456789ABCDEF";
+    public static Client client;
+
 }
