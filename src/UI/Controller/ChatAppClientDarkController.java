@@ -8,7 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
 
-public class ChatAppClientController{
+public class ChatAppClientDarkController{
     private ChatAppClient chatAppClient;
 
     @FXML
@@ -69,7 +69,7 @@ public class ChatAppClientController{
             }
         });
         changeStyleButton.setOnAction(event -> {
-                chatAppClient.changeDarkStyle();
+                chatAppClient.changeWhiteStyle();
         });
         // 添加其他控件的事件监听器等
     }
