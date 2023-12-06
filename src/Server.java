@@ -15,13 +15,13 @@ public class Server {
     public static void main(String[] args) {
         try {
             ServerSocket serverSocket = new ServerSocket(9999);
-            while(true){
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("客户端连接成功，地址：" + clientSocket.getInetAddress());
-                InputStream is=clientSocket.getInputStream();
-                OutputStream os=clientSocket.getOutputStream();
-                ObjectInputStream ois=new ObjectInputStream(is);
-                ObjectOutputStream oos=new ObjectOutputStream(os);
+            Socket clientSocket = serverSocket.accept();
+            System.out.println("客户端连接成功，地址：" + clientSocket.getInetAddress());
+            OutputStream os=clientSocket.getOutputStream();
+            ObjectOutputStream oos=new ObjectOutputStream(os);
+            InputStream is=clientSocket.getInputStream();
+            ObjectInputStream ois=new ObjectInputStream(is);
+            while(clientSocket!=null){
                 SysMsg msg=(SysMsg) ois.readObject();
                 System.out.println(msg.getContent());
                 JsonObject job=new JsonObject();
@@ -30,11 +30,6 @@ public class Server {
                 SysMsg msg1 = new SysMsg("system",1,content);
                 oos.writeObject(msg1);
                 oos.flush();
-                if(oos!=null) oos.close();
-                if(ois!=null) ois.close();
-                if(!clientSocket.isClosed()){
-                    clientSocket.close();
-                }
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

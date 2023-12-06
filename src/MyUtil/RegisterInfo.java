@@ -1,4 +1,4 @@
-package Message;
+package MyUtil;
 
 import MyUtil.MyUtil;
 

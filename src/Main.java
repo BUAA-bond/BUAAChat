@@ -1,7 +1,6 @@
 import Client.Client;
-import Message.LoginInfo;
 import MyUtil.MyUtil;
-import Message.RegisterInfo;
+import MyUtil.RegisterInfo;
 import UI.ChatAppClient;
 import UI.LoginClient;
 import javafx.stage.Stage;
@@ -16,8 +15,6 @@ public class Main {
             Client client = new Client();
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
-            //创建客户端线程
-            client.start();
             //在数据库里创建一个users表
             MyUtil.createUsersTable();
             // 设置回调函数
@@ -28,6 +25,10 @@ public class Main {
                 if(client.login(loginAccount,loginPassword)){
                     loginClient.close();
                     try {
+                        //创建客户端线程
+                        client.setLogin(true);
+                        client.setLive(true);
+                        client.start();
                         chatAppClient.start(new Stage());
                     } catch (Exception e) {
                         e.printStackTrace();
