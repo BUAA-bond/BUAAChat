@@ -1,5 +1,7 @@
 package UI.Controller;
 
+import Client.Group;
+import Client.User;
 import UI.ChatAppClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,6 +12,10 @@ import javafx.scene.text.TextFlow;
 import static Constant.Constant.client;
 public class ChatAppClientController{
     private ChatAppClient chatAppClient;
+    @FXML
+    private Label sendToObjectName;
+    @FXML
+    private Label onlineUserName;
 
     @FXML
     private Tab chooseChatTab;
@@ -20,6 +26,12 @@ public class ChatAppClientController{
     @FXML
     private Tab chooseGroupTab;
 
+    //@FXML
+    //private ListView<User> chatHistoryListView;
+    @FXML
+    private ListView<User> friendListView;
+    @FXML
+    private ListView<Group> groupListView;
     @FXML
     private AnchorPane chatListShow;
 
@@ -75,14 +87,22 @@ public class ChatAppClientController{
     }
     void send(String message)
     {
-        System.out.println(message);
+        //TODO
+        //需要一个能获取当前聊天对象account的东西
+        if(client!=null) client.sendText(message,"");
     }
     void setFit(ImageView imageView,double width,double height){
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
     }
+
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
+    }
+    public void initUser(User user){
+        onlineUserName.setText(user.getName());
+        Image AvatarImage = new Image(user.getAvatarPath());
+        AvatarShow.setImage(AvatarImage);
     }
     // 可以添加其他方法和处理逻辑
 }

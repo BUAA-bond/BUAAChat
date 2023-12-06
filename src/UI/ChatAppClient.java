@@ -30,10 +30,18 @@ public class ChatAppClient extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("image/icon/icon_naxida.jpg"));
+        //user = client.getUser();
+        //改为测试用户
+        user = new User("114514","胡桃","123456ccf","image/AvatarImage/hutao.png");
+
         initWhiteRootLayout();
         initDarkRootStyle();
         darkController.setChatAppClient(this);
+        darkController.initUser(user);
         whiteController.setChatAppClient(this);
+        whiteController.initUser(user);
+        changeDarkStyle();
+        primaryStage.show();
         //showPersonOverview();
     }
     /**
@@ -74,8 +82,6 @@ public class ChatAppClient extends Application {
 
             // Show the scene containing the root layout.
             darkScene = new Scene(darkRootLayout);
-            primaryStage.setScene(darkScene);
-            primaryStage.show();
             changeDarkStyle();
         } catch (IOException e) {
             e.printStackTrace();
