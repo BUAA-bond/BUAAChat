@@ -113,7 +113,7 @@
     -fx-border-color: #e2e2e2;
     -fx-border-width: 2;
     -fx-background-radius: 0;
-    -fx-background-color: #1d1d1d;
+    -fx-background-color: #0c3654;
 
     -fx-font-size: 11pt;
     -fx-text-fill: #d8d8d8;
@@ -121,7 +121,7 @@
 }
 
 .button:hover {
-    -fx-background-color: #3a3a3a;
+    -fx-background-color: #0f466c;
 }
 
 .button:pressed, .button:default:hover:pressed {
@@ -177,6 +177,8 @@
 {
     -fx-background-color: -fx-outer-border, -fx-text-box-border, #1c3b5c;
 }
+
+
 /* 修改Tab中文本的颜色 */
 .tab-label {
     -fx-text-fill: #e6e6e6;
@@ -187,11 +189,70 @@
 }
 /* tab选中时设置背景颜色 */
 .tab:selected {
-    -fx-background-color: #990000ff;
+    -fx-background-color: #487da2ff;
 }
 /* Tab选中的时候选中其边框并修改样式 */
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
     -fx-border-radius: 0px;
     -fx-border-width: 1px 1px 1px 1px;
     -fx-border-color: #4d1a4dff;
+}
+.tab-pane #chooseChatTab .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIcon.png');
+
+    -fx-scale-shape: true; /* 图标缩放 */
+
+}
+
+/* 设置 Tab 鼠标悬停时的图标 */
+.tab-pane #chooseChatTab:hover .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIconHovered.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+}
+
+/* 设置 Tab 被选中时的图标 */
+.tab-pane #chooseChatTab:selected .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIconClicked.png');
+    -fx-scale-shape: true;
+
+}
+.tab-pane #chooseFriendTab .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIcon.png');
+
+    -fx-scale-shape: true; /* 图标缩放 */
+
+}
+
+/* 设置 Tab 鼠标悬停时的图标 */
+.tab-pane #chooseFriendTab:hover .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIconHovered.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+}
+
+/* 设置 Tab 被选中时的图标 */
+.tab-pane #chooseFriendTab:selected .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIconClicked.png');
+    -fx-scale-shape: true;
+}
+.tab-pane #chooseGroupTab .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIcon.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+
+}
+
+/* 设置 Tab 鼠标悬停时的图标 */
+.tab-pane #chooseGroupTab:hover .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIconHovered.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+}
+
+/* 设置 Tab 被选中时的图标 */
+.tab-pane #chooseGroupTab:selected .tab-label {
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIconClicked.png');
+    -fx-scale-shape: true;
+
+}
+#changeStyleButton {
+    /* 在这里定义按钮的样式 */
+    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/changeStyleButton.png');
 }
