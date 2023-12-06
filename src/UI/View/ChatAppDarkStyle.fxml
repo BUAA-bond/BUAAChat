@@ -13,7 +13,7 @@
    <children>
       <SplitPane dividerPositions="0.29571577847439917" layoutX="155.0" layoutY="137.0" prefHeight="674.0" prefWidth="959.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane maxWidth="325.0" minHeight="0.0" minWidth="250.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane maxWidth="277.0" minHeight="0.0" minWidth="277.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                 <AnchorPane layoutY="83.0" minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="299.0" styleClass="leftBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="100.0">
                      <children>
@@ -22,25 +22,26 @@
                               <Image url="@../../image/ChatClientImage/darkTheme/leftColumnImage.jpg" />
                            </image>
                         </ImageView>
-                        <TabPane layoutY="92.0" maxWidth="300.0" minWidth="200.0" prefHeight="668.0" prefWidth="396.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="30.0" tabMaxWidth="50.0" tabMinHeight="30.0" tabMinWidth="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TabPane maxWidth="300.0" minWidth="200.0" prefHeight="573.0" prefWidth="276.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="10.0" tabMinWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <tabs>
-                            <Tab id="chatTab" fx:id="chooseChatTab" text="chat">
+                            <Tab id="chooseChatTab" fx:id="chooseChatTab" text="chat">
+                                 <content>
+                                    <ListView prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
+                                 </content>
+                            </Tab>
+                            <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
                                  <content>
                                     <ListView prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                  </content>
                             </Tab>
-                            <Tab fx:id="chooseFriendTab" text="fridend">
-                                 <content>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
-                                 </content>
-                            </Tab>
-                              <Tab fx:id="chooseGroupTab" text="group">
+                              <Tab id="chooseGroupTab" fx:id="chooseGroupTab" text="group">
                                  <content>
                                     <ListView prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                  </content>
                               </Tab>
                           </tabs>
                         </TabPane>
+                        <Button fx:id="changeStyleButton" layoutX="36.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" />
                      </children>
                   </AnchorPane>
                   <SplitPane layoutX="21.0" layoutY="-48.0" maxHeight="100.0" minHeight="100.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -74,7 +75,7 @@
                            <children>
                               <AnchorPane prefHeight="180.0" prefWidth="670.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                               <TextArea fx:id="sendMessage" layoutX="134.0" layoutY="30.0" prefHeight="161.0" prefWidth="668.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-                              <Button fx:id="sendButton" ellipsisString="" layoutX="576.0" layoutY="133.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="80.0" text="发送" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                              <Button id="sendButton" fx:id="sendButton" ellipsisString="" layoutX="576.0" layoutY="133.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="80.0" text="发送" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
                            </children>
                         </AnchorPane>
                     </items>

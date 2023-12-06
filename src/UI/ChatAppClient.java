@@ -19,6 +19,7 @@ public class ChatAppClient extends Application {
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("image/icon/icon_naxida.jpg"));
         initRootLayout();
+        initDarkStyle();
         //showPersonOverview();
 
     }
@@ -30,6 +31,22 @@ public class ChatAppClient extends Application {
             // 读取Fxml
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("UI/View/ChatApp.fxml");
+            loader.setLocation(url);
+            rootLayout = loader.load();
+
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void initDarkStyle() {
+        try {
+            // 读取Fxml
+            FXMLLoader loader = new FXMLLoader();
+            URL url = loader.getClassLoader().getResource("UI/View/ChatAppDarkStyle.fxml");
             loader.setLocation(url);
             rootLayout = loader.load();
 
