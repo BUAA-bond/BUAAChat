@@ -1,5 +1,7 @@
 package Client;
 
+import java.util.HashMap;
+
 /**
  * @author 西西弗
  * @Description: 保存的是每一条信息的内容，还有是谁发的
@@ -12,5 +14,6 @@ public class ChatInfo {
     public ChatInfo(String fromUser, String content) {
         this.fromUser = fromUser;
         this.content = content;
+
     }
 }

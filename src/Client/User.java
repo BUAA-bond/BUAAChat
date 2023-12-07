@@ -13,7 +13,8 @@ public class User {
     private String avatarPath;
     private HashMap<String, UserInfo> friends = new HashMap();//主键是好友账号
     private HashMap<String, GroupInfo> groups = new HashMap();//主键是群聊号
-    private HashMap<String, ArrayList<ChatInfo>> messages=new HashMap<>();//主键是好友账号，表示与谁谁的聊天记录
+    private HashMap<String, ArrayList<ChatInfo>> messagesF=new HashMap<>();//主键是好友账号，表示与谁谁的聊天记录
+    private HashMap<String, ArrayList<ChatInfo>> messagesG=new HashMap<>();//主键是群账号，表示在哪个群的聊天记录
     public User() {
     }
 
@@ -69,8 +70,8 @@ public class User {
         return this.avatarPath;
     }
 
-    public HashMap<String, ArrayList<ChatInfo>> getMessages() {
-        return messages;
+    public HashMap<String, ArrayList<ChatInfo>> getMessagesF() {
+        return messagesF;
     }
     public void setAvatar(Image avatar) {
         this.avatar = avatar;
@@ -90,6 +91,10 @@ public class User {
 
     public HashMap<String, GroupInfo> getGroups() {
         return groups;
+    }
+
+    public HashMap<String, ArrayList<ChatInfo>> getMessagesG() {
+        return messagesG;
     }
 
     public void setAvatarPath(String avatarPath) {

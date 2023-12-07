@@ -208,7 +208,7 @@ public class Client implements Runnable {
             }
             oos.writeObject(text);
             oos.flush();
-            HashMap<String, ArrayList<ChatInfo>> map=user.getMessages();
+            HashMap<String, ArrayList<ChatInfo>> map=user.getMessagesF();
             if(map.containsKey(toUser)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(toUser);
@@ -362,7 +362,7 @@ public class Client implements Runnable {
     }
     public void handleText(Text text){
         String fromUser= text.getFromUser();
-        HashMap<String, ArrayList<ChatInfo>> map=user.getMessages();
+        HashMap<String, ArrayList<ChatInfo>> map=user.getMessagesF();
         if(map.containsKey(fromUser)){
             //将信息记录
             ArrayList<ChatInfo> msgs=map.get(fromUser);
