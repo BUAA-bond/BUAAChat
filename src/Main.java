@@ -3,6 +3,8 @@ import MyUtil.MyUtil;
 import MyUtil.RegisterInfo;
 import UI.ChatAppClient;
 import UI.LoginClient;
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import static Constant.Constant.client;
 public class Main {

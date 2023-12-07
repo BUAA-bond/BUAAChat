@@ -39,9 +39,13 @@ public class ChatAppClient extends Application {
 
         //HashMap<String, UserInfo> friends = user.getFriends();
         //改为测试好友
-        UserInfo friend1 = new UserInfo("钟离","image/AvatarImage/zhongli.png");
-        UserInfo friend2 = new UserInfo("ganyu","image/AvatarImage/ganyu.png");
+        UserInfo newFriend = new UserInfo("newFriend","新的好友","image/Controller/newFriend.png");
+        UserInfo addFriend = new UserInfo("addFriend","添加好友","image/Controller/addFriend.png");
+        UserInfo friend1 = new UserInfo("123456","钟离","image/AvatarImage/zhongli.png");
+        UserInfo friend2 = new UserInfo("123123","ganyu","image/AvatarImage/ganyu.png");
         HashMap<String, UserInfo> friends = new HashMap<>();
+        friends.put("newFriend",newFriend);
+        friends.put("addFriend",addFriend);
         friends.put("123456",friend1);
         friends.put("123123",friend2);
         //
@@ -52,6 +56,7 @@ public class ChatAppClient extends Application {
         darkController.initFriends(friends);
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
+        whiteController.initFriends(friends);
         changeDarkStyle();
         primaryStage.show();
         //showPersonOverview();

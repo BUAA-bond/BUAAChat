@@ -94,7 +94,27 @@ public class ChatAppClientDarkController{
         changeStyleButton.setOnAction(event -> {
                 chatAppClient.changeWhiteStyle();
         });
+        //好友被选中
+        friendListView.setOnMouseClicked(event -> {
+            UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
+            sendToObjectName.setText(selectedUser.name);
+            //处理添加好友事件
+            if(selectedUser.account.equals("addFriend")){
+                //TODO
+            }
+            //处理新的好友事件
+            else if(selectedUser.account.equals("newFriend")){
+                //TODO
+            }
+            else{
+                sendMessage.setEditable(true);
+                System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
+            }
 
+            // 执行你想要的操作
+        });
+
+        sendMessage.setEditable(false);
         // 添加其他控件的事件监听器等
     }
     void send(String message)
@@ -131,22 +151,13 @@ public class ChatAppClientDarkController{
                 imageView.setFitHeight(40); // 设置图片高度
                 imageView.setFitWidth(40); // 设置图片宽度
                 setGraphic(imageView);/**/
-                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.7);");
+                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
 
             }
         }
         // 可以添加其他方法和处理逻辑
     }
     public void initFriends(HashMap<String, UserInfo> friends){
-        /*
-        var iterator = friends.values().iterator();
-        while(true){
-            if(!iterator.hasNext()) {
-                break;
-            }
-            var val = iterator.next();
-            friendListView.getItems().add(val);
-        }*/
         friendListView.getItems().addAll(friends.values());
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         friendListView.setCellFactory(param -> new CustomListCell<UserInfo>());
