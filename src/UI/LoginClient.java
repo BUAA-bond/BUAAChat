@@ -6,6 +6,7 @@ import MyInterface.LoginButtonClickListener;
 import MyInterface.RegisterButtonClickListener;
 import MyUtil.MyUtil;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;

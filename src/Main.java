@@ -8,6 +8,9 @@ import static Constant.Constant.client;
 public class Main {
     public static void main(String[] args) {
         // 在 JavaFX 主线程中启动应用程序
+        new Main().start();
+    }
+    public void start(){
         javafx.application.Platform.startup(() -> {
             LoginClient loginClient = new LoginClient();
             ChatAppClient chatAppClient=new ChatAppClient();

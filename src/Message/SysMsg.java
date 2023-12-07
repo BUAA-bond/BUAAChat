@@ -14,6 +14,8 @@ public class SysMsg extends Message implements Serializable {
      *   1 - login
      *   2 - register
      *   3 - System command
+     *   4 - send making friends request
+     *   5 - receive making friends request
      *  -1 - quit
      * 200 - OK, current operation complete
      * 500 - error
