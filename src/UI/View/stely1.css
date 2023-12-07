@@ -13,7 +13,7 @@
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-opacity: 0.6;
 }
 
@@ -153,7 +153,7 @@
 }
 .text-area {
     -fx-control-inner-background: #fafff8; /* 设置 TextArea 的背景色 */
-    -fx-text-fill: white; /* 设置文本颜色 */
+    -fx-text-fill: black; /* 设置文本颜色 */
 }
 .scroll-pane {
     -fx-background-color: transparent; /* 设置 ScrollPane 的背景为透明 */
@@ -260,4 +260,10 @@
 }
 #changeStyleButton:hover {
     -fx-background-color: #5b8c89;
+}
+#sendToObjectName{
+    -fx-font-size: 22pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: black;
+    -fx-opacity: 0.6;
 }

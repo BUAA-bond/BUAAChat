@@ -26,17 +26,17 @@
                           <tabs>
                             <Tab id="chooseChatTab" fx:id="chooseChatTab" text="chat">
                                  <content>
-                                    <ListView prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
+                                    <ListView fx:id="chatHistoryListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
                                  </content>
                             </Tab>
                             <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
                                  <content>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
+                                    <ListView fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                  </content>
                             </Tab>
                               <Tab id="chooseGroupTab" fx:id="chooseGroupTab" text="group">
                                  <content>
-                                    <ListView prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
+                                    <ListView fx:id="groupListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                  </content>
                               </Tab>
                           </tabs>
@@ -51,7 +51,7 @@
                               <AnchorPane prefHeight="200.0" prefWidth="279.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                               <TextField fx:id="searchField" layoutX="82.0" layoutY="34.0" prefHeight="30.0" prefWidth="181.0" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="82.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="34.0" />
                               <ImageView fx:id="AvatarShow" fitHeight="53.0" fitWidth="53.0" layoutX="8.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" />
-                              <Label layoutX="82.0" layoutY="66.0" text="name" />
+                              <Label id="onlineUserName" fx:id="onlineUserName" layoutX="82.0" layoutY="66.0" text="name" />
                            </children>
                         </AnchorPane>
                      </items>
@@ -64,11 +64,12 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="667.0" styleClass="transparent-background">
                            <children>
-                              <AnchorPane prefHeight="484.0" prefWidth="667.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <AnchorPane layoutY="100.0" prefHeight="384.0" prefWidth="667.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
                                  <children>
-                                    <ScrollPane layoutY="109.0" prefHeight="484.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ScrollPane layoutY="-42.0" prefHeight="426.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-42.0" />
                                  </children>
                               </AnchorPane>
+                              <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="415.0" text="sendToObjectName" />
                            </children>
                         </AnchorPane>
                       <AnchorPane maxHeight="180.0" minHeight="150.0" minWidth="600.0" prefWidth="160.0" styleClass="transparent-background">

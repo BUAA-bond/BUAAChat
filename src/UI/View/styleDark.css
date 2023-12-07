@@ -257,3 +257,9 @@
     -fx-graphic: url('../../Image/ChatClientImage/darkTheme/changeStyleButton.png');
     -fx-border-width: 0px; /* 设置边框宽度 */
 }
+#sendToObjectName{
+    -fx-font-size: 22pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 0.6;
+}

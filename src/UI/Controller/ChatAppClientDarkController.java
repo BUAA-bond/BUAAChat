@@ -1,5 +1,7 @@
 package UI.Controller;
 
+import Client.Group;
+import Client.User;
 import UI.ChatAppClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -7,9 +9,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
+
+import java.io.PushbackInputStream;
+
 import static Constant.Constant.client;
 public class ChatAppClientDarkController{
     private ChatAppClient chatAppClient;
+    @FXML
+    private Label sendToObjectName;
+    @FXML
+    private Label onlineUserName;
 
     @FXML
     private Tab chooseChatTab;
@@ -19,6 +28,12 @@ public class ChatAppClientDarkController{
 
     @FXML
     private Tab chooseGroupTab;
+    //@FXML
+    //private ListView<User> chatHistoryListView;
+    @FXML
+    private ListView<User> friendListView;
+    @FXML
+    private ListView<Group> groupListView;
 
     @FXML
     private AnchorPane chatListShow;
@@ -71,6 +86,7 @@ public class ChatAppClientDarkController{
         changeStyleButton.setOnAction(event -> {
                 chatAppClient.changeWhiteStyle();
         });
+        friendListView.setCellFactory(param -> new CustomListCell<>());
         // 添加其他控件的事件监听器等
     }
     void send(String message)
@@ -86,5 +102,31 @@ public class ChatAppClientDarkController{
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
     }
+    public void initUser(User user){
+        onlineUserName.setText(user.getName());
+        Image AvatarImage = new Image(user.getAvatarPath());
+        AvatarShow.setImage(AvatarImage);
+    }
+    static class CustomListCell<T extends User> extends ListCell<T> {
+        @Override
+        protected void updateItem(T item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+            } /*else {
+
+            }
+                setText(item.getText());
+
+                Image image = new Image(item.getImagePath());
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(30); // 设置图片高度
+                imageView.setFitWidth(30); // 设置图片宽度
+
+                setGraphic(imageView);*/
+            }
+        }
     // 可以添加其他方法和处理逻辑
 }
