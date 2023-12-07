@@ -1,14 +1,25 @@
 package UI.Controller;
 
 import Client.Group;
+import Client.GroupInfo;
 import Client.User;
+import Client.UserInfo;
 import UI.ChatAppClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
+
+import java.io.PushbackInputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import static Constant.Constant.client;
 public class ChatAppClientController{
     private ChatAppClient chatAppClient;
@@ -25,13 +36,13 @@ public class ChatAppClientController{
 
     @FXML
     private Tab chooseGroupTab;
-
     //@FXML
     //private ListView<User> chatHistoryListView;
     @FXML
-    private ListView<User> friendListView;
+    private ListView<UserInfo> friendListView;
     @FXML
-    private ListView<Group> groupListView;
+    private ListView<GroupInfo> groupListView;
+
     @FXML
     private AnchorPane chatListShow;
 
@@ -81,7 +92,15 @@ public class ChatAppClientController{
             }
         });
         changeStyleButton.setOnAction(event -> {
-                chatAppClient.changeDarkStyle();
+            chatAppClient.changeDarkStyle();
+        });
+        //好友被选中
+        friendListView.setOnMouseClicked(event -> {
+            UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
+            sendToObjectName.setText(selectedUser.name);
+            sendMessage.setEditable(true);
+            System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
+            // 执行你想要的操作
         });
         // 添加其他控件的事件监听器等
     }
@@ -95,7 +114,6 @@ public class ChatAppClientController{
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
     }
-
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
     }
@@ -104,5 +122,31 @@ public class ChatAppClientController{
         Image AvatarImage = new Image(user.getAvatarPath());
         AvatarShow.setImage(AvatarImage);
     }
-    // 可以添加其他方法和处理逻辑
+    static class CustomListCell<T extends UserInfo> extends ListCell<T> {
+        @Override
+        protected void updateItem(T item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+                setBackground(Background.EMPTY);
+            } else {
+                setText(item.name);
+                Image image = new Image(item.avatarPath);
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(40); // 设置图片高度
+                imageView.setFitWidth(40); // 设置图片宽度
+                setGraphic(imageView);/**/
+                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
+
+            }
+        }
+        // 可以添加其他方法和处理逻辑
+    }
+    public void initFriends(HashMap<String, UserInfo> friends){
+        friendListView.getItems().addAll(friends.values());
+        // 设置列表的单元格工厂，以便自定义单元格显示内容
+        friendListView.setCellFactory(param -> new CustomListCell<UserInfo>());
+    }
 }

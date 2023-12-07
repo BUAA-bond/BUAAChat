@@ -1,6 +1,7 @@
 package UI;
 
 import Client.User;
+import Client.UserInfo;
 import UI.Controller.ChatAppClientController;
 import UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
@@ -11,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+
 import javafx.scene.control.Button;
 
 import static Constant.Constant.client;
@@ -34,12 +37,26 @@ public class ChatAppClient extends Application {
         //改为测试用户
         user = new User("114514","胡桃","123456ccf","image/AvatarImage/hutao.png");
 
+        //HashMap<String, UserInfo> friends = user.getFriends();
+        //改为测试好友
+        UserInfo newFriend = new UserInfo("newFriend","新的好友","image/Controller/newFriend.png");
+        UserInfo addFriend = new UserInfo("addFriend","添加好友","image/Controller/addFriend.png");
+        UserInfo friend1 = new UserInfo("123456","钟离","image/AvatarImage/zhongli.png");
+        UserInfo friend2 = new UserInfo("123123","ganyu","image/AvatarImage/ganyu.png");
+        HashMap<String, UserInfo> friends = new HashMap<>();
+        friends.put("newFriend",newFriend);
+        friends.put("addFriend",addFriend);
+        friends.put("123456",friend1);
+        friends.put("123123",friend2);
+        //
         initWhiteRootLayout();
         initDarkRootStyle();
         darkController.setChatAppClient(this);
         darkController.initUser(user);
+        darkController.initFriends(friends);
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
+        whiteController.initFriends(friends);
         changeDarkStyle();
         primaryStage.show();
         //showPersonOverview();
