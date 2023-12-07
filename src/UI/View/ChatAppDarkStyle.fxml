@@ -31,7 +31,7 @@
                             </Tab>
                             <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
                                  <content>
-                                    <ListView fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
+                                    <ListView id="friendListView" fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                  </content>
                             </Tab>
                               <Tab id="chooseGroupTab" fx:id="chooseGroupTab" text="group">
@@ -69,7 +69,7 @@
                                     <ScrollPane layoutY="-42.0" prefHeight="426.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-42.0" />
                                  </children>
                               </AnchorPane>
-                              <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="415.0" text="sendToObjectName" />
+                              <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="415.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane maxHeight="180.0" minHeight="150.0" minWidth="600.0" prefWidth="160.0" styleClass="transparent-background">

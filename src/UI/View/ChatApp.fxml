@@ -67,7 +67,7 @@
                                         <AnchorPane prefHeight="484.0" prefWidth="667.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <ScrollPane layoutY="55.0" prefHeight="429.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0" />
-                                    <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="437.0" text="Label" />
+                                    <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="437.0" />
                                             </children>
                                         </AnchorPane>
                                     </children>

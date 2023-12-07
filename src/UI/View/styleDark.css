@@ -263,3 +263,6 @@
     -fx-text-fill: white;
     -fx-opacity: 0.6;
 }
+#friendListView{
+    -fx-background-color:transparent;
+}
