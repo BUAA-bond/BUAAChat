@@ -61,6 +61,12 @@ public class ChatAppClientDarkController{
     private ImageView AvatarShow;
 
     @FXML
+    private AnchorPane newFriendScene;
+    @FXML
+    private AnchorPane newGroupScene;
+    @FXML
+    private AnchorPane ChatScene;
+    @FXML
     private TextFlow currentChat;
 
     @FXML
@@ -123,10 +129,6 @@ public class ChatAppClientDarkController{
         //需要一个能获取当前聊天对象account的东西
         if(client!=null) client.sendText(message,"");
     }
-    void setFit(ImageView imageView,double width,double height){
-        imageView.setFitHeight(height);
-        imageView.setFitWidth(width);
-    }
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
     }
@@ -152,7 +154,6 @@ public class ChatAppClientDarkController{
                 imageView.setFitWidth(40); // 设置图片宽度
                 setGraphic(imageView);/**/
                 setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
-
             }
         }
         // 可以添加其他方法和处理逻辑

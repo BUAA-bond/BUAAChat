@@ -43,7 +43,9 @@ public class ChatAppClient extends Application {
         UserInfo addFriend = new UserInfo("addFriend","添加好友","image/Controller/addFriend.png");
         UserInfo friend1 = new UserInfo("123456","钟离","image/AvatarImage/zhongli.png");
         UserInfo friend2 = new UserInfo("123123","ganyu","image/AvatarImage/ganyu.png");
+        //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
         HashMap<String, UserInfo> friends = new HashMap<>();
+        //friends.put("121212",group1);
         friends.put("newFriend",newFriend);
         friends.put("addFriend",addFriend);
         friends.put("123456",friend1);
