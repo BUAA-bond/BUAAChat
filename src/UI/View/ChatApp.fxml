@@ -51,7 +51,7 @@
                                                         <Image url="@../../image/ChatClientImage/whiteTheme/leftColumnImage.png" />
                                                     </image>
                                                 </ImageView>
-                                                <ListView prefHeight="573.0" prefWidth="231.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <ListView id="searchFriendListView" fx:id="searchFriendListView" prefHeight="573.0" prefWidth="231.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                             </children>
                                         </AnchorPane>
                                     </children>

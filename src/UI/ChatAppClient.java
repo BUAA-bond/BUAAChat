@@ -1,5 +1,6 @@
 package UI;
 
+import Client.GroupInfo;
 import Client.User;
 import Client.UserInfo;
 import UI.Controller.ChatAppClientController;
@@ -12,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.scene.control.Button;
@@ -36,26 +38,30 @@ public class ChatAppClient extends Application {
         //user = client.getUser();
         //改为测试用户
         user = new User("114514","胡桃","123456ccf","image/AvatarImage/hutao.png");
-
-        //HashMap<String, UserInfo> friends = user.getFriends();
+        //ArrayList<UserInfo> friends =  user.getFriends();
         //改为测试好友
+        ArrayList<UserInfo> friends = new ArrayList<>();
         UserInfo newFriend = new UserInfo("newFriend","新的好友","image/Controller/newFriend.png");
-        UserInfo addFriend = new UserInfo("addFriend","添加好友","image/Controller/addFriend.png");
         UserInfo friend1 = new UserInfo("123456","钟离","image/AvatarImage/zhongli.png");
         UserInfo friend2 = new UserInfo("123123","ganyu","image/AvatarImage/ganyu.png");
         //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
-        HashMap<String, UserInfo> friends = new HashMap<>();
         //friends.put("121212",group1);
-        friends.put("newFriend",newFriend);
-        friends.put("addFriend",addFriend);
-        friends.put("123456",friend1);
-        friends.put("123123",friend2);
-        //
+        friends.add(newFriend);
+        friends.add(friend1);
+        friends.add(friend2);
+        //ArrayList<GroupInfo> groups =  user.getGroups();
+        //改为测试群聊
+        ArrayList<GroupInfo> groups = new ArrayList<>();
+        GroupInfo newGroup = new GroupInfo("newGroup","新的群聊","image/Controller/newGroup.png");
+        GroupInfo group1 = new GroupInfo("1234","群聊1","image/GroupImage/1.png");
+        groups.add(newGroup);
+        groups.add(group1);
         initWhiteRootLayout();
         initDarkRootStyle();
         darkController.setChatAppClient(this);
         darkController.initUser(user);
         darkController.initFriends(friends);
+        darkController.initGroups(groups);
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);

@@ -43,7 +43,7 @@
                                     </Tab>
                                 </tabs>
                               </TabPane>
-                              <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="38.0" prefHeight="573.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="38.0" prefHeight="573.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="44.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <AnchorPane prefHeight="573.0" prefWidth="231.0" styleClass="leftBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                     <ImageView fitHeight="573.0" fitWidth="238.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -51,7 +51,7 @@
                                           <Image url="@../../image/ChatClientImage/darkTheme/leftColumnImage.jpg" />
                                        </image>
                                     </ImageView>
-                                    <ListView prefHeight="573.0" prefWidth="231.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ListView id="searchFriendListView" fx:id="searchFriendListView" prefHeight="573.0" prefWidth="231.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>

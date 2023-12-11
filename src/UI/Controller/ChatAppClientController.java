@@ -1,6 +1,5 @@
 package UI.Controller;
 
-import Client.Group;
 import Client.GroupInfo;
 import Client.User;
 import Client.UserInfo;
@@ -11,16 +10,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextFlow;
 
-import java.io.PushbackInputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
-import static Constant.Constant.client;
 public class ChatAppClientController{
     private ChatAppClient chatAppClient;
     @FXML
@@ -42,6 +35,8 @@ public class ChatAppClientController{
     private ListView<UserInfo> friendListView;
     @FXML
     private ListView<GroupInfo> groupListView;
+    @FXML
+    private AnchorPane searchListScene;
 
     @FXML
     private AnchorPane chatListShow;
@@ -51,6 +46,7 @@ public class ChatAppClientController{
 
     @FXML
     private AnchorPane groupListShow;
+
 
     @FXML
     private TextField searchField;
@@ -144,9 +140,12 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
-    public void initFriends(HashMap<String, UserInfo> friends){
-        friendListView.getItems().addAll(friends.values());
+    public void initFriends(ArrayList<UserInfo> friends){
+        for(int i = 0;i<friends.size();i++){
+            UserInfo userInfo = friends.get(i);
+            friendListView.getItems().add(userInfo);
+        }
         // 设置列表的单元格工厂，以便自定义单元格显示内容
-        friendListView.setCellFactory(param -> new CustomListCell<UserInfo>());
+        friendListView.setCellFactory(param -> new ChatAppClientDarkController.FriendListCell<UserInfo>());
     }
 }
