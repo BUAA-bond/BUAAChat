@@ -26,11 +26,6 @@
                            <children>
                               <TabPane maxWidth="300.0" minWidth="200.0" prefHeight="573.0" prefWidth="276.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="10.0" tabMinWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <tabs>
-                                  <Tab id="chooseChatTab" fx:id="chooseChatTab" text="chat">
-                                       <content>
-                                          <ListView fx:id="chatHistoryListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
-                                       </content>
-                                  </Tab>
                                   <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
                                        <content>
                                           <ListView id="friendListView" fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
@@ -41,9 +36,14 @@
                                           <ListView fx:id="groupListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                        </content>
                                     </Tab>
+                                  <Tab id="chooseAddGroupTab" fx:id="chooseAddGroupTab" text="chat">
+                                       <content>
+                                          <ListView fx:id="addGroupListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
+                                       </content>
+                                  </Tab>
                                 </tabs>
                               </TabPane>
-                              <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="38.0" prefHeight="573.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="44.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="38.0" prefHeight="573.0" prefWidth="236.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <AnchorPane prefHeight="573.0" prefWidth="231.0" styleClass="leftBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                     <ImageView fitHeight="573.0" fitWidth="238.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -51,7 +51,7 @@
                                           <Image url="@../../image/ChatClientImage/darkTheme/leftColumnImage.jpg" />
                                        </image>
                                     </ImageView>
-                                    <ListView id="searchFriendListView" fx:id="searchFriendListView" prefHeight="573.0" prefWidth="231.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ListView id="searchFriendListView" fx:id="searchFriendListView" layoutX="6.0" prefHeight="573.0" prefWidth="230.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -75,14 +75,6 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <AnchorPane id="newGroupScene" fx:id="newGroupScene" layoutY="62.0" prefHeight="611.0" prefWidth="667.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="62.0">
-                     <children>
-                        <ListView id="newGroupList" fx:id="newGroupList" prefHeight="673.0" prefWidth="667.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children></AnchorPane>
-                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" layoutY="62.0" prefHeight="611.0" prefWidth="667.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="62.0">
-                     <children>
-                        <ListView id="newFriendList" fx:id="newFriendList" prefHeight="611.0" prefWidth="667.0" />
-                     </children></AnchorPane>
                   <AnchorPane id="ChatScene" fx:id="ChatScene" prefHeight="673.0" prefWidth="667.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="672.0" prefWidth="670.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -105,9 +97,31 @@
                               </AnchorPane>
                           </items>
                         </SplitPane>
+                        <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="8.0" layoutY="-4.0" prefHeight="0.0" prefWidth="396.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
-                  <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="11.0" layoutY="10.0" prefHeight="33.0" prefWidth="404.0" />
+                  <AnchorPane id="newGroupScene" fx:id="newGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="571.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+                           <children>
+                              <ListView id="newGroupList" fx:id="newGroupList" prefHeight="673.0" prefWidth="667.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <Label id="sendToObjectName" fx:id="sendToObjectName11" layoutX="8.0" layoutY="-47.0" prefHeight="33.0" prefWidth="396.0" text="新的群聊" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                     </children></AnchorPane>
+                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label id="sendToObjectName" fx:id="sendToObjectName1" layoutX="10.0" layoutY="-50.0" prefHeight="43.0" prefWidth="396.0" text="新的好友" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <AnchorPane layoutY="54.0" prefHeight="619.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+                           <children>
+                              <ListView id="newFriendList" fx:id="newFriendList" prefHeight="573.0" prefWidth="667.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </children></AnchorPane>
+                  <AnchorPane id="addGroupScene" fx:id="addGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="673.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+                     </children></AnchorPane>
                </children>
             </AnchorPane>
         </items>

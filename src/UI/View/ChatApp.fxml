@@ -26,11 +26,6 @@
                                     <children>
                                         <TabPane maxWidth="300.0" minWidth="200.0" prefHeight="573.0" prefWidth="276.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="10.0" tabMinWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <tabs>
-                                                <Tab id="chooseChatTab" fx:id="chooseChatTab" text="chat">
-                                                    <content>
-                                                        <ListView fx:id="chatHistoryListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
-                                                    </content>
-                                                </Tab>
                                                 <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
                                                     <content>
                                                         <ListView id="friendListView" fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
@@ -41,9 +36,14 @@
                                                         <ListView fx:id="groupListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
                                                     </content>
                                                 </Tab>
+                                                <Tab id="chooseAddGroupTab" fx:id="chooseAddGroupTab" text="chat">
+                                                    <content>
+                                                        <ListView fx:id="addGroupListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
+                                                    </content>
+                                                </Tab>
                                             </tabs>
                                         </TabPane>
-                                        <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="47.0" prefHeight="573.0" prefWidth="229.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                        <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="47.0" prefHeight="573.0" prefWidth="229.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                     <AnchorPane prefHeight="573.0" prefWidth="231.0" styleClass="leftBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                 <ImageView fitHeight="573.0" fitWidth="238.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

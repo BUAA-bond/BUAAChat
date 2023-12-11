@@ -10,6 +10,10 @@
 .transparent-background {
     -fx-background-color: transparent;
 }
+.loadBackground{
+    -fx-background-image: url('../../image/ChatClientImage/whiteTheme/RightAreaImage2.jpg');
+    -fx-background-size: cover;
+}
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -198,7 +202,7 @@
     -fx-border-width: 1px 1px 1px 1px;
     -fx-border-color: transparent;
 }
-.tab-pane #chooseChatTab .tab-label {
+.tab-pane #chooseAddGroupTab .tab-label {
     -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIcon.png');
 
     -fx-scale-shape: true; /* 图标缩放 */
@@ -206,13 +210,13 @@
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
-.tab-pane #chooseChatTab:hover .tab-label {
+.tab-pane #chooseAddGroupTab:hover .tab-label {
     -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
-.tab-pane #chooseChatTab:selected .tab-label {
+.tab-pane #chooseAddGroupTab:selected .tab-label {
     -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIconClicked.png');
     -fx-scale-shape: true;
 
