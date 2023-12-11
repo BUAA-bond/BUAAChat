@@ -121,7 +121,7 @@ public class ChatAppClientDarkController{
     {
         //TODO
         //需要一个能获取当前聊天对象account的东西
-        if(client!=null) client.sendText(message,"");
+        //if(client!=null) client.sendText(message,"");
     }
     void setFit(ImageView imageView,double width,double height){
         imageView.setFitHeight(height);

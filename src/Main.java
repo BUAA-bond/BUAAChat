@@ -1,10 +1,7 @@
 import Client.Client;
-import MyUtil.MyUtil;
 import MyUtil.RegisterInfo;
 import UI.ChatAppClient;
 import UI.LoginClient;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import static Constant.Constant.client;
 public class Main {
@@ -21,7 +18,7 @@ public class Main {
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
             //在数据库里创建一个users表
-            MyUtil.createUsersTable();
+            //MyUtil.createUsersTable();
             // 设置回调函数
             loginClient.setButtonClickListener(message -> {
                 // 处理按钮点击后返回的消息

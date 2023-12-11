@@ -10,10 +10,16 @@ import java.util.HashMap;
 public class ChatInfo {
     public String fromUser;
     public String content;
-
+    public String time;
     public ChatInfo(String fromUser, String content) {
         this.fromUser = fromUser;
         this.content = content;
 
+    }
+
+    public ChatInfo(String fromUser, String content, String time) {
+        this.fromUser = fromUser;
+        this.content = content;
+        this.time = time;
     }
 }

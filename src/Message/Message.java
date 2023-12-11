@@ -7,41 +7,42 @@ import java.io.Serializable;
  * @Description:
  * @date 2023/11/9 20:12
  */
-public abstract class Message implements Serializable {
-    private String fromUser;//ID
-    private String toUser;//ID
-    private String content;
-    public Message(String fromUser,String toUser,String content){
-        this.fromUser=fromUser;
-        this.toUser=toUser;
-        this.content=content;
+public class Message implements Serializable {
+    private String from;//ID
+    private String to;//ID
+    private String data;
+
+    public Message(String from, String to, String data) {
+        this.from = from;
+        this.to = to;
+        this.data = data;
+    }
+    public Message(String from, String data) {
+        this.from = from;
+        this.data = data;
     }
 
-    public Message(String fromUser) {
-        this.fromUser = fromUser;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getFromUser(){
-        return fromUser;
+    public void setTo(String to) {
+        this.to = to;
     }
 
-    public String getToUser() {
-        return toUser;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public String getContent() {
-        return content;
+    public String getFrom() {
+        return from;
     }
 
-    public void setFromUser(String fromUser) {
-        this.fromUser = fromUser;
+    public String getTo() {
+        return to;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public String getData() {
+        return data;
     }
 }

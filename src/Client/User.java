@@ -11,8 +11,8 @@ public class User {
     private String password;
     private Image avatar;
     private String avatarPath;
-    private HashMap<String, UserInfo> friends = new HashMap();//主键是好友账号
-    private HashMap<String, GroupInfo> groups = new HashMap();//主键是群聊号
+    private ArrayList<UserInfo> friends = new ArrayList();//主键是好友账号
+    private ArrayList<GroupInfo> groups = new ArrayList();//主键是群聊号
     private HashMap<String, ArrayList<ChatInfo>> messagesF=new HashMap<>();//主键是好友账号，表示与谁谁的聊天记录
     private HashMap<String, ArrayList<ChatInfo>> messagesG=new HashMap<>();//主键是群账号，表示在哪个群的聊天记录
     public User() {
@@ -77,20 +77,28 @@ public class User {
         this.avatar = avatar;
     }
 
-    public void setFriends(HashMap<String, UserInfo> friends) {
+    public void setFriends(ArrayList<UserInfo> friends) {
         this.friends = friends;
     }
 
-    public void setGroups(HashMap<String, GroupInfo> groups) {
+    public void setGroups(ArrayList<GroupInfo> groups) {
         this.groups = groups;
     }
 
-    public HashMap<String, UserInfo> getFriends() {
+    public ArrayList<UserInfo> getFriends() {
         return friends;
     }
 
-    public HashMap<String, GroupInfo> getGroups() {
+    public ArrayList<GroupInfo> getGroups() {
         return groups;
+    }
+
+    public void setMessagesF(HashMap<String, ArrayList<ChatInfo>> messagesF) {
+        this.messagesF = messagesF;
+    }
+
+    public void setMessagesG(HashMap<String, ArrayList<ChatInfo>> messagesG) {
+        this.messagesG = messagesG;
     }
 
     public HashMap<String, ArrayList<ChatInfo>> getMessagesG() {
