@@ -349,13 +349,13 @@ public class MyUtil {
      * @throws SQLException
      */
     public static void insertMessage(Message message){
-        String fromAccount=message.getFromUser();
-        String toAccount=message.getToUser();
+        String fromAccount=message.getFrom();
+        String toAccount=message.getTo();
         int type=0;
-        if(message instanceof Text) type=0;
-        else if(message instanceof Photo) type=1;
+//        if(message instanceof Text) type=0;
+//        else if(message instanceof Photo) type=1;
 
-        String content=message.getContent();
+        String content=message.getData();
         Connection connection=null;
         PreparedStatement insertStatement=null;
         try {

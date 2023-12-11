@@ -9,19 +9,14 @@ import java.util.HashMap;
  */
 public class Group {
     private String name;
-    private HashMap<String,User> member=new HashMap<>();
+    private String account;
+    private HashMap<String,UserInfo> member=new HashMap<>();
 
-    public Group(HashMap<String, User> member) {
-        this.member = member;
-        for (int i = 0; i < member.size(); i++) {
-            if(i== member.size()-1)
-                name+=member.get(i).getName();
-            else
-                name+=member.get(i).getName()+"、";
-        }
+    public Group(HashMap<String, UserInfo> member) {
+
     }
 
-    public Group(String name, HashMap<String, User> member) {
+    public Group(String name, HashMap<String, UserInfo> member) {
         this.name = name;
         this.member = member;
     }
@@ -30,7 +25,7 @@ public class Group {
         return name;
     }
 
-    public HashMap<String, User> getMember() {
+    public HashMap<String, UserInfo> getMember() {
         return member;
     }
 }
