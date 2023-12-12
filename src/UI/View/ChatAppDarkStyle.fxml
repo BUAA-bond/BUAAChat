@@ -100,7 +100,7 @@
                         <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="8.0" layoutY="-4.0" prefHeight="0.0" prefWidth="396.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane id="newGroupScene" fx:id="newGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane id="newGroupScene" fx:id="newGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane prefHeight="571.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
                            <children>
@@ -109,7 +109,7 @@
                         </AnchorPane>
                         <Label id="sendToObjectName" layoutX="8.0" layoutY="-47.0" prefHeight="33.0" prefWidth="396.0" text="新的群聊" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children></AnchorPane>
-                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label id="sendToObjectName" layoutX="10.0" layoutY="-50.0" prefHeight="43.0" prefWidth="396.0" text="新的好友" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                         <AnchorPane layoutY="54.0" prefHeight="619.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
@@ -118,17 +118,21 @@
                            </children>
                         </AnchorPane>
                      </children></AnchorPane>
-                  <AnchorPane id="addGroupScene" fx:id="addGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane id="addGroupScene" fx:id="addGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane prefHeight="673.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
                            <children>
-                              <Button fx:id="createGroupButton" layoutX="295.0" layoutY="505.0" mnemonicParsing="false" text="创建" />
-                              <TextField fx:id="createGroupAccount" layoutX="201.0" layoutY="393.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="201.0" />
-                              <Label layoutX="100.0" layoutY="284.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="名字" AnchorPane.leftAnchor="100.0" />
-                              <TextField fx:id="createGroupName" layoutX="202.0" layoutY="286.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="201.0" />
-                              <Label layoutX="100.0" layoutY="391.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="群号" />
-                              <ImageView id="createGroupAvatar" fx:id="createGroupAvatar" fitHeight="100.0" fitWidth="100.0" layoutX="284.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true" />
-                              <FlowPane fx:id="groupAvatarFlowPane" hgap="20.0" prefHeight="615.0" prefWidth="667.0" styleClass="loadBackground" vgap="20.0" visible="false" />
+                              <Button fx:id="createGroupButton" layoutX="295.0" layoutY="505.0" mnemonicParsing="false" text="创建" AnchorPane.leftAnchor="295.0" AnchorPane.rightAnchor="294.0" />
+                              <TextField fx:id="createGroupAccount" layoutX="201.0" layoutY="393.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" />
+                              <Label layoutX="100.0" layoutY="284.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="名字" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="487.0" />
+                              <TextField fx:id="createGroupName" layoutX="202.0" layoutY="286.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" />
+                              <Label layoutX="100.0" layoutY="391.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="群号" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="487.0" />
+                              <HBox fx:id="createGroupAvatarHbox" alignment="CENTER" layoutX="284.0" layoutY="129.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="284.0" AnchorPane.rightAnchor="283.0">
+                                 <children>
+                                    <ImageView id="createGroupAvatar" fx:id="createGroupAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                              <FlowPane fx:id="groupAvatarFlowPane" hgap="20.0" prefHeight="615.0" prefWidth="667.0" styleClass="loadBackground" vgap="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children></AnchorPane>
                         <Label id="sendToObjectName" prefHeight="33.0" prefWidth="396.0" text="创建群聊" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children></AnchorPane>
