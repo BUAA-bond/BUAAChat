@@ -22,7 +22,7 @@
 }
 
 .label-bright {
-    -fx-font-size: 11pt;
+    -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: white;
     -fx-opacity: 1;
@@ -102,6 +102,13 @@
 
 .text-field {
     -fx-font-size: 8pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
+}
+. addGroupTextfield{
+    -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
     -fx-background-radius: 15; /* 设置圆角半径 */

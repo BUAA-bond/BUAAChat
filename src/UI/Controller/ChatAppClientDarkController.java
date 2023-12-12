@@ -5,16 +5,22 @@ import Client.User;
 import Client.UserInfo;
 import UI.ChatAppClient;
 import javafx.fxml.FXML;
+import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.text.TextFlow;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatAppClientDarkController{
+    private final String folderPath = "src/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
     @FXML
     private Label sendToObjectName;
@@ -54,8 +60,7 @@ public class ChatAppClientDarkController{
     @FXML
     private Button changeStyleButton;
 
-    @FXML
-    private ImageView AvatarShow;
+
 
     @FXML
     private AnchorPane newFriendScene;
@@ -73,19 +78,25 @@ public class ChatAppClientDarkController{
 
     @FXML
     private Button sendButton;
-
+    @FXML
+    private ImageView AvatarShow;
+    @FXML
+    private ImageView createGroupAvatar;
+    @FXML
+    private TextField createGroupName;
+    @FXML
+    private TextField createGroupAccount;
+    @FXML
+    private FlowPane groupAvatarFlowPane;
+    @FXML
+    private Button createGroupButton;
     // 可以在这里添加初始化方法或处理事件的方法
 
     // 例如，如果你想在控件初始化后执行一些操作，可以使用@FXML注解的initialize方法
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
-        sendButton.setOnAction(event -> {
-            send(sendMessage.getText());
-            sendMessage.clear();
-            // 处理按钮点击事件
-        });
-
+        initButton();
         sendMessage.setOnKeyPressed(event -> {
             // 如果按下的是回车键（KeyCode.ENTER）
             if (event.getCode().getName().equals("Enter")) {
@@ -166,7 +177,23 @@ public class ChatAppClientDarkController{
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
         initTab();
+        initAddGroupAvatar();
+        groupAvatarFlowPane.setVisible(false);
         // 添加其他控件的事件监听器等
+    }
+    public void initButton()
+    {
+        sendButton.setOnAction(event -> {
+            send(sendMessage.getText());
+            sendMessage.clear();
+            // 处理按钮点击事件
+        });
+        createGroupButton.setOnAction(event -> {
+            String name = createGroupName.getText();
+            String account = createGroupAccount.getText();
+            //TODO
+            initCreateGroup();
+        });
     }
     void send(String message)
     {
@@ -287,6 +314,7 @@ public class ChatAppClientDarkController{
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
             cleanRight();
+            initCreateGroup();
         });
         chooseFriendTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
@@ -303,5 +331,54 @@ public class ChatAppClientDarkController{
         sendToObjectName.setText("");
         sendMessage.clear();
         sendMessage.setEditable(false);
+    }
+    public void initCreateGroup(){
+        Image firstImage = new Image("image/GroupImage/7.png");
+        createGroupAvatar.setImage(firstImage);
+        createGroupName.clear();
+        createGroupAccount.clear();
+    }
+    public void initAddGroupAvatar()
+    {
+        // 获取特定文件夹内的所有图片
+        List<File> imageFiles = getImagesFromFolder(new File(folderPath));
+        for (File file : imageFiles) {
+            Image image = new Image(file.toURI().toString());
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            // 添加点击事件监听器
+            imageView.setOnMouseClicked(newEvent -> {
+                File selectedFile = file;
+                if (selectedFile != null) {
+                    createGroupAvatar.setImage(image);
+                    groupAvatarFlowPane.setVisible(false);
+                }
+            });
+            groupAvatarFlowPane.getChildren().add(imageView);
+        }
+        createGroupAvatar.setOnMouseClicked(event -> {
+            groupAvatarFlowPane.setVisible(true);
+        });
+    }
+    private List<File> getImagesFromFolder(File folder) {
+        List<File> imageFiles = new ArrayList<>();
+        File[] files = folder.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && isImage(file)) {
+                    imageFiles.add(file);
+                }
+            }
+        }
+        return imageFiles;
+    }
+    // 检查文件是否为图片
+    private boolean isImage(File file) {
+        String fileName = file.getName().toLowerCase();
+        return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ||
+                fileName.endsWith(".png") || fileName.endsWith(".gif") ||
+                fileName.endsWith(".bmp");
     }
 }
