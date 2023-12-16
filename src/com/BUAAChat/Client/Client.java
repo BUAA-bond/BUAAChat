@@ -799,6 +799,7 @@ public class Client implements Runnable {
     public boolean receiveFriendFeedback(String json){
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+        if(jsonObject.get("status").getAsInt()==9000) return true;
         ArrayList<RequestInfo> requestInfos=user.getRequests();
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String account=data.get("account_B").getAsString();
@@ -828,7 +829,7 @@ public class Client implements Runnable {
     public UserInfo receiveFriendRequest(String json){
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-        //if(jsonObject.get("status").getAsInt()==0) return null;
+//        if(jsonObject.get("status").getAsInt()==0) return null;
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String account_A=data.get("account_A").getAsString();
         String account_B=data.get("account_B").getAsString();
