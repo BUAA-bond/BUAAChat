@@ -6,6 +6,9 @@ import com.BUAAChat.MyUtil.RegisterInfo;
 import com.BUAAChat.UI.ChatAppClient;
 import com.BUAAChat.UI.LoginClient;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+
 import static com.BUAAChat.Constant.Constant.client;
 public class Main {
     public static void main(String[] args) {
@@ -23,8 +26,7 @@ public class Main {
             // 设置回调函数
             loginClient.setButtonClickListener(message -> {
                 //建立socket连接
-                //if(client.getSocket()==null)
-                    client.init();
+                client.init();
                 // 处理按钮点击后返回的消息
                 String loginAccount = message[0];    //account
                 String loginPassword = message[1];   //password
@@ -69,6 +71,12 @@ public class Main {
                     loginClient.throwError("用户已存在");
                 }else{
                     loginClient.changeRegisterSuccess();
+                    try {
+                        if(client.getSocket()!=null)
+                            client.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         });
