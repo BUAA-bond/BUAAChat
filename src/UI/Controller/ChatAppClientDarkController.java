@@ -185,6 +185,7 @@ public class ChatAppClientDarkController{
                 sendToObjectName.setText(selectedGroup.name);
                 sendMessage.setEditable(true);
                 newGroupScene.setVisible(false);
+                ObjectAccount = selectedGroup.account;
                 System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             }
             // 执行你想要的操作
