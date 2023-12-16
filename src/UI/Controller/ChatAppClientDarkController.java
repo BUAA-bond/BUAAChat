@@ -6,14 +6,15 @@ import Client.UserInfo;
 import UI.ChatAppClient;
 import javafx.event.*;
 import javafx.fxml.FXML;
-import javafx.geometry.Orientation;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.TextFlow;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,13 +65,15 @@ public class ChatAppClientDarkController{
     @FXML
     private AnchorPane newFriendScene;
     @FXML
+    private ListView<UserInfo> newFriendList;
+    @FXML
     private AnchorPane newGroupScene;
     @FXML
     private AnchorPane addGroupScene;
     @FXML
     private AnchorPane ChatScene;
     @FXML
-    private TextFlow currentChat;
+    private ScrollPane currentChat;
 
     @FXML
     private TextArea sendMessage;
@@ -91,7 +94,9 @@ public class ChatAppClientDarkController{
     private Button createGroupButton;
     @FXML
     private HBox createGroupAvatarHbox;
+    private VBox currentChatVbox;
     private static ArrayList<UserInfo> selectedUserInfo;
+    private String ObjectAccount;
     class UserEvent extends Event {
         public static final EventType<UserEvent> ANY = new EventType<>(Event.ANY, "ANY");
 
@@ -103,9 +108,6 @@ public class ChatAppClientDarkController{
         }
     }
 
-    // 可以在这里添加初始化方法或处理事件的方法
-
-    // 例如，如果你想在控件初始化后执行一些操作，可以使用@FXML注解的initialize方法
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -120,13 +122,15 @@ public class ChatAppClientDarkController{
         initTab();
         initAddGroupAvatar();
         groupAvatarFlowPane.setVisible(false);
+        initCurrentChat();
         // 添加其他控件的事件监听器等
     }
-    public void initButton()
-    {
+    public void initButton() {
         sendButton.setOnAction(event -> {
             send(sendMessage.getText());
             sendMessage.clear();
+            UserInfo testUserInfo = new UserInfo("123456","zhongli","image/AvatarImage/zhongli.png");
+            updateOtherUserMessage(testUserInfo,"你好");
             // 处理按钮点击事件
         });
         createGroupButton.setOnAction(event -> {
@@ -163,6 +167,7 @@ public class ChatAppClientDarkController{
                 sendToObjectName.setText(selectedUser.name);
                 sendMessage.setEditable(true);
                 newFriendScene.setVisible(false);
+                ObjectAccount = selectedUser.account;
                 System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
             }
             // 执行你想要的操作
@@ -221,8 +226,10 @@ public class ChatAppClientDarkController{
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
     }
-    void send(String message)
-    {
+    void send(String message) {
+        if (message.isEmpty()) return;
+        //Client.sendTextTo(ObjectAccount,message);
+        updateOnlineUserMessage(message);
         //TODO
         //需要一个能获取当前聊天对象account的东西
         //if(client!=null) client.sendText(message,"");
@@ -359,7 +366,7 @@ public class ChatAppClientDarkController{
             newGroupScene.setVisible(false);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
-            cleanRight();
+            //cleanRight();
             initCreateGroup();
         });
         chooseFriendTab.setOnSelectionChanged(event -> {
@@ -429,8 +436,10 @@ public class ChatAppClientDarkController{
                 fileName.endsWith(".png") || fileName.endsWith(".gif") ||
                 fileName.endsWith(".bmp");
     }
-    public void getSelectedUserInfo()
-    {
+    public void clearCurrentChat(){
+        currentChatVbox.getChildren().clear();
+    }
+    public void getSelectedUserInfo() {
         System.out.println("Selected Items:");
         for (UserInfo selectedItem : selectedUserInfo) {
             System.out.println(selectedItem.account+" "+selectedItem.name);
@@ -443,5 +452,75 @@ public class ChatAppClientDarkController{
                 cell.clear();
             }
         }
+    }
+    public void initCurrentChat(){
+        currentChatVbox = new VBox();
+        currentChatVbox.setPadding(new Insets(10));
+        currentChatVbox.setSpacing(10);
+        currentChatVbox.setMaxWidth(Double.MAX_VALUE);
+        currentChat.setContent(currentChatVbox);
+        currentChat.setFitToWidth(true);
+        sendToObjectName.textProperty().addListener((observable, oldValue, newValue) -> {
+            clearCurrentChat();
+        });
+        clearCurrentChat();
+    }
+    public void updateOnlineUserMessage(String message){
+        HBox content = new HBox();
+        content.setSpacing(10);
+        content.setAlignment(Pos.CENTER);
+        Text text = new Text(message);
+        text.setWrappingWidth(200); // 设置固定宽度
+        text.setTextAlignment(TextAlignment.RIGHT);
+        double textHeight = text.getLayoutBounds().getHeight(); // 获取文本的高度
+        text.prefHeight(textHeight);
+        StackPane textPane = new StackPane();
+        textPane.getChildren().add(text);
+        textPane.setStyle("-fx-background-color: lightblue; " +
+                "-fx-border-color: black;" +
+                " -fx-border-width: 1px;" +
+                "-fx-background-radius: 15;"+
+                "-fx-border-radius: 15;" +
+                " -fx-padding: 10px");
+        ImageView Avatar = new ImageView(AvatarShow.getImage());
+        Avatar.setFitWidth(50);
+        Avatar.setFitHeight(50);
+        content.getChildren().add(textPane);
+        content.getChildren().add(Avatar);
+        content.setAlignment(Pos.CENTER_RIGHT);
+        currentChatVbox.getChildren().add(content);
+        chatAppClient.getPrimaryStage().show();
+        currentChat.setVvalue(1.0);
+    }
+    public void updateOtherUserMessage(UserInfo otherUser,String message){
+        HBox content = new HBox();
+        content.setSpacing(10);
+        content.setAlignment(Pos.CENTER);
+        Text text = new Text(message);
+        text.setWrappingWidth(200); // 设置固定宽度
+        text.setTextAlignment(TextAlignment.LEFT);
+        double textHeight = text.getLayoutBounds().getHeight(); // 获取文本的高度
+        text.prefHeight(textHeight);
+        StackPane textPane = new StackPane();
+        textPane.getChildren().add(text);
+        textPane.setStyle("-fx-background-color: lightblue; " +
+                "-fx-border-color: black;" +
+                " -fx-border-width: 1px;" +
+                "-fx-background-radius: 15;"+
+                "-fx-border-radius: 15;" +
+                " -fx-padding: 10px");
+        Image image = new Image(otherUser.avatarPath);
+        ImageView Avatar = new ImageView(image);
+        Avatar.setFitWidth(50);
+        Avatar.setFitHeight(50);
+        content.getChildren().add(Avatar);
+        content.getChildren().add(textPane);
+        content.setAlignment(Pos.CENTER_LEFT);
+        currentChatVbox.getChildren().add(content);
+        chatAppClient.getPrimaryStage().show();
+        currentChat.setVvalue(1.0);
+    }
+    public void getNewFriends(ArrayList<UserInfo> newFriends){
+        
     }
 }

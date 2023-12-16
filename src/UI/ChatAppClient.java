@@ -29,7 +29,6 @@ public class ChatAppClient extends Application {
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
-    Button sendButton;
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -89,7 +88,6 @@ public class ChatAppClient extends Application {
             loader.setLocation(url);
             whiteRootLayout = loader.load();
             whiteController = loader.getController();
-
             // Show the scene containing the root layout.
             whiteScene = new Scene(whiteRootLayout);
         } catch (IOException e) {
@@ -103,10 +101,8 @@ public class ChatAppClient extends Application {
             URL url = loader.getClassLoader().getResource("UI/View/ChatAppDarkStyle.fxml");
             loader.setLocation(url);
             darkRootLayout = loader.load();
-
             // 设置控制器
             darkController = loader.getController();
-
             // Show the scene containing the root layout.
             darkScene = new Scene(darkRootLayout);
             changeDarkStyle();
