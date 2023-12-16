@@ -1,10 +1,18 @@
 package UI;
 
+<<<<<<< Updated upstream:src/UI/ChatAppClient.java
 import Client.GroupInfo;
 import Client.User;
 import Client.UserInfo;
 import UI.Controller.ChatAppClientController;
 import UI.Controller.ChatAppClientDarkController;
+=======
+import com.BUAAChat.Client.GroupInfo;
+import com.BUAAChat.Client.User;
+import com.BUAAChat.Client.UserInfo;
+import com.BUAAChat.UI.Controller.ChatAppClientController;
+import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
+>>>>>>> Stashed changes:src/com/BUAAChat/UI/ChatAppClient.java
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,11 +22,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+<<<<<<< Updated upstream:src/UI/ChatAppClient.java
 import java.util.HashMap;
 
 import javafx.scene.control.Button;
 
 import static Constant.Constant.client;
+=======
+>>>>>>> Stashed changes:src/com/BUAAChat/UI/ChatAppClient.java
 
 public class ChatAppClient extends Application {
     private Stage primaryStage;
@@ -36,6 +47,7 @@ public class ChatAppClient extends Application {
         this.primaryStage.getIcons().add(new Image("image/icon/icon_naxida.jpg"));
         //user = client.getUser();
         //改为测试用户
+<<<<<<< Updated upstream:src/UI/ChatAppClient.java
         user = new User("114514","胡桃","123456ccf","image/AvatarImage/hutao.png");
         //ArrayList<UserInfo> friends =  user.getFriends();
         //改为测试好友
@@ -43,6 +55,15 @@ public class ChatAppClient extends Application {
         UserInfo newFriend = new UserInfo("newFriend","新的好友","image/Controller/newFriend.png");
         UserInfo friend1 = new UserInfo("123456","钟离","image/AvatarImage/zhongli.png");
         UserInfo friend2 = new UserInfo("123123","ganyu","image/AvatarImage/ganyu.png");
+=======
+        user = new User("114514","胡桃","123456ccf","com/BUAAChat/image/AvatarImage/hutao.png");
+        //ArrayList<UserInfo> friends =  user.getFriends();
+        //改为测试好友
+        ArrayList<UserInfo> friends = new ArrayList<>();
+        UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
+        UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
+        UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
+>>>>>>> Stashed changes:src/com/BUAAChat/UI/ChatAppClient.java
         //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
         //friends.put("121212",group1);
         friends.add(newFriend);
@@ -51,8 +72,13 @@ public class ChatAppClient extends Application {
         //ArrayList<GroupInfo> groups =  user.getGroups();
         //改为测试群聊
         ArrayList<GroupInfo> groups = new ArrayList<>();
+<<<<<<< Updated upstream:src/UI/ChatAppClient.java
         GroupInfo newGroup = new GroupInfo("newGroup","新的群聊","image/Controller/newGroup.png");
         GroupInfo group1 = new GroupInfo("1234","群聊1","image/GroupImage/1.png");
+=======
+        GroupInfo newGroup = new GroupInfo("newGroup","新的群聊","com/BUAAChat/image/Controller/newGroup.png");
+        GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
+>>>>>>> Stashed changes:src/com/BUAAChat/UI/ChatAppClient.java
         groups.add(newGroup);
         groups.add(group1);
         initWhiteRootLayout();

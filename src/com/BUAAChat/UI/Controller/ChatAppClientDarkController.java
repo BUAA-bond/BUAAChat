@@ -1,9 +1,9 @@
-package UI.Controller;
+package com.BUAAChat.UI.Controller;
 
-import Client.GroupInfo;
-import Client.User;
-import Client.UserInfo;
-import UI.ChatAppClient;
+import com.BUAAChat.Client.GroupInfo;
+import com.BUAAChat.Client.User;
+import com.BUAAChat.Client.UserInfo;
+import com.BUAAChat.UI.ChatAppClient;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatAppClientDarkController{
-    private final String folderPath = "src/image/GroupImage"; // 指定文件夹路径
+    private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
     @FXML
     private Label sendToObjectName;
@@ -129,7 +129,7 @@ public class ChatAppClientDarkController{
         sendButton.setOnAction(event -> {
             send(sendMessage.getText());
             sendMessage.clear();
-            UserInfo testUserInfo = new UserInfo("123456","zhongli","image/AvatarImage/zhongli.png");
+            UserInfo testUserInfo = new UserInfo("123456","zhongli","com/BUAAChat/image/AvatarImage/zhongli.png");
             updateOtherUserMessage(testUserInfo,"你好");
             // 处理按钮点击事件
         });
@@ -229,7 +229,7 @@ public class ChatAppClientDarkController{
     }
     void send(String message) {
         if (message.isEmpty()) return;
-        //Client.sendTextTo(ObjectAccount,message);
+        //com.BUAAChat.Constant.Client.sendTextTo(ObjectAccount,message);
         updateOnlineUserMessage(message);
         //TODO
         //需要一个能获取当前聊天对象account的东西
@@ -387,7 +387,7 @@ public class ChatAppClientDarkController{
         sendMessage.setEditable(false);
     }
     public void initCreateGroup(){
-        Image firstImage = new Image("image/GroupImage/7.png");
+        Image firstImage = new Image("com/BUAAChat/image/GroupImage/7.png");
         createGroupAvatar.setImage(firstImage);
         createGroupName.clear();
         createGroupAccount.clear();
