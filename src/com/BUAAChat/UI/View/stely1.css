@@ -1,0 +1,279 @@
+.background {
+    -fx-background-color: #91c3d6;
+}
+.leftBackground{
+    -fx-background-color: #dcfcf9;
+}
+.rightBackground{
+    -fx-background-color: #c5eee5;
+}
+.transparent-background {
+    -fx-background-color: transparent;
+}
+.loadBackground{
+    -fx-background-image: url('../../image/ChatClientImage/whiteTheme/RightAreaImage2.jpg');
+    -fx-background-size: cover;
+}
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: black;
+    -fx-opacity: 0.6;
+}
+
+.label-bright {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.table-view {
+    -fx-base: #1d1d1d;
+    -fx-control-inner-background: #1d1d1d;
+    -fx-background-color: #1d1d1d;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+            transparent
+            transparent
+            derive(-fx-base, 80%)
+            transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-border-color: transparent #91c3d6 transparent #91c3d6;
+    -fx-background-color: transparent, derive(#7dcdd6,20%);
+}
+
+.split-pane {
+    -fx-padding: 1 0 0 0;
+}
+
+.menu-bar {
+    -fx-background-color: derive(#91c3d6,20%);
+}
+
+.context-menu {
+    -fx-background-color: derive(#91c3d6,50%);
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 0.9;
+}
+
+.menu .left-container {
+    -fx-background-color: #91c3d6;
+}
+
+.text-field {
+    -fx-font-size: 8pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
+}
+. addGroupTextfield{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
+}
+/*
+ * Metro style Push com.BUAAChat.Constant.Button
+ * Author: Pedro Duque Vieira
+ * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #cefbf8;
+
+    -fx-font-size: 11pt;
+    -fx-text-fill: #192827;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #a6d2cf;
+}
+
+.button:pressed, .button:default:hover:pressed {
+    -fx-background-color: white;
+    -fx-text-fill: #1d1d1d;
+}
+
+.button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid;
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.button:default:hover {
+    -fx-background-color: derive(-fx-focus-color,30%);
+}
+.text-area {
+    -fx-control-inner-background: #fafff8; /* 设置 TextArea 的背景色 */
+    -fx-text-fill: black; /* 设置文本颜色 */
+}
+.scroll-pane {
+    -fx-background-color: transparent; /* 设置 ScrollPane 的背景为透明 */
+}
+
+.scroll-pane .viewport {
+    -fx-background-image: url('../../image/ChatClientImage/whiteTheme/RightAreaImage3.jpg'); /* 设置 ScrollPane 视口的背景图片 */
+    -fx-background-repeat: no-repeat; /* 设置背景图片不重复 */
+    -fx-background-size: cover; /* 设置背景图片铺满整个视口 */
+}
+/* 修改TabPane的Pane区域背景颜色 */
+.tab-pane {
+    -fx-background-color: transparent;
+}
+/* 修改Tab的背景颜色 */
+.tab {
+    -fx-background-color: transparent;
+}
+/* 修改顶栏的背景颜色 */
+.tab-pane>*.tab-header-area>*.tab-header-background
+{
+    -fx-background-color: -fx-outer-border, -fx-text-box-border, #91c3d6;
+}
+
+
+/* 修改Tab中文本的颜色 */
+.tab-label {
+    -fx-text-fill: #e6e6e6;
+}
+/* 子代选择器，Tab选中的时候选择其子元素tab-label */
+.tab:selected .tab-label {
+    -fx-text-fill: #79a2b2ff;
+}
+/* tab选中时设置背景颜色 */
+.tab:selected {
+    -fx-background-color: #79a2b2ff;
+}
+/* Tab选中的时候选中其边框并修改样式 */
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-radius: 2px;
+    -fx-border-width: 1px 1px 1px 1px;
+    -fx-border-color: transparent;
+}
+.tab-pane #chooseAddGroupTab .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/chatIcon.png');
+
+    -fx-scale-shape: true; /* 图标缩放 */
+
+}
+
+/* 设置 Tab 鼠标悬停时的图标 */
+.tab-pane #chooseAddGroupTab:hover .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/chatIconHovered.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+}
+
+/* 设置 Tab 被选中时的图标 */
+.tab-pane #chooseAddGroupTab:selected .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/chatIconClicked.png');
+    -fx-scale-shape: true;
+
+}
+.tab-pane #chooseFriendTab .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/friendIcon.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+
+}
+
+/* 设置 Tab 鼠标悬停时的图标 */
+.tab-pane #chooseFriendTab:hover .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/friendIconHovered.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+}
+
+/* 设置 Tab 被选中时的图标 */
+.tab-pane #chooseFriendTab:selected .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/friendIconClicked.png');
+    -fx-scale-shape: true;
+}
+.tab-pane #chooseGroupTab .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/groupIcon.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+
+}
+
+/* 设置 Tab 鼠标悬停时的图标 */
+.tab-pane #chooseGroupTab:hover .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/groupIconHovered.png');
+    -fx-scale-shape: true; /* 图标缩放 */
+}
+
+/* 设置 Tab 被选中时的图标 */
+.tab-pane #chooseGroupTab:selected .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/groupIconClicked.png');
+    -fx-scale-shape: true;
+
+}
+#changeStyleButton {
+    /* 在这里定义按钮的样式 */
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/changeStyleButton.png');
+    -fx-background-color: #91c3d6;
+    -fx-border-width: 0px; /* 设置边框宽度 */
+}
+#changeStyleButton:hover {
+    -fx-background-color: #5b8c89;
+}
+#sendToObjectName{
+    -fx-font-size: 22pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: black;
+    -fx-opacity: 0.6;
+}
