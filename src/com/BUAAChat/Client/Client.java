@@ -117,7 +117,8 @@ public class Client implements Runnable {
     public UserInfo getUserInfo(String account){
         pauseThread();
         getInfoRequest(account,"401");
-        System.out.println(123123123);
+        System.out.println("getUserInfo:"+account);
+        //System.out.println(123123123);
         UserInfo userInfo=getUserInfoFeedback();
         resumeThread();
         return userInfo;
@@ -218,8 +219,9 @@ public class Client implements Runnable {
         JsonObject jsonObject=new Gson().fromJson(json,JsonObject.class);
         if(jsonObject.get("status").getAsInt()!=9000) return null;
         JsonObject data=jsonObject.get("data").getAsJsonObject();
-        JsonArray requests=data.getAsJsonArray("historys");
+        JsonArray requests=data.get("history").getAsJsonArray();
         ArrayList<RequestInfo> tmp=new ArrayList<>();
+        //System.out.println("getAllRequestInfoFeedback===begin");
         if(requests!=null)
             for(JsonElement requestElement: requests){
                 RequestInfo requestInfo = new RequestInfo();
@@ -237,8 +239,11 @@ public class Client implements Runnable {
                 requestInfo.to=account_B;
                 requestInfo.name=userInfo.name;
                 requestInfo.avatarPath=userInfo.avatarPath;
-                requestInfo.type=Integer.parseInt(type);
+                if(type.equals("pending")) requestInfo.type=0;
+                else if(type.equals("accepted")) requestInfo.type=1;
+                else if(type.equals("rejected")) requestInfo.type=-1;
                 tmp.add(requestInfo);
+                //System.out.println("getAllRequestInfoFeedback===end");
             }
         return tmp;
     }
@@ -558,7 +563,6 @@ public class Client implements Runnable {
         logoutRequest();
         boolean sign=logoutFeedback();
         resumeThread();
-        System.out.println("==="+isLogin+"====="+isLive);
         return sign;
     }
     public void logoutRequest(){
@@ -874,6 +878,7 @@ public class Client implements Runnable {
      * @param toUser
      */
     public void addFriendRequest(String toUser,String name,String avatar){//todo
+        System.out.println("addFriendRequest:"+name);
         //this.user向toUser发送好友申请
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -886,7 +891,7 @@ public class Client implements Runnable {
         try {
             oos.writeObject(msg);
             oos.flush();
-            user.getRequests().add(new RequestInfo(user.getAccount(),toUser,name,avatar,0));
+            //user.getRequests().add(new RequestInfo(user.getAccount(),toUser,name,avatar,0));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -897,6 +902,7 @@ public class Client implements Runnable {
      * @return
      */
     public boolean addFriendFeedback(String json){
+        System.out.println("addFriendFeedback:"+json);
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         if(jsonObject.get("status").getAsInt()==9000) return false;
@@ -926,7 +932,8 @@ public class Client implements Runnable {
      * 接收好友申请
      * @param
      */
-    public UserInfo receiveFriendRequest(String json){
+    public UserInfo receiveAddFriendRequest(String json){
+        System.out.println("receiveAddFriendRequest:"+json);
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         if(jsonObject.get("status").getAsInt()==9000) return null;
@@ -943,7 +950,8 @@ public class Client implements Runnable {
      * @param
      * @param choose
      */
-    public void sendRequestFeedback(String toUser,boolean choose){
+    public void receiveAddFriendFeedback(String toUser,boolean choose){
+        System.out.println("receiveAddFriendFeedback:"+toUser);
         JsonObject jsonObject = new JsonObject();
         ArrayList<RequestInfo> requestInfos=user.getRequests();
         if(choose){
@@ -983,11 +991,12 @@ public class Client implements Runnable {
     public void handleMessage(Message message){
         JsonParser jsonParser = new JsonParser();
         String json=message.getContent();
+        System.out.println("====="+json);
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         String  code=jsonObject.get("code").getAsString();
         switch (code){
             case "201"://这里是别人的好友申请
-                receiveFriendRequest(json);
+                receiveAddFriendRequest(json);
                 break;
             case "202"://这里是我给别人发，然后别人给我的回馈
             case "203":

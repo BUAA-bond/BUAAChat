@@ -519,6 +519,7 @@ public class ChatAppClientDarkController{
         currentChat.setVvalue(1.0);
     }
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
+        if(newFriends==null) return ;
         for(int i = 0;i<newFriends.size();i++){
             RequestInfo requestInfo = newFriends.get(i);
             newFriendList.getItems().add(requestInfo);
@@ -561,7 +562,7 @@ public class ChatAppClientDarkController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.sendRequestFeedback(item.from,true);
+                        client.receiveAddFriendFeedback(item.from,true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -569,7 +570,7 @@ public class ChatAppClientDarkController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.sendRequestFeedback(item.from,false);
+                        client.receiveAddFriendFeedback(item.from,false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -638,6 +639,7 @@ public class ChatAppClientDarkController{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
                         client.addFriendRequest(item.account, item.name,item.avatarPath);
+                        System.out.println(item.account+"  "+item.name);
                         type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();
@@ -657,6 +659,7 @@ public class ChatAppClientDarkController{
     }
 
     public void initChat(ArrayList<ChatInfo>chatInfos){
+        if(chatInfos==null) return;
         for(int i=0;i<chatInfos.size();i++){
             ChatInfo chatInfo = chatInfos.get(i);
             if(chatInfo.fromUser.account.equals(onlineUser.getAccount())){

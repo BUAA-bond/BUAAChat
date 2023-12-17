@@ -41,17 +41,8 @@ public class ChatAppClient extends Application {
         //改为测试群聊
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
-
-        //ArrayList<RequestInfo> newFriendRequest = user.getRequests();
+        ArrayList<RequestInfo> newFriendRequest = user.getRequests();
         //改为测试请求
-        ArrayList<RequestInfo> newFriendRequest = new ArrayList<>();
-        RequestInfo requestInfo1 = new RequestInfo("zhongli","hutao","钟离","com/BUAAChat/image/AvatarImage/zhongli.png",1);
-        RequestInfo requestInfo2 = new RequestInfo("naxida","hutao","纳西妲","com/BUAAChat/image/AvatarImage/naxida.png",0);
-        RequestInfo requestInfo3 = new RequestInfo("ying","hutao","莹","com/BUAAChat/image/AvatarImage/ying.png",-1);
-        newFriendRequest.add(requestInfo1);
-        newFriendRequest.add(requestInfo2);
-        newFriendRequest.add(requestInfo3);
-
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
                 System.out.println("Window is closing...");
@@ -68,7 +59,7 @@ public class ChatAppClient extends Application {
         darkController.initFriends(friends);
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
-        //darkController.initNewFriends(newFriendRequest);
+        darkController.initNewFriends(newFriendRequest);
 
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
