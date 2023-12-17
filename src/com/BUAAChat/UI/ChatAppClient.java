@@ -1,6 +1,7 @@
 package com.BUAAChat.UI;
 
 import com.BUAAChat.Client.GroupInfo;
+import com.BUAAChat.Client.RequestInfo;
 import com.BUAAChat.Client.User;
 import com.BUAAChat.Client.UserInfo;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
@@ -14,8 +15,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClient extends Application {
     private Stage primaryStage;
@@ -31,16 +30,35 @@ public class ChatAppClient extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
-        user = client.getUser();
+        //user = client.getUser();
         //改为测试用户
-        ArrayList<UserInfo> friends =  user.getFriends();
+        user = new User("114514","胡桃","123456ccf","com/BUAAChat/image/AvatarImage/hutao.png");
+        //ArrayList<UserInfo> friends =  user.getFriends();
         //改为测试好友
-        UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
-        friends.add(newFriend);
-        ArrayList<GroupInfo> groups =  user.getGroups();
+        ArrayList<UserInfo> friends = new ArrayList<>();
+        UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
+        UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
+        //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
+
+        friends.add(friend1);
+        friends.add(friend2);
+        //ArrayList<GroupInfo> groups =  user.getGroups();
         //改为测试群聊
+        ArrayList<GroupInfo> groups = new ArrayList<>();
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
+
+        //ArrayList<RequestInfo> newFriendRequest = user.getRequests();
+        //改为测试请求
+        ArrayList<RequestInfo> newFriendRequest = new ArrayList<>();
+        RequestInfo requestInfo1 = new RequestInfo("zhongli","hutao","钟离","com/BUAAChat/image/AvatarImage/zhongli.png",1);
+        RequestInfo requestInfo2 = new RequestInfo("naxida","hutao","纳西妲","com/BUAAChat/image/AvatarImage/naxida.png",0);
+        RequestInfo requestInfo3 = new RequestInfo("ying","hutao","莹","com/BUAAChat/image/AvatarImage/ying.png",-1);
+        newFriendRequest.add(requestInfo1);
+        newFriendRequest.add(requestInfo2);
+        newFriendRequest.add(requestInfo3);
+
+
         initWhiteRootLayout();
         initDarkRootStyle();
         darkController.setChatAppClient(this);
@@ -48,6 +66,7 @@ public class ChatAppClient extends Application {
         darkController.initFriends(friends);
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
+        darkController.initNewFriends(newFriendRequest);
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);
