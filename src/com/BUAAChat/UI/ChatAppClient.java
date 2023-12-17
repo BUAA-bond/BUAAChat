@@ -21,10 +21,13 @@ public class ChatAppClient extends Application {
     private AnchorPane darkRootLayout;
     private AnchorPane whiteRootLayout;
     private ChatAppClientDarkController darkController;
-    private ChatAppClientController whiteController;
+    private ChatAppClientDarkController whiteController;
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
+    ArrayList<GroupInfo> groups;
+    ArrayList<UserInfo> friends;
+    ArrayList<RequestInfo> newFriendRequest;
     private String toAccount;
     private boolean isStart=false;
     @Override
@@ -35,47 +38,50 @@ public class ChatAppClient extends Application {
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
         user = client.getUser();
         //改为测试用户
-        ArrayList<UserInfo> friends =  user.getFriends();
+        friends =  user.getFriends();
         //改为测试好友
         UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
         UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
         //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
         friends.add(friend1);
         friends.add(friend2);
-        ArrayList<GroupInfo> groups =  user.getGroups();
+        groups =  user.getGroups();
         //改为测试群聊
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
 
         //ArrayList<RequestInfo> newFriendRequest = user.getRequests();
         //改为测试请求
-        ArrayList<RequestInfo> newFriendRequest = new ArrayList<>();
+        newFriendRequest = new ArrayList<>();
         RequestInfo requestInfo1 = new RequestInfo("zhongli","hutao","钟离","com/BUAAChat/image/AvatarImage/zhongli.png",1);
         RequestInfo requestInfo2 = new RequestInfo("naxida","hutao","纳西妲","com/BUAAChat/image/AvatarImage/naxida.png",0);
         RequestInfo requestInfo3 = new RequestInfo("ying","hutao","莹","com/BUAAChat/image/AvatarImage/ying.png",-1);
         newFriendRequest.add(requestInfo1);
         newFriendRequest.add(requestInfo2);
         newFriendRequest.add(requestInfo3);
-
-
         initWhiteRootLayout();
         initDarkRootStyle();
+        initDark();
+        primaryStage.show();
+
+    }
+    public void initDark(){
         darkController.setChatAppClient(this);
         darkController.initUser(user);
         darkController.initFriends(friends);
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
-        //darkController.initNewFriends(newFriendRequest);
-
+        darkController.initNewFriends(newFriendRequest);
+        changeDarkStyle();
+    }
+    public void initWhite(){
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);
         whiteController.initGroups(groups);
         whiteController.initAddGroup(friends);
         whiteController.initNewFriends(newFriendRequest);
-        changeDarkStyle();
-        primaryStage.show();
-
+        changeWhiteStyle();
     }
     public void openThread(){//当前聊天对象的账号
         new Thread(()->{
@@ -120,6 +126,7 @@ public class ChatAppClient extends Application {
             loader.setLocation(url);
             whiteRootLayout = loader.load();
             whiteController = loader.getController();
+            whiteController.setStyle(1);
             // Show the scene containing the root layout.
             whiteScene = new Scene(whiteRootLayout);
         } catch (IOException e) {
@@ -135,6 +142,7 @@ public class ChatAppClient extends Application {
             darkRootLayout = loader.load();
             // 设置控制器
             darkController = loader.getController();
+            darkController.setStyle(0);
             // Show the scene containing the root layout.
             darkScene = new Scene(darkRootLayout);
             changeDarkStyle();

@@ -104,6 +104,7 @@ public class ChatAppClientDarkController{
     private String ObjectAccount;
     private User onlineUser;
     String newAvatarPath = null;
+    private int Style;
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -154,7 +155,8 @@ public class ChatAppClientDarkController{
             }
         });
         changeStyleButton.setOnAction(event -> {
-            chatAppClient.changeWhiteStyle();
+            if(Style==0)chatAppClient.initWhite();
+            else chatAppClient.initDark();
         });
     }
     void initMessageArea(){
@@ -368,6 +370,7 @@ public class ChatAppClientDarkController{
         // 可以添加其他方法和处理逻辑
     }
     public void initFriends(ArrayList<UserInfo> friends){
+        friendListView.getItems().clear();
         UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
         friendListView.getItems().add(newFriend);
         for(int i = 0;i<friends.size();i++){
@@ -378,6 +381,7 @@ public class ChatAppClientDarkController{
         friendListView.setCellFactory(param -> new FriendListCell<UserInfo>());
     }
     public void initGroups(ArrayList<GroupInfo> groups){
+        groupListView.getItems().clear();
         for(int i = 0;i<groups.size();i++){
             GroupInfo groupInfo = groups.get(i);
             groupListView.getItems().add(groupInfo);
@@ -387,6 +391,7 @@ public class ChatAppClientDarkController{
     }
     // 设置创建群聊的好友列表显示及其功能
     public void initAddGroup(ArrayList<UserInfo> friends){
+        addGroupListView.getItems().clear();
         for(int i = 0;i<friends.size();i++){
             UserInfo userInfo = friends.get(i);
             if(!userInfo.account.equals("newFriend")) addGroupListView.getItems().add(userInfo);
@@ -708,5 +713,9 @@ public class ChatAppClientDarkController{
                 updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
             }
         }
+    }
+
+    public void setStyle(int style) {
+        Style = style;
     }
 }
