@@ -115,12 +115,12 @@ public class Client implements Runnable {
      * @param account
      */
     public UserInfo getUserInfo(String account){
-        pauseThread();
+        //pauseThread();
         getInfoRequest(account,"401");
         System.out.println("getUserInfo:"+account);
         //System.out.println(123123123);
         UserInfo userInfo=getUserInfoFeedback();
-        resumeThread();
+        //resumeThread();
         return userInfo;
     }
     public ArrayList<UserInfo> searchUser(String account){
@@ -134,10 +134,10 @@ public class Client implements Runnable {
      * @return
      */
     public GroupInfo getGroupInfo(String account){
-        pauseThread();
+        //pauseThread();
         getGroupInfoRequest(account);
         GroupInfo groupInfo=getGroupInfoFeedback();
-        resumeThread();
+        //resumeThread();
         return groupInfo;
     }
     public void getAllRequestInfoRequest(String account){//todo
@@ -494,21 +494,18 @@ public class Client implements Runnable {
      * @param code
      * @return
      */
-    static Message tmpMsg=null;
     public JsonObject getJsonObjectFromMsg(String code){
-        String json=null;
         JsonObject jsonObject=null;
         try {
             while(true){
-                tmpMsg=(Message)ois.readObject();
-                json=tmpMsg.getContent();
+                Message tmpMsg=(Message)ois.readObject();
+                String json=tmpMsg.getContent();
                 jsonObject=new Gson().fromJson(json, JsonObject.class);
                 if(!jsonObject.get("code").getAsString().equals(code)){//如果不是需要的消息类型，那就开启一个线程去处理
                     new Thread(()->{
                         handleMessage(tmpMsg);
                     }).start();
-                }
-                else break;
+                } else break;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -522,10 +519,10 @@ public class Client implements Runnable {
      * @param password
      */
     public boolean changePassword(String password){
-        pauseThread();
+        //pauseThread();
         changePasswordRequest(password);
         boolean sign=changePasswordFeedback(password);
-        resumeThread();
+        //resumeThread();
         return sign;
     }
     public void changePasswordRequest(String password){
@@ -559,10 +556,15 @@ public class Client implements Runnable {
      * 登出
      */
     public boolean logout(){
-        pauseThread();
+        System.out.println(1);
+        //pauseThread();
+        System.out.println(2);
         logoutRequest();
-        boolean sign=logoutFeedback();
-        resumeThread();
+        System.out.println(3);
+        boolean sign = logoutFeedback();
+        System.out.println(4);
+        //resumeThread();
+        System.out.println(5);
         return sign;
     }
     public void logoutRequest(){
@@ -607,10 +609,10 @@ public class Client implements Runnable {
      * @param account
      */
     public boolean removeFriend(String account){
-        pauseThread();
+        //pauseThread();
         removeFriendRequest(account);
         boolean sign=removeFriendFeedback(account);
-        resumeThread();
+        //resumeThread();
         return sign;
     }
     public void removeFriendRequest(String account){
@@ -647,7 +649,7 @@ public class Client implements Runnable {
         }else return false;
     }
     public boolean buildGroup(String gAccount,String name,String avatar,ArrayList<UserInfo> members){
-        pauseThread();
+        //pauseThread();
         buildGroupRequest(gAccount,name,avatar);
         boolean sign=buildGroupFeedback(gAccount,name,avatar);
         if(sign){
@@ -656,7 +658,7 @@ public class Client implements Runnable {
                 joinGroup(userInfo,gAccount);
             }
         }
-        resumeThread();
+        //resumeThread();
         return sign;
     }
     public void buildGroupRequest(String gAccount,String name,String avatar){
@@ -750,10 +752,10 @@ public class Client implements Runnable {
      * @param name
      */
     public boolean modifyUserName(String name){
-        pauseThread();
+        //pauseThread();
         modifyUserNameRequest(name);
         boolean sign=modifyUserNameFeedback(name);
-        resumeThread();
+        //resumeThread();
         return sign;
     }
     public void modifyUserNameRequest(String name){
@@ -818,6 +820,7 @@ public class Client implements Runnable {
         }
     }
     public void receiveText(String json){
+        System.out.println("receiveText"+json);
         JsonObject jsonObject=new Gson().fromJson(json,JsonObject.class);
         if(jsonObject.get("status").getAsInt()==9000){
             return;
@@ -991,7 +994,6 @@ public class Client implements Runnable {
     public void handleMessage(Message message){
         JsonParser jsonParser = new JsonParser();
         String json=message.getContent();
-        System.out.println("====="+json);
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         String  code=jsonObject.get("code").getAsString();
         switch (code){
@@ -1013,18 +1015,12 @@ public class Client implements Runnable {
      */
     public Message receiveMessage(){
         try {
-            if(ois.available()>0) {
-                Message msg = (Message) ois.readObject();
-                System.out.println(msg);
-                return msg;
-            }else {
-                Thread.sleep(1000);
-            }
+            Message msg = (Message) ois.readObject();
+            System.out.println("receiveMessage"+msg);
+            return msg;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }catch (InterruptedException e){
             e.printStackTrace();
         }
         return null;
@@ -1039,33 +1035,34 @@ public class Client implements Runnable {
                 while (isLogin) {
                     try {
                         while (isPaused) {
+                            //System.out.println("lock");
                             lock.wait(); // 当 isPaused 为 true 时，线程进入等待状态
                         }
-                        Message message = receiveMessage();
-                        if(message!=null)
-                            handleMessage(message);
+                        //System.out.println(1);
+                        //Message message = receiveMessage();
+                        //System.out.println(2);
+                        //if(message!=null)
+                            //handleMessage(message);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        });
-//        while(isLive){
-//
+        }).start();
+    }
+//    private void pauseThread() {
+//        synchronized (lock) {
+//            isPaused = true; // 设置为暂停状态
+//            // 其他暂停前的操作可以放在这里
 //        }
-    }
-    private void pauseThread() {
-        synchronized (lock) {
-            isPaused = true; // 设置为暂停状态
-            // 其他暂停前的操作可以放在这里
-        }
-    }
-    private void resumeThread() {
-        synchronized (lock) {
-            isPaused = false; // 设置为运行状态
-            lock.notify(); // 唤醒等待中的线程
-        }
-    }
+//    }
+//    private void resumeThread() {
+//        synchronized (lock) {
+//            isPaused = false; // 设置为运行状态
+//            lock.notify(); // 唤醒等待中的线程
+//        }
+//    }
 
     public void setLogin(boolean login) {
         isLogin = login;
