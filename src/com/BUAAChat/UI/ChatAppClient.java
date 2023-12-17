@@ -3,7 +3,9 @@ package com.BUAAChat.UI;
 import com.BUAAChat.Client.*;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
+import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -12,22 +14,20 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
+import javafx.stage.WindowEvent;
 import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClient extends Application {
     private Stage primaryStage;
-    private ChatAppClientController darkController;
+    private AnchorPane darkRootLayout;
+    private AnchorPane whiteRootLayout;
+    private ChatAppClientDarkController darkController;
     private ChatAppClientController whiteController;
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
-    ArrayList<GroupInfo> groups;
-    ArrayList<UserInfo> friends;
-    ArrayList<RequestInfo> newFriendRequest;
     private String toAccount;
     private boolean isStart=false;
-    private int Style;
     @Override
     public void start(Stage primaryStage) throws Exception {
         isStart=true;
@@ -35,19 +35,24 @@ public class ChatAppClient extends Application {
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
         user = client.getUser();
-        friends =  user.getFriends();
-        //测试群聊
-        groups =  user.getGroups();
+        //改为测试用户
+        ArrayList<UserInfo> friends =  user.getFriends();
+        ArrayList<GroupInfo> groups =  user.getGroups();
+        //改为测试群聊
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
+        ArrayList<RequestInfo> newFriendRequest = user.getRequests();
+        //改为测试请求
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                //System.out.println("Window is closing...");
+                client.logout();
+                // 如果你希望阻止窗口关闭，可以调用 event.consume();
+                // event.consume();
+            }
+        });
 
-
-        newFriendRequest = user.getRequests();
-        initDark();
-        primaryStage.show();
-
-    }
-    public void initDark(){
+        initWhiteRootLayout();
         initDarkRootStyle();
         darkController.setChatAppClient(this);
         darkController.initUser(user);
@@ -55,17 +60,19 @@ public class ChatAppClient extends Application {
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
         darkController.initNewFriends(newFriendRequest);
-        changeDarkStyle();
-    }
-    public void initWhite(){
-        initWhiteRootLayout();
+
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);
         whiteController.initGroups(groups);
         whiteController.initAddGroup(friends);
         whiteController.initNewFriends(newFriendRequest);
-        changeWhiteStyle();
+        changeDarkStyle();
+        primaryStage.show();
+
+    }
+    public void close(){
+
     }
     public void openThread(){//当前聊天对象的账号
         new Thread(()->{
@@ -108,9 +115,8 @@ public class ChatAppClient extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("com/BUAAChat/UI/View/ChatApp.fxml");
             loader.setLocation(url);
-            AnchorPane whiteRootLayout = loader.load();
+            whiteRootLayout = loader.load();
             whiteController = loader.getController();
-            whiteController.setStyle(1);
             // Show the scene containing the root layout.
             whiteScene = new Scene(whiteRootLayout);
         } catch (IOException e) {
@@ -123,10 +129,9 @@ public class ChatAppClient extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("com/BUAAChat/UI/View/ChatAppDarkStyle.fxml");
             loader.setLocation(url);
-            AnchorPane darkRootLayout = loader.load();
+            darkRootLayout = loader.load();
             // 设置控制器
             darkController = loader.getController();
-            darkController.setStyle(0);
             // Show the scene containing the root layout.
             darkScene = new Scene(darkRootLayout);
             changeDarkStyle();
@@ -138,17 +143,7 @@ public class ChatAppClient extends Application {
         return primaryStage;
     }
 
-    public void setStyle(int style) {
-        Style = style;
-    }
-    public void updateChat(ChatInfo chatInfo){
-        if(Style==1){
-            whiteController.updateChatObject(chatInfo);
-        }
-        else {
-            darkController.updateChatObject(chatInfo);
-        }
-    }
+
     public static void main(String[] args) throws Exception {
         launch(args);
     }
