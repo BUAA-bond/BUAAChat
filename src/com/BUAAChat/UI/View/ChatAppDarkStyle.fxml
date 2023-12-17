@@ -100,7 +100,7 @@
                         <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="8.0" layoutY="-4.0" prefHeight="0.0" prefWidth="396.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label id="sendToObjectName" layoutX="10.0" layoutY="-50.0" prefHeight="43.0" prefWidth="396.0" text="新的好友" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                         <AnchorPane layoutY="54.0" prefHeight="619.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
@@ -127,6 +127,24 @@
                            </children></AnchorPane>
                         <Label id="sendToObjectName" prefHeight="33.0" prefWidth="396.0" text="创建群聊" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children></AnchorPane>
+                  <AnchorPane fx:id="changeIdentityScene" prefHeight="673.0" prefWidth="667.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="673.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
+                           <children>
+                              <HBox layoutX="219.0" layoutY="156.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="284.0" AnchorPane.rightAnchor="283.0">
+                                 <children>
+                                    <ImageView fx:id="newAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                              <Label layoutX="114.0" layoutY="372.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="昵称" AnchorPane.leftAnchor="114.0" AnchorPane.rightAnchor="473.0" />
+                              <TextField fx:id="newNameField" layoutX="212.0" layoutY="374.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="190.0" />
+                              <Button fx:id="changeIdentityButton" layoutX="286.0" layoutY="506.0" mnemonicParsing="false" text="更改" />
+                              <FlowPane fx:id="AvatarFlowPane" hgap="20.0" prefHeight="615.0" prefWidth="667.0" styleClass="loadBackground" vgap="20.0" visible="false" />
+                           </children>
+                        </AnchorPane>
+                        <Label id="sendToObjectName" prefHeight="33.0" prefWidth="396.0" text="修改个人信息" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
         </items>

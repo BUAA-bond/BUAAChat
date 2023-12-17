@@ -59,8 +59,6 @@ public class ChatAppClientDarkController{
     private ListView<UserInfo> searchFriendListView;
     @FXML
     private Button changeStyleButton;
-
-
     @FXML
     private AnchorPane newFriendScene;
     @FXML
@@ -90,7 +88,15 @@ public class ChatAppClientDarkController{
     @FXML
     private Button createGroupButton;
     @FXML
-    private HBox createGroupAvatarHbox;
+    private  AnchorPane changeIdentityScene;
+    @FXML
+    private  ImageView newAvatar;
+    @FXML
+    private  TextField newNameField;
+    @FXML
+    private Button changeIdentityButton;
+    @FXML
+    private FlowPane AvatarFlowPane;
     private VBox currentChatVbox;
     private static ArrayList<UserInfo> selectedUserInfo;
     private String ObjectAccount;
@@ -103,6 +109,7 @@ public class ChatAppClientDarkController{
         initFriendList();//设置好友列表点击事件
         initGroupView();//设置群聊列表点击事件
         //initCreateGroupView();//设置创建群聊列表对象被选中的事件
+        initChangeIdentity();
         initSearchField();//初始化搜索好友文本框
         initScene();//设置初始时界面显示
         initTab();
@@ -123,9 +130,12 @@ public class ChatAppClientDarkController{
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             getSelectedUserInfo();
-            //TODO
+            //TODO 创建新群聊
             clearAddGroupFriends();
             initCreateGroup();
+        });
+        changeIdentityButton.setOnAction(event -> {
+            //TODO 发送更改信息
         });
         changeStyleButton.setOnAction(event -> {
             chatAppClient.changeWhiteStyle();
@@ -148,9 +158,11 @@ public class ChatAppClientDarkController{
             if(selectedUser.account.equals("newFriend")){
                 //TODO
                 newFriendScene.setVisible(true);
+                changeIdentityScene.setVisible(false);
             }
             else{
                 sendToObjectName.setText(selectedUser.name);
+                changeIdentityScene.setVisible(false);
                 sendMessage.setEditable(true);
                 newFriendScene.setVisible(false);
                 ObjectAccount = selectedUser.account;
@@ -168,6 +180,9 @@ public class ChatAppClientDarkController{
             System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             // 执行你想要的操作
         });
+    }
+    void initChangeIdentity(){
+
     }
     void initSearchField(){
         searchField.setOnKeyPressed(event -> {
@@ -202,6 +217,7 @@ public class ChatAppClientDarkController{
         searchListScene.setVisible(false);
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
+        changeIdentityScene.setVisible(false);
     }
     void send(String message) {
         if (message.isEmpty()) return;
@@ -341,6 +357,7 @@ public class ChatAppClientDarkController{
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
             //cleanRight();
             initCreateGroup();
         });
@@ -348,12 +365,14 @@ public class ChatAppClientDarkController{
             addGroupScene.setVisible(false);
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
         });
     }
     public void cleanRight(){
