@@ -3,7 +3,6 @@ package com.BUAAChat.UI.Controller;
 import com.BUAAChat.Client.*;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
-import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatAppClientDarkController{
-    private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
     @FXML
     private Label sendToObjectName;
@@ -390,7 +388,9 @@ public class ChatAppClientDarkController{
     }
     public void initAddGroupAvatar() {
         // 获取特定文件夹内的所有图片
-        List<File> imageFiles = getImagesFromFolder(new File(folderPath));
+        // 指定文件夹路径
+        String groupAvatarPath = "src/com/BUAAChat/image/GroupImage";
+        List<File> imageFiles = getImagesFromFolder(new File(groupAvatarPath));
         for (File file : imageFiles) {
             Image image = new Image(file.toURI().toString());
             ImageView imageView = new ImageView(image);
@@ -647,5 +647,9 @@ public class ChatAppClientDarkController{
             }
         }
         // 可以添加其他方法和处理逻辑
+    }
+
+    public void initChat(ArrayList<ChatInfo>chatInfos){
+
     }
 }
