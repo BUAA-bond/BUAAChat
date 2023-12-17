@@ -20,6 +20,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.BUAAChat.Constant.Constant.client;
+
 public class ChatAppClientDarkController{
     private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
@@ -229,11 +231,8 @@ public class ChatAppClientDarkController{
     }
     void send(String message) {
         if (message.isEmpty()) return;
-        //com.BUAAChat.Constant.Client.sendTextTo(ObjectAccount,message);
+        client.sendText(ObjectAccount,message);
         updateOnlineUserMessage(message);
-        //TODO
-        //需要一个能获取当前聊天对象account的东西
-        //if(client!=null) client.sendText(message,"");
     }
     void searchFriend(String s){
         //TODO

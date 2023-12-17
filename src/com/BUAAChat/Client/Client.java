@@ -1,10 +1,8 @@
 package com.BUAAChat.Client;
 
 import com.BUAAChat.Message;
-import com.BUAAChat.MyException.ConnectException;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.google.gson.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -22,7 +20,6 @@ public class Client implements Runnable {
     private OutputStream os=null;
     private ObjectInputStream ois=null;
     private ObjectOutputStream oos=null;
-    private boolean isLive = false;
     private boolean isLogin =false;
     private User user=new User();
     private static Message receiveMsg =null;
@@ -55,32 +52,41 @@ public class Client implements Runnable {
         Message msg=null;
         String json=null;
         //初始化用户
+        //user.setName("ccf");
         UserInfo userInfo = getUserInfo(account);
+        //System.out.println(userInfo.name);
         user.setName(userInfo.name);
         user.setAvatarPath(userInfo.avatarPath);
         user.setAccount(account);
         user.setPassword(password);
-//        try {
-//            //初始化朋友
-//            getAllFriendsInfoRequest(account);//发送请求
-//            msg=(Message)ois.readObject();
-//            json=msg.getContent();
-//            user.setFriends(getAllFriendsInfoFeedback(json,0));
-//            //初始化群
-//            getAllGroupsInfoRequest(account);//发送请求
-//            msg=(Message)ois.readObject();
-//            json=msg.getContent();
-//            user.setGroups(getAllGroupsInfoFeedback(json,0));
-//            //初始化请求
-//            getAllRequestInfoRequest(account);
-//            msg=(Message)ois.readObject();
-//            json=msg.getContent();
-//            user.setRequests(getAllRequestInfoFeedback(json));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        System.out.println("userInit");
+        System.out.println(userInfo.name);
+        System.out.println(userInfo.account);
+        System.out.println(userInfo.avatarPath);
+        try {
+            //初始化朋友
+            getAllFriendsInfoRequest(account);//发送请求
+            msg=(Message)ois.readObject();
+            json=msg.getContent();
+            System.out.println("friends:"+json);
+            user.setFriends(getAllFriendsInfoFeedback(json,0));
+            //初始化群
+            getAllGroupsInfoRequest(account);//发送请求
+            msg=(Message)ois.readObject();
+            json=msg.getContent();
+            System.out.println("groups:"+json);
+            user.setGroups(getAllGroupsInfoFeedback(json,0));
+            //初始化请求
+            getAllRequestInfoRequest(account);
+            msg=(Message)ois.readObject();
+            json=msg.getContent();
+            System.out.println("requests:"+json);
+            user.setRequests(getAllRequestInfoFeedback(json));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * 发送获取信息请求
@@ -112,9 +118,13 @@ public class Client implements Runnable {
         getInfoRequest(account,"401");
         System.out.println(1111);
         UserInfo userInfo=getUserInfoFeedback();
-        System.out.println(111111111);
         resumeThread();
         return userInfo;
+    }
+    public ArrayList<UserInfo> searchUser(String account){
+        ArrayList<UserInfo> tmp=new ArrayList<UserInfo>();
+        tmp.add(getUserInfo(account));
+        return tmp;
     }
     /**
      * 获取某个群聊的信息
@@ -189,23 +199,13 @@ public class Client implements Runnable {
      * @return
      */
     public UserInfo getUserInfoFeedback(){
-        //todo
-        //JsonObject jsonObject=getJsonObjectFromMsg(401);
-        JsonObject jsonObject=null;
-        try {
-            Message message=(Message) ois.readObject();
-            jsonObject=new Gson().fromJson(message.getContent(),JsonObject.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        if(jsonObject.get("status").getAsInt()!=9000) return null;
-        JsonObject data=jsonObject.get("data").getAsJsonObject();
-        String name=data.get("name").getAsString();
-        String account=data.get("account").getAsString();
-        String avatar=data.get("avatar").getAsString();
-        UserInfo userInfo = new UserInfo(name, account, avatar);
+        JsonObject jsonObject = getJsonObjectFromMsg("401");
+        if (jsonObject.get("status").getAsInt() != 9000) return null;
+        JsonObject data = jsonObject.get("data").getAsJsonObject();
+        String name = data.get("name").getAsString();
+        String account = data.get("account").getAsString();
+        String avatar = data.get("avatar").getAsString();
+        UserInfo userInfo = new UserInfo(account,name, avatar);
         return userInfo;
     }
 
@@ -217,7 +217,7 @@ public class Client implements Runnable {
         JsonObject jsonObject=new Gson().fromJson(json,JsonObject.class);
         if(jsonObject.get("status").getAsInt()!=9000) return null;
         JsonObject data=jsonObject.get("data").getAsJsonObject();
-        JsonArray requests=data.getAsJsonArray("requests");
+        JsonArray requests=data.getAsJsonArray("historys");
         ArrayList<RequestInfo> tmp=new ArrayList<>();
         if(requests!=null)
             for(JsonElement requestElement: requests){
@@ -249,8 +249,14 @@ public class Client implements Runnable {
     public ArrayList<UserInfo> getAllFriendsInfoFeedback(String json,int sign){
         JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if(jsonObject.get("status").getAsInt()!=9000) return null;
-        JsonObject data=jsonObject.get("data").getAsJsonObject();
-        JsonArray friendsJson=data.get("friends").getAsJsonArray();
+        JsonElement jsonElement=jsonObject.get("data");
+        JsonArray friendsJson=null;
+        if(jsonElement!=null && jsonElement.isJsonArray()){
+            friendsJson=jsonObject.get("data").getAsJsonArray();
+        }else if(jsonElement!=null && jsonElement.isJsonObject()){
+            JsonObject data=jsonObject.get("data").getAsJsonObject();
+            friendsJson=data.get("friends").getAsJsonArray();
+        }
         return setFriends(friendsJson,sign);
     }
     /**
@@ -261,8 +267,14 @@ public class Client implements Runnable {
     public ArrayList<GroupInfo> getAllGroupsInfoFeedback(String json,int sign){
         JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if(jsonObject.get("status").getAsInt()!=9000) return null;
-        JsonObject data=new Gson().fromJson(json, JsonObject.class);
-        JsonArray groupsJson=data.get("groups").getAsJsonArray();
+        JsonElement jsonElement=jsonObject.get("data");
+        JsonArray groupsJson=null;
+        if(jsonElement!=null && jsonElement.isJsonArray()){
+            groupsJson=jsonObject.get("data").getAsJsonArray();
+        }else if(jsonElement!=null && jsonElement.isJsonObject()){
+            JsonObject data=jsonObject.get("data").getAsJsonObject();
+            groupsJson=data.get("groups").getAsJsonArray();
+        }
         return setGroups(groupsJson,sign);
     }
     /**
@@ -298,12 +310,9 @@ public class Client implements Runnable {
         String content = gson.toJson(outerJsonObject);
         Message message = new Message(account, "0",content);
         try {
-            if(socket.isClosed()){
-                throw new ConnectException("连接异常中断");
-            }
             oos.writeObject(message);
             oos.flush();
-        } catch (IOException | ConnectException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -315,14 +324,12 @@ public class Client implements Runnable {
     public boolean registerReceive() {
         Message msg = null;
         try {
-            if(socket.isClosed()){
-                throw new ConnectException("连接异常中断");
-            }
+
             msg = (Message) ois.readObject();
             Gson gson = new Gson();
             JsonObject jsonObject = gson.fromJson(msg.getContent(),JsonObject.class);
             if (jsonObject.get("status").getAsInt()!=9000) return false;
-        } catch (ClassNotFoundException | IOException | ConnectException e) {
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
             return false;
         }
@@ -362,14 +369,9 @@ public class Client implements Runnable {
         String content = gson.toJson(jsonObject);
         Message msg = new Message(account,"0",content);
         try {
-            if(socket.isClosed()){
-                throw new ConnectException("连接异常中断");
-            }
             oos.writeObject(msg);
             oos.flush();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ConnectException e) {
             e.printStackTrace();
         }
     }
@@ -380,17 +382,12 @@ public class Client implements Runnable {
     public boolean loginReceive(String account) {
         Message msg = null;
         try {
-            if(socket.isClosed()){
-                throw new ConnectException("连接异常中断");
-            }
             msg = (Message) ois.readObject();
             String json = msg.getContent();
             JsonObject jj1 = new Gson().fromJson(json,JsonObject.class);
             if (jj1.get("status").getAsInt()!=9000) return false;
             return true;
         } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-        } catch (ConnectException e) {
             e.printStackTrace();
         }
         return false;
@@ -560,7 +557,6 @@ public class Client implements Runnable {
         if(jsonObject.get("status").getAsInt()==9000){
             //save();
             isLogin=false;
-            isLive=false;
             System.out.println("登出成功");
             return true;
         }else{
@@ -613,26 +609,29 @@ public class Client implements Runnable {
             return true;
         }else return false;
     }
-    /**
-     * 加入群聊申请
-     * @param groupAccount
-     */
-    public boolean joinGroup(String groupAccount){
+    public boolean buildGroup(String gAccount,String name,String avatar,ArrayList<UserInfo> members){
         pauseThread();
-        joinGroupRequest(groupAccount);
-        boolean sign=joinGroupFeedback(groupAccount);
+        buildGroupRequest(gAccount,name,avatar);
+        boolean sign=buildGroupFeedback(gAccount,name,avatar);
+        if(sign){
+            for (int i = 0; i < members.size(); i++) {
+                UserInfo userInfo=members.get(i);
+                joinGroup(userInfo,gAccount);
+            }
+        }
         resumeThread();
         return sign;
     }
-    public void joinGroupRequest(String groupAccount){
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("code","210");
-        JsonObject data = new JsonObject();
+    public void buildGroupRequest(String gAccount,String name,String avatar){
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("code","209");
+        JsonObject data=new JsonObject();
         data.addProperty("uAccount",user.getAccount());
-        data.addProperty("gAccount",groupAccount);
+        data.addProperty("gAccount",gAccount);
+        data.addProperty("gName",name);
+        data.addProperty("gAvatar",avatar);
         jsonObject.add("data",data);
-        String content=new Gson().toJson(jsonObject);
-        Message message = new Message(user.getAccount(),"0",content);
+        Message message = new Message(user.getAccount(),"0",new Gson().toJson(jsonObject));
         try {
             oos.writeObject(message);
             oos.flush();
@@ -640,12 +639,51 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean joinGroupFeedback(String groupAccount){
+    public boolean buildGroupFeedback(String gAccount,String name,String avatar){
+        JsonObject jsonObject=getJsonObjectFromMsg("209");
+        if(jsonObject.get("status").getAsInt()==9000){
+            GroupInfo groupInfo = new GroupInfo(gAccount, name, avatar);
+            groupInfo.members.add(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()));
+            user.getGroups().add(groupInfo);
+            user.getMessagesG().put(gAccount,new ArrayList<ChatInfo>());
+            return true;
+        } else return false;
+    }
+    /**
+     * 加入群聊申请
+     * @param groupAccount
+     */
+    public boolean joinGroup(UserInfo userInfo,String groupAccount){
+        joinGroupRequest(userInfo.account,groupAccount);
+        boolean sign=joinGroupFeedback(userInfo,groupAccount);
+        return sign;
+    }
+    public void joinGroupRequest(String uAccount,String groupAccount){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("code","210");
+        JsonObject data = new JsonObject();
+        data.addProperty("uAccount",uAccount);
+        data.addProperty("gAccount",groupAccount);
+        jsonObject.add("data",data);
+        String content=new Gson().toJson(jsonObject);
+        Message message = new Message(uAccount,"0",content);
+        try {
+            oos.writeObject(message);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public boolean joinGroupFeedback(UserInfo userInfo,String groupAccount){
         JsonObject jsonObject=getJsonObjectFromMsg("210");
         if(jsonObject.get("status").getAsInt()!=9000) return false;
-        //TODO
-        GroupInfo groupInfo=getGroupInfo(groupAccount);
-        user.getGroups().add(groupInfo);
+        ArrayList<GroupInfo> groups=user.getGroups();
+        GroupInfo groupInfo=null;
+        for (int i = groups.size()-1; i >= 0; i--) {
+            groupInfo=groups.get(i);
+            if(groupInfo.account.equals(groupAccount)) break;
+        }
+        groupInfo.members.add(userInfo);
         return true;
     }
 
@@ -706,11 +744,11 @@ public class Client implements Runnable {
         return true;
     }
     /**
-     * 用于给其他用户发送信息
+     * 用于发送信息,给用户或者群聊
      * @param content
      * @param toUser
      */
-    public void sendTextToF(String toUser,String content){//501发文本，502发视频
+    public void sendText(String toUser,String content){//501发文本，502发视频
         String code="501";
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code",code);
@@ -722,12 +760,13 @@ public class Client implements Runnable {
         String json=new Gson().toJson(jsonObject);
         Message message = new Message(user.getAccount(),toUser,json);
         try{
-            if(socket.isClosed()){
-                throw new ConnectException("连接异常中断");
-            }
             oos.writeObject(message);
             oos.flush();
-            HashMap<String, ArrayList<ChatInfo>> map=user.getMessagesF();
+            HashMap<String, ArrayList<ChatInfo>> map=null;
+            if(MyUtil.judgeAccount(toUser))
+                map=user.getMessagesF();
+            else if(MyUtil.judgeGroupAccount(toUser))
+                map=user.getMessagesG();
             if(map.containsKey(toUser)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(toUser);
@@ -739,36 +778,50 @@ public class Client implements Runnable {
             }
         }catch (IOException e){
             e.printStackTrace();
-        }catch (ConnectException e) {
-            e.printStackTrace();
         }
     }
-    public void receiveTextF(String json){
+    public void receiveText(String json){
         JsonObject jsonObject=new Gson().fromJson(json,JsonObject.class);
-        //todo
         if(jsonObject.get("status").getAsInt()==9000){
             return;
         }
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String content=data.get("content").getAsString();
         String from=data.get("from").getAsString();
-        HashMap<String, ArrayList<ChatInfo>> map=user.getMessagesF();
-        if(map.containsKey(from)){
-            //将信息记录
-            ArrayList<ChatInfo> msgs=map.get(from);
-            msgs.add(new ChatInfo(from,content));
+        String to=data.get("to").getAsString();
+        HashMap<String, ArrayList<ChatInfo>> map=null;
+        if(MyUtil.judgeAccount(to)){
+            map=user.getMessagesF();
+            if(map.containsKey(from)){
+                //将信息记录
+                ArrayList<ChatInfo> msgs=map.get(from);
+                msgs.add(new ChatInfo(from,content));
+                map.put(from,msgs);
+            }else{
+                ArrayList<ChatInfo> msgs=new ArrayList<>();
+                msgs.add(new ChatInfo(from,content));
+                map.put(from,msgs);
+            }
         }else{
-            ArrayList<ChatInfo> msgs=new ArrayList<>();
-            msgs.add(new ChatInfo(from,content));
-            map.put(from,msgs);
+            map=user.getMessagesG();
+            if(!map.containsKey(to)){
+                //将信息记录
+                ArrayList<ChatInfo> msgs=new ArrayList<>();
+                msgs.add(new ChatInfo(to,content));
+                map.put(to,msgs);
+            }else{
+                ArrayList<ChatInfo> msgs=map.get(to);
+                msgs.add(new ChatInfo(to,content));
+                map.put(to,msgs);
+            }
         }
-    }
 
+    }
     /**
      * 给别人发送好友申请
      * @param toUser
      */
-    public void sendFriendRequest(String toUser,String name,String avatar){//todo
+    public void addFriendRequest(String toUser,String name,String avatar){//todo
         //this.user向toUser发送好友申请
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -779,15 +832,10 @@ public class Client implements Runnable {
         jsonObject.add("data",data);
         Message msg = new Message(user.getAccount(), toUser,gson.toJson(jsonObject));
         try {
-            if(socket.isClosed()){
-                throw new ConnectException("连接中断");
-            }
             oos.writeObject(msg);
             oos.flush();
             user.getRequests().add(new RequestInfo(user.getAccount(),toUser,name,avatar,0));
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ConnectException e) {
             e.printStackTrace();
         }
     }
@@ -796,10 +844,10 @@ public class Client implements Runnable {
      * @param
      * @return
      */
-    public boolean receiveFriendFeedback(String json){
+    public boolean addFriendFeedback(String json){
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-        if(jsonObject.get("status").getAsInt()==9000) return true;
+        if(jsonObject.get("status").getAsInt()==9000) return false;
         ArrayList<RequestInfo> requestInfos=user.getRequests();
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String account=data.get("account_B").getAsString();
@@ -829,7 +877,7 @@ public class Client implements Runnable {
     public UserInfo receiveFriendRequest(String json){
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-//        if(jsonObject.get("status").getAsInt()==0) return null;
+        if(jsonObject.get("status").getAsInt()==9000) return null;
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String account_A=data.get("account_A").getAsString();
         String account_B=data.get("account_B").getAsString();
@@ -892,10 +940,10 @@ public class Client implements Runnable {
                 break;
             case "202"://这里是我给别人发，然后别人给我的回馈
             case "203":
-                receiveFriendFeedback(json);
+                addFriendFeedback(json);
                 break;
             case "501"://收消息
-                receiveTextF(json);
+                receiveText(json);
                 break;
         }
     }
@@ -905,9 +953,6 @@ public class Client implements Runnable {
      */
     public Message receiveMessage(){
         try {
-            if(socket.isClosed()){
-                throw new ConnectException("连接中断");
-            }
             if(ois.available()>0) {
                 Message msg = (Message) ois.readObject();
                 System.out.println(msg);
@@ -921,8 +966,6 @@ public class Client implements Runnable {
             e.printStackTrace();
         }catch (InterruptedException e){
             e.printStackTrace();
-        } catch (ConnectException e) {
-            e.printStackTrace();
         }
         return null;
     }
@@ -931,7 +974,6 @@ public class Client implements Runnable {
         thread.start();
     }
     public void run() {
-        //new Thread(() -> {
             synchronized (lock) {
                 while (isLogin) {
                     try {
@@ -939,14 +981,14 @@ public class Client implements Runnable {
                             lock.wait(); // 当 isPaused 为 true 时，线程进入等待状态
                         }
                         Message message = receiveMessage();
-                        handleMessage(message);
+                        if(message!=null)
+                            handleMessage(message);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        //}).start();
-        if (!isLive) {
+        if (!isLogin) {
             try {
                 synchronized (lock) {
                     if (oos != null) oos.close();
@@ -969,10 +1011,6 @@ public class Client implements Runnable {
             isPaused = false; // 设置为运行状态
             lock.notify(); // 唤醒等待中的线程
         }
-    }
-
-    public void setLive(boolean live) {
-        isLive = live;
     }
 
     public void setLogin(boolean login) {

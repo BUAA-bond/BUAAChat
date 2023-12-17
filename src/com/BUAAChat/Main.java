@@ -39,11 +39,10 @@ public class Main {
                     try {
                         //创建客户端线程
                         //TODO
-                        chatAppClient.start(new Stage());
                         client.setLogin(true);
-                        client.setLive(true);
                         client.userInit(loginAccount,loginPassword);//先初始化，在登录进去
                         client.start();
+                        chatAppClient.start(new Stage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
