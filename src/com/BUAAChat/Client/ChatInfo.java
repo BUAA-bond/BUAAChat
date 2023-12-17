@@ -8,16 +8,15 @@ import java.util.HashMap;
  * @date 2023/12/7 20:57
  */
 public class ChatInfo {
-    public String fromUser;
+    public UserInfo fromUser;
     public String content;
     public String time;
-    public ChatInfo(String fromUser, String content) {
+    public ChatInfo(UserInfo fromUser, String content) {
         this.fromUser = fromUser;
         this.content = content;
-
     }
 
-    public ChatInfo(String fromUser, String content, String time) {
+    public ChatInfo(UserInfo fromUser, String content, String time) {
         this.fromUser = fromUser;
         this.content = content;
         this.time = time;

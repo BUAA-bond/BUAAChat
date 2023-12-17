@@ -411,10 +411,11 @@ public class Client implements Runnable {
                 String name = friendObject.get("name").getAsString();
                 String account = friendObject.get("account").getAsString();
                 String avatar =friendObject.get("avatar").getAsString();
-                tmp.add(new UserInfo(account,name,avatar));
+                UserInfo userInfo=new UserInfo(account,name,avatar);
+                tmp.add(userInfo);
                 if(sign==0) {//初始化获取信息标记
                     JsonArray messages = friendObject.get("messages").getAsJsonArray();
-                    setMessages(account, messages);
+                    setMessages(userInfo, messages);
                 }
             }
         return tmp;
@@ -445,17 +446,17 @@ public class Client implements Runnable {
                 tmp.add(groupInfo);//加入
                 if(sign==0){//初始化标记
                     JsonArray messages=groupObject.get("messages").getAsJsonArray();
-                    setMessages(groupAccount,messages);
+                    setMessages(groupInfo,messages);
                 }
             }
         return tmp;
     }
     /**
      * 初始化消息
-     * @param account
+     * @param
      * @param jsonArray
      */
-    public void setMessages(String account,JsonArray jsonArray){
+    public void setMessages(UserInfo userInfo,JsonArray jsonArray){
         ArrayList<ChatInfo> chats=new ArrayList<>();
         for (JsonElement messageElement : jsonArray) {
             // 在这里处理每个 "messages" 数组元素
@@ -463,10 +464,31 @@ public class Client implements Runnable {
             String sendTime = messageObject.get("sendTime").getAsString();
             String content = messageObject.get("content").getAsString();
             String sender = messageObject.get("sender").getAsString();
-            chats.add(new ChatInfo(sender,content,sendTime));
+            if(sender.equals(userInfo.account))
+                chats.add(new ChatInfo(userInfo,content,sendTime));
+            else chats.add(new ChatInfo(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()),content,sendTime));
         }
-        if(MyUtil.judgeAccount(account)) this.user.getMessagesF().put(account,chats);
-        else this.user.getMessagesG().put(account,chats);
+        //保存在user里
+        this.user.getMessagesF().put(userInfo.account,chats);
+    }
+    public void setMessages(GroupInfo groupInfo,JsonArray jsonArray){
+        ArrayList<ChatInfo> chats=new ArrayList<>();
+        ArrayList<UserInfo> members=groupInfo.members;
+        for (JsonElement messageElement : jsonArray) {
+            // 在这里处理每个 "messages" 数组元素
+            JsonObject messageObject = messageElement.getAsJsonObject();
+            String content = messageObject.get("content").getAsString();
+            String sendTime = messageObject.get("sendTime").getAsString();
+            String sender = messageObject.get("sender").getAsString();
+            UserInfo userInfo=null;
+            for (int i = 0; i < members.size(); i++) {//找到这个发送者
+                userInfo=members.get(i);
+                if(userInfo.account.equals(sender)) break;
+            }
+            chats.add(new ChatInfo(userInfo,content,sendTime));
+        }
+        //保存在user里
+        this.user.getMessagesG().put(groupInfo.account,chats);
     }
     /**
      * 根据code读取信息，如果不符合的就转发，然后一直读到符合为止
@@ -777,10 +799,10 @@ public class Client implements Runnable {
             if(map.containsKey(toUser)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(toUser);
-                msgs.add(new ChatInfo(user.getAccount(),content));
+                msgs.add(new ChatInfo(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()),content));
             }else{
                 ArrayList<ChatInfo> msgs=new ArrayList<>();
-                msgs.add(new ChatInfo(user.getAccount(),content));
+                msgs.add(new ChatInfo(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()),content));
                 map.put(toUser,msgs);
             }
         }catch (IOException e){
@@ -799,27 +821,46 @@ public class Client implements Runnable {
         HashMap<String, ArrayList<ChatInfo>> map=null;
         if(MyUtil.judgeAccount(to)){
             map=user.getMessagesF();
+            ArrayList<UserInfo> tmpFriends=user.getFriends();
+            UserInfo userInfo=null;
+            for (int i = 0; i < tmpFriends.size(); i++) {
+                userInfo=tmpFriends.get(i);
+                if(userInfo.account.equals(from)) break;
+            }
             if(map.containsKey(from)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(from);
-                msgs.add(new ChatInfo(from,content));
-                map.put(from,msgs);
+                msgs.add(new ChatInfo(userInfo,content));
+                //map.put(from,msgs);
             }else{
                 ArrayList<ChatInfo> msgs=new ArrayList<>();
-                msgs.add(new ChatInfo(from,content));
+                msgs.add(new ChatInfo(userInfo,content));
                 map.put(from,msgs);
             }
         }else{
+            //to是群聊号，from是群里那个发这条信息的人
             map=user.getMessagesG();
+            ArrayList<GroupInfo> tmpGroups=user.getGroups();
+            GroupInfo groupInfo=null;
+            for (int i = 0; i < tmpGroups.size(); i++) {
+                groupInfo=tmpGroups.get(i);
+                if(groupInfo.account.equals(to)) break;
+            }
+            ArrayList<UserInfo> tmpMembers=groupInfo.members;
+            UserInfo userInfo=null;
+            for (int i = 0; i < tmpMembers.size(); i++) {
+                userInfo=tmpMembers.get(i);
+                if(userInfo.account.equals(from)) break;
+            }
             if(!map.containsKey(to)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=new ArrayList<>();
-                msgs.add(new ChatInfo(to,content));
+                msgs.add(new ChatInfo(userInfo,content));
                 map.put(to,msgs);
             }else{
                 ArrayList<ChatInfo> msgs=map.get(to);
-                msgs.add(new ChatInfo(to,content));
-                map.put(to,msgs);
+                msgs.add(new ChatInfo(userInfo,content));
+                //map.put(to,msgs);
             }
         }
 
