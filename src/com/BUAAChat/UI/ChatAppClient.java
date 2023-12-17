@@ -5,6 +5,7 @@ import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
 import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -13,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
+import javafx.stage.WindowEvent;
 import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClient extends Application {
@@ -36,12 +37,6 @@ public class ChatAppClient extends Application {
         user = client.getUser();
         //改为测试用户
         ArrayList<UserInfo> friends =  user.getFriends();
-        //改为测试好友
-        UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
-        UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
-        //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
-        friends.add(friend1);
-        friends.add(friend2);
         ArrayList<GroupInfo> groups =  user.getGroups();
         //改为测试群聊
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
@@ -57,6 +52,14 @@ public class ChatAppClient extends Application {
         newFriendRequest.add(requestInfo2);
         newFriendRequest.add(requestInfo3);
 
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                System.out.println("Window is closing...");
+                client.logout();
+                // 如果你希望阻止窗口关闭，可以调用 event.consume();
+                // event.consume();
+            }
+        });
 
         initWhiteRootLayout();
         initDarkRootStyle();
@@ -75,6 +78,9 @@ public class ChatAppClient extends Application {
         whiteController.initNewFriends(newFriendRequest);
         changeDarkStyle();
         primaryStage.show();
+
+    }
+    public void close(){
 
     }
     public void openThread(){//当前聊天对象的账号

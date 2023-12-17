@@ -83,12 +83,6 @@ public class Client implements Runnable {
             json=msg.getContent();
             System.out.println("requests:"+json);
             user.setRequests(getAllRequestInfoFeedback(json));
-            ArrayList<UserInfo> tmp=searchUser("100003");
-            for (int i = 0; i < tmp.size(); i++) {
-                UserInfo userInfo1=tmp.get(i);
-                System.out.println(userInfo1.name);
-                System.out.println(userInfo1.account);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -230,9 +224,9 @@ public class Client implements Runnable {
             for(JsonElement requestElement: requests){
                 RequestInfo requestInfo = new RequestInfo();
                 JsonObject requestObject=(JsonObject) requestElement;
-                String account_A=requestObject.get("account_A").getAsString();
-                String account_B=requestObject.get("account_B").getAsString();
-                int type=requestObject.get("type").getAsInt();
+                String account_A=requestObject.get("sender").getAsString();
+                String account_B=requestObject.get("recipient").getAsString();
+                String type=requestObject.get("status").getAsString();
                 if(account_A.equals(user.getAccount())){
                     getInfoRequest(account_B,"401");
                 }else{
@@ -243,7 +237,7 @@ public class Client implements Runnable {
                 requestInfo.to=account_B;
                 requestInfo.name=userInfo.name;
                 requestInfo.avatarPath=userInfo.avatarPath;
-                requestInfo.type=type;
+                requestInfo.type=Integer.parseInt(type);
                 tmp.add(requestInfo);
             }
         return tmp;
@@ -564,6 +558,7 @@ public class Client implements Runnable {
         logoutRequest();
         boolean sign=logoutFeedback();
         resumeThread();
+        System.out.println("==="+isLogin+"====="+isLive);
         return sign;
     }
     public void logoutRequest(){
@@ -584,8 +579,17 @@ public class Client implements Runnable {
     public boolean logoutFeedback(){
         JsonObject jsonObject=getJsonObjectFromMsg("109");
         if(jsonObject.get("status").getAsInt()==9000){
-            //save();
             isLogin=false;
+            isLive=false;
+            if (!isLogin) {
+                try {
+                    if (oos != null) oos.close();
+                    if (ois != null) ois.close();
+                    if (!socket.isClosed()) socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             System.out.println("登出成功");
             return true;
         }else{
@@ -1037,20 +1041,9 @@ public class Client implements Runnable {
                 }
             }
         });
-        while(isLive){
-
-        }
-        if (!isLogin) {
-            try {
-                synchronized (lock) {
-                    if (oos != null) oos.close();
-                    if (ois != null) ois.close();
-                    if (!socket.isClosed()) socket.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        while(isLive){
+//
+//        }
     }
     private void pauseThread() {
         synchronized (lock) {
