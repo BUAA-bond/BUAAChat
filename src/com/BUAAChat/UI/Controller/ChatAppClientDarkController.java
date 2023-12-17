@@ -94,6 +94,8 @@ public class ChatAppClientDarkController{
     @FXML
     private  TextField newNameField;
     @FXML
+    private  TextField newPasswordField;
+    @FXML
     private Button changeIdentityButton;
     @FXML
     private FlowPane AvatarFlowPane;
@@ -101,6 +103,7 @@ public class ChatAppClientDarkController{
     private static ArrayList<UserInfo> selectedUserInfo;
     private String ObjectAccount;
     private User onlineUser;
+    String newAvatarPath = null;
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -110,11 +113,11 @@ public class ChatAppClientDarkController{
         initFriendList();//设置好友列表点击事件
         initGroupView();//设置群聊列表点击事件
         //initCreateGroupView();//设置创建群聊列表对象被选中的事件
-        initChangeIdentity();
         initSearchField();//初始化搜索好友文本框
         initScene();//设置初始时界面显示
         initTab();
         initAddGroupAvatar();
+        initChangeIdentity();
         groupAvatarFlowPane.setVisible(false);
         initCurrentChat();
         // 添加其他控件的事件监听器等
@@ -136,7 +139,19 @@ public class ChatAppClientDarkController{
             initCreateGroup();
         });
         changeIdentityButton.setOnAction(event -> {
-            //TODO 发送更改信息
+            //TODO 更改头像 newAvatarPath
+            Image image = new Image(newAvatarPath);
+            AvatarShow.setImage(image);
+            String newName = newNameField.getText();
+            newNameField.clear();
+            String newPassword = newPasswordField.getText();
+            newPasswordField.clear();
+            if(!newName.isEmpty()){
+                //TODO 更改名字
+            }
+            if(!newPassword.isEmpty()){
+                //TODO 更改密码
+            }
         });
         changeStyleButton.setOnAction(event -> {
             chatAppClient.changeWhiteStyle();
@@ -189,7 +204,33 @@ public class ChatAppClientDarkController{
         });
     }
     void initChangeIdentity(){
-
+        AvatarShow.setOnMouseClicked(event -> {
+            newAvatar.setImage(AvatarShow.getImage());
+            newFriendScene.setVisible(false);
+            addGroupScene.setVisible(false);
+            changeIdentityScene.setVisible(true);
+        });
+        String AvatarPath = "src/com/BUAAChat/image/AvatarImage";
+        List<File> imageFiles = getImagesFromFolder(new File(AvatarPath));
+        for (File file : imageFiles) {
+            Image image = new Image(file.toURI().toString());
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            // 添加点击事件监听器
+            imageView.setOnMouseClicked(newEvent -> {
+                File selectedFile = file;
+                if (selectedFile != null) {
+                    newAvatar.setImage(image);
+                    newAvatarPath = "com/BUAAChat/image/AvatarImage/"+file.getName();
+                    AvatarFlowPane.setVisible(false);
+                }
+            });
+            AvatarFlowPane.getChildren().add(imageView);
+        }
+        newAvatar.setOnMouseClicked(event -> {
+            AvatarFlowPane.setVisible(true);
+        });
     }
     void initSearchField(){
         searchField.setOnKeyPressed(event -> {
@@ -519,6 +560,7 @@ public class ChatAppClientDarkController{
         currentChat.setVvalue(1.0);
     }
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
+        newFriendList.getItems().clear();
         for(int i = 0;i<newFriends.size();i++){
             RequestInfo requestInfo = newFriends.get(i);
             newFriendList.getItems().add(requestInfo);
@@ -655,8 +697,8 @@ public class ChatAppClientDarkController{
         }
         // 可以添加其他方法和处理逻辑
     }
-
     public void initChat(ArrayList<ChatInfo>chatInfos){
+        currentChatVbox.getChildren().clear();
         for(int i=0;i<chatInfos.size();i++){
             ChatInfo chatInfo = chatInfos.get(i);
             if(chatInfo.fromUser.account.equals(onlineUser.getAccount())){
