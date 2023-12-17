@@ -3,7 +3,6 @@ package com.BUAAChat.UI;
 import com.BUAAChat.Client.*;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
-import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -20,8 +19,8 @@ public class ChatAppClient extends Application {
     private Stage primaryStage;
     private AnchorPane darkRootLayout;
     private AnchorPane whiteRootLayout;
-    private ChatAppClientDarkController darkController;
-    private ChatAppClientDarkController whiteController;
+    private ChatAppClientController darkController;
+    private ChatAppClientController whiteController;
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
@@ -37,35 +36,20 @@ public class ChatAppClient extends Application {
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
         user = client.getUser();
-        //改为测试用户
         friends =  user.getFriends();
-        //改为测试好友
-        UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
-        UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
-        //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
-        friends.add(friend1);
-        friends.add(friend2);
+        //测试群聊
         groups =  user.getGroups();
-        //改为测试群聊
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
 
-        //ArrayList<RequestInfo> newFriendRequest = user.getRequests();
-        //改为测试请求
-        newFriendRequest = new ArrayList<>();
-        RequestInfo requestInfo1 = new RequestInfo("zhongli","hutao","钟离","com/BUAAChat/image/AvatarImage/zhongli.png",1);
-        RequestInfo requestInfo2 = new RequestInfo("naxida","hutao","纳西妲","com/BUAAChat/image/AvatarImage/naxida.png",0);
-        RequestInfo requestInfo3 = new RequestInfo("ying","hutao","莹","com/BUAAChat/image/AvatarImage/ying.png",-1);
-        newFriendRequest.add(requestInfo1);
-        newFriendRequest.add(requestInfo2);
-        newFriendRequest.add(requestInfo3);
-        initWhiteRootLayout();
-        initDarkRootStyle();
+
+        newFriendRequest = user.getRequests();
         initDark();
         primaryStage.show();
 
     }
     public void initDark(){
+        initDarkRootStyle();
         darkController.setChatAppClient(this);
         darkController.initUser(user);
         darkController.initFriends(friends);
@@ -75,6 +59,7 @@ public class ChatAppClient extends Application {
         changeDarkStyle();
     }
     public void initWhite(){
+        initWhiteRootLayout();
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);

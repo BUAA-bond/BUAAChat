@@ -1,6 +1,7 @@
 package com.BUAAChat.UI.Controller;
 
 import com.BUAAChat.Client.*;
+import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -104,6 +105,7 @@ public class ChatAppClientDarkController{
     private String ObjectAccount;
     private User onlineUser;
     String newAvatarPath = null;
+    String newGroupAvatarPath = null;
     private int Style;
     @FXML
     public void initialize() {
@@ -113,7 +115,6 @@ public class ChatAppClientDarkController{
         initMessageArea();//初始化输入文本框，设置输入回车事件
         initFriendList();//设置好友列表点击事件
         initGroupView();//设置群聊列表点击事件
-        //initCreateGroupView();//设置创建群聊列表对象被选中的事件
         initSearchField();//初始化搜索好友文本框
         initScene();//设置初始时界面显示
         initTab();
@@ -135,7 +136,7 @@ public class ChatAppClientDarkController{
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             getSelectedUserInfo();
-            //TODO 创建新群聊
+            //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
             clearAddGroupFriends();
             initCreateGroup();
         });
@@ -150,7 +151,7 @@ public class ChatAppClientDarkController{
             if(!newName.isEmpty()){
                 //TODO 更改名字
             }
-            if(!newPassword.isEmpty()){
+            if(!newPassword.isEmpty()&& !MyUtil.judgePassword(newPassword)){
                 //TODO 更改密码
             }
         });
@@ -452,6 +453,7 @@ public class ChatAppClientDarkController{
                 if (selectedFile != null) {
                     createGroupAvatar.setImage(image);
                     groupAvatarFlowPane.setVisible(false);
+                    newGroupAvatarPath = "com/BUAAChat/image/GroupImage"+selectedFile.getName();
                 }
             });
             groupAvatarFlowPane.getChildren().add(imageView);
@@ -490,6 +492,7 @@ public class ChatAppClientDarkController{
         }
     }
     public void clearAddGroupFriends() {
+        selectedUserInfo.clear();
         for (Node node : addGroupListView.lookupAll(".list-cell")) {
             if (node instanceof addGroupListCell) {
                 addGroupListCell<UserInfo> cell = (addGroupListCell<UserInfo>) node;

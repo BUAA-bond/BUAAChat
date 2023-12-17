@@ -1,6 +1,7 @@
 package com.BUAAChat.UI.Controller;
 
 import com.BUAAChat.Client.*;
+import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -104,6 +105,8 @@ public class ChatAppClientController{
     private String ObjectAccount;
     private User onlineUser;
     String newAvatarPath = null;
+    String newGroupAvatarPath = null;
+    private int Style;
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -112,7 +115,6 @@ public class ChatAppClientController{
         initMessageArea();//初始化输入文本框，设置输入回车事件
         initFriendList();//设置好友列表点击事件
         initGroupView();//设置群聊列表点击事件
-        //initCreateGroupView();//设置创建群聊列表对象被选中的事件
         initSearchField();//初始化搜索好友文本框
         initScene();//设置初始时界面显示
         initTab();
@@ -134,7 +136,7 @@ public class ChatAppClientController{
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             getSelectedUserInfo();
-            //TODO 创建新群聊
+            //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
             clearAddGroupFriends();
             initCreateGroup();
         });
@@ -149,12 +151,13 @@ public class ChatAppClientController{
             if(!newName.isEmpty()){
                 //TODO 更改名字
             }
-            if(!newPassword.isEmpty()){
+            if(!newPassword.isEmpty()&& !MyUtil.judgePassword(newPassword)){
                 //TODO 更改密码
             }
         });
         changeStyleButton.setOnAction(event -> {
-            chatAppClient.changeDarkStyle();
+            if(Style==0)chatAppClient.initWhite();
+            else chatAppClient.initDark();
         });
     }
     void initMessageArea(){
@@ -368,6 +371,7 @@ public class ChatAppClientController{
         // 可以添加其他方法和处理逻辑
     }
     public void initFriends(ArrayList<UserInfo> friends){
+        friendListView.getItems().clear();
         UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
         friendListView.getItems().add(newFriend);
         for(int i = 0;i<friends.size();i++){
@@ -378,6 +382,7 @@ public class ChatAppClientController{
         friendListView.setCellFactory(param -> new FriendListCell<UserInfo>());
     }
     public void initGroups(ArrayList<GroupInfo> groups){
+        groupListView.getItems().clear();
         for(int i = 0;i<groups.size();i++){
             GroupInfo groupInfo = groups.get(i);
             groupListView.getItems().add(groupInfo);
@@ -387,6 +392,7 @@ public class ChatAppClientController{
     }
     // 设置创建群聊的好友列表显示及其功能
     public void initAddGroup(ArrayList<UserInfo> friends){
+        addGroupListView.getItems().clear();
         for(int i = 0;i<friends.size();i++){
             UserInfo userInfo = friends.get(i);
             if(!userInfo.account.equals("newFriend")) addGroupListView.getItems().add(userInfo);
@@ -447,6 +453,7 @@ public class ChatAppClientController{
                 if (selectedFile != null) {
                     createGroupAvatar.setImage(image);
                     groupAvatarFlowPane.setVisible(false);
+                    newGroupAvatarPath = "com/BUAAChat/image/GroupImage"+selectedFile.getName();
                 }
             });
             groupAvatarFlowPane.getChildren().add(imageView);
@@ -485,6 +492,7 @@ public class ChatAppClientController{
         }
     }
     public void clearAddGroupFriends() {
+        selectedUserInfo.clear();
         for (Node node : addGroupListView.lookupAll(".list-cell")) {
             if (node instanceof addGroupListCell) {
                 addGroupListCell<UserInfo> cell = (addGroupListCell<UserInfo>) node;
@@ -535,6 +543,8 @@ public class ChatAppClientController{
         HBox content = new HBox();
         content.setSpacing(10);
         content.setAlignment(Pos.CENTER);
+        VBox vBox = new VBox();
+        Label name = new Label(otherUser.name);
         Text text = new Text(message);
         text.setWrappingWidth(200); // 设置固定宽度
         text.setTextAlignment(TextAlignment.LEFT);
@@ -553,7 +563,8 @@ public class ChatAppClientController{
         Avatar.setFitWidth(50);
         Avatar.setFitHeight(50);
         content.getChildren().add(Avatar);
-        content.getChildren().add(textPane);
+        vBox.getChildren().addAll(name,textPane);
+        content.getChildren().add(vBox);
         content.setAlignment(Pos.CENTER_LEFT);
         currentChatVbox.getChildren().add(content);
         chatAppClient.getPrimaryStage().show();
@@ -708,5 +719,9 @@ public class ChatAppClientController{
                 updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
             }
         }
+    }
+
+    public void setStyle(int style) {
+        Style = style;
     }
 }
