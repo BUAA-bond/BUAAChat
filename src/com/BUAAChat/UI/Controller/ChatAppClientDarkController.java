@@ -19,8 +19,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.BUAAChat.Constant.Constant.client;
-
 public class ChatAppClientDarkController{
     private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
@@ -175,7 +173,6 @@ public class ChatAppClientDarkController{
         searchField.setOnKeyPressed(event -> {
             if (event.getCode().getName().equals("Enter")) {
                 searchFriend(searchField.getText().replaceAll("[\r\n]", ""));
-                //System.out.println(searchField.getText().replaceAll("[\r\n]", ""));
                 searchField.clear(); // 清空 TextArea 内容
                 //searchFriends = getFriends;
                 //getSearchFriendListView(searchFriends);
@@ -187,7 +184,7 @@ public class ChatAppClientDarkController{
                 searchListScene.setVisible(true);
             }
             else {
-                searchListScene.setVisible(false);
+                //searchListScene.setVisible(false);
             }
         });
         //initSearchFriendListView();
@@ -216,9 +213,9 @@ public class ChatAppClientDarkController{
     }
     void searchFriend(String s){
         //TODO
-        System.out.println("start");
-        ArrayList<UserInfo> users =client.searchUser(s);
-        System.out.println("over");
+        ArrayList<UserInfo> users = new ArrayList<>();
+        UserInfo userInfo = new UserInfo("12345","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
+        users.add(userInfo);
         getSearchFriendListView(users);
     }
     public void setChatAppClient(ChatAppClient chatAppClient){
@@ -343,17 +340,20 @@ public class ChatAppClientDarkController{
             addGroupScene.setVisible(true);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
+            searchListScene.setVisible(false);
             //cleanRight();
             initCreateGroup();
         });
         chooseFriendTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
             ChatScene.setVisible(true);
+            searchListScene.setVisible(false);
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(true);
+            searchListScene.setVisible(false);
         });
     }
     public void cleanRight(){
@@ -572,7 +572,8 @@ public class ChatAppClientDarkController{
     class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
-        private final ImageView imageView = new ImageView();;
+        private final ImageView imageView = new ImageView();
+        private int type;
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -595,7 +596,6 @@ public class ChatAppClientDarkController{
                 rightHbox.setAlignment(Pos.CENTER_RIGHT);
                 ObservableList<UserInfo> friends =  friendListView.getItems();
                 int size =friends.size();
-                int type = 0;
                 for(int i = 0;i<size;i++){
                     UserInfo userInfo = friends.get(i);
                     if(userInfo.account.equals(item.account)) type = 1;
@@ -604,13 +604,19 @@ public class ChatAppClientDarkController{
                     Type.setText("已添加");
                     rightHbox.getChildren().add(Type);
                 }
+                else if(type == 2){
+                    Type.setText("已申请");
+                    rightHbox.getChildren().add(Type);
+                }
                 else{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
                         //TODO 发送请求
+                        type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();
-                        content.getChildren().add(Type);
+                        rightHbox.getChildren().add(Type);
+                        searchListScene.setVisible(true);
                         updateItem(item,false);
                     });
                     rightHbox.getChildren().add(add);

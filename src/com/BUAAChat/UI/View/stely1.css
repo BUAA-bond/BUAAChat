@@ -11,7 +11,7 @@
     -fx-background-color: transparent;
 }
 .loadBackground{
-    -fx-background-image: url('../../image/ChatClientImage/whiteTheme/RightAreaImage2.jpg');
+    -fx-background-image: url('../../image/ChatClientImage/whiteTheme/RightAreaImage3.jpg');
     -fx-background-size: cover;
 }
 .label {
@@ -24,7 +24,7 @@
 .label-bright {
     -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-opacity: 1;
 }
 

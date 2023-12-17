@@ -65,10 +65,13 @@ public class ChatAppClient extends Application {
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
         darkController.initNewFriends(newFriendRequest);
+
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);
         whiteController.initGroups(groups);
+        whiteController.initAddGroup(friends);
+        whiteController.initNewFriends(newFriendRequest);
         changeDarkStyle();
         primaryStage.show();
         //showPersonOverview();
