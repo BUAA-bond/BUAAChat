@@ -3,7 +3,6 @@ package com.BUAAChat.UI.Controller;
 import com.BUAAChat.Client.*;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
-import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,8 +18,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.BUAAChat.Constant.Constant.client;
+
 public class ChatAppClientController{
-    private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
     @FXML
     private Label sendToObjectName;
@@ -59,8 +59,6 @@ public class ChatAppClientController{
     private ListView<UserInfo> searchFriendListView;
     @FXML
     private Button changeStyleButton;
-
-
     @FXML
     private AnchorPane newFriendScene;
     @FXML
@@ -90,10 +88,22 @@ public class ChatAppClientController{
     @FXML
     private Button createGroupButton;
     @FXML
-    private HBox createGroupAvatarHbox;
+    private  AnchorPane changeIdentityScene;
+    @FXML
+    private  ImageView newAvatar;
+    @FXML
+    private  TextField newNameField;
+    @FXML
+    private  TextField newPasswordField;
+    @FXML
+    private Button changeIdentityButton;
+    @FXML
+    private FlowPane AvatarFlowPane;
     private VBox currentChatVbox;
     private static ArrayList<UserInfo> selectedUserInfo;
     private String ObjectAccount;
+    private User onlineUser;
+    String newAvatarPath = null;
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -107,6 +117,7 @@ public class ChatAppClientController{
         initScene();//设置初始时界面显示
         initTab();
         initAddGroupAvatar();
+        initChangeIdentity();
         groupAvatarFlowPane.setVisible(false);
         initCurrentChat();
         // 添加其他控件的事件监听器等
@@ -123,9 +134,24 @@ public class ChatAppClientController{
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             getSelectedUserInfo();
-            //TODO
+            //TODO 创建新群聊
             clearAddGroupFriends();
             initCreateGroup();
+        });
+        changeIdentityButton.setOnAction(event -> {
+            //TODO 更改头像 newAvatarPath
+            Image image = new Image(newAvatarPath);
+            AvatarShow.setImage(image);
+            String newName = newNameField.getText();
+            newNameField.clear();
+            String newPassword = newPasswordField.getText();
+            newPasswordField.clear();
+            if(!newName.isEmpty()){
+                //TODO 更改名字
+            }
+            if(!newPassword.isEmpty()){
+                //TODO 更改密码
+            }
         });
         changeStyleButton.setOnAction(event -> {
             chatAppClient.changeDarkStyle();
@@ -146,14 +172,19 @@ public class ChatAppClientController{
             UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
             //处理新的好友事件
             if(selectedUser.account.equals("newFriend")){
-                //TODO
+                initNewFriends(client.getUser().getRequests());
                 newFriendScene.setVisible(true);
+                changeIdentityScene.setVisible(false);
             }
             else{
                 sendToObjectName.setText(selectedUser.name);
+                changeIdentityScene.setVisible(false);
                 sendMessage.setEditable(true);
                 newFriendScene.setVisible(false);
                 ObjectAccount = selectedUser.account;
+                chatAppClient.setToAccount(ObjectAccount);
+                ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesF().get(ObjectAccount);
+                initChat(chatInfos);
                 System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
             }
             // 执行你想要的操作
@@ -165,8 +196,40 @@ public class ChatAppClientController{
             sendToObjectName.setText(selectedGroup.name);
             sendMessage.setEditable(true);
             ObjectAccount = selectedGroup.account;
+            chatAppClient.setToAccount(ObjectAccount);
+            ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesG().get(ObjectAccount);
+            initChat(chatInfos);
             System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             // 执行你想要的操作
+        });
+    }
+    void initChangeIdentity(){
+        AvatarShow.setOnMouseClicked(event -> {
+            newAvatar.setImage(AvatarShow.getImage());
+            newFriendScene.setVisible(false);
+            addGroupScene.setVisible(false);
+            changeIdentityScene.setVisible(true);
+        });
+        String AvatarPath = "src/com/BUAAChat/image/AvatarImage";
+        List<File> imageFiles = getImagesFromFolder(new File(AvatarPath));
+        for (File file : imageFiles) {
+            Image image = new Image(file.toURI().toString());
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100);
+            imageView.setFitHeight(100);
+            // 添加点击事件监听器
+            imageView.setOnMouseClicked(newEvent -> {
+                File selectedFile = file;
+                if (selectedFile != null) {
+                    newAvatar.setImage(image);
+                    newAvatarPath = "com/BUAAChat/image/AvatarImage/"+file.getName();
+                    AvatarFlowPane.setVisible(false);
+                }
+            });
+            AvatarFlowPane.getChildren().add(imageView);
+        }
+        newAvatar.setOnMouseClicked(event -> {
+            AvatarFlowPane.setVisible(true);
         });
     }
     void initSearchField(){
@@ -202,26 +265,22 @@ public class ChatAppClientController{
         searchListScene.setVisible(false);
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
+        changeIdentityScene.setVisible(false);
     }
     void send(String message) {
         if (message.isEmpty()) return;
-        //com.BUAAChat.Constant.Client.sendTextTo(ObjectAccount,message);
+        client.sendText(ObjectAccount,message);
         updateOnlineUserMessage(message);
-        //TODO
-        //需要一个能获取当前聊天对象account的东西
-        //if(client!=null) client.sendText(message,"");
     }
     void searchFriend(String s){
-        //TODO
-        ArrayList<UserInfo> users = new ArrayList<>();
-        UserInfo userInfo = new UserInfo("12345","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
-        users.add(userInfo);
+        ArrayList<UserInfo> users=client.searchUser(s);
         getSearchFriendListView(users);
     }
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
     }
     public void initUser(User user){
+        this.onlineUser = user;
         onlineUserName.setText(user.getName());
         Image AvatarImage = new Image(user.getAvatarPath());
         AvatarShow.setImage(AvatarImage);
@@ -341,6 +400,7 @@ public class ChatAppClientController{
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
             //cleanRight();
             initCreateGroup();
         });
@@ -348,12 +408,14 @@ public class ChatAppClientController{
             addGroupScene.setVisible(false);
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
         });
     }
     public void cleanRight(){
@@ -371,7 +433,9 @@ public class ChatAppClientController{
     }
     public void initAddGroupAvatar() {
         // 获取特定文件夹内的所有图片
-        List<File> imageFiles = getImagesFromFolder(new File(folderPath));
+        // 指定文件夹路径
+        String groupAvatarPath = "src/com/BUAAChat/image/GroupImage";
+        List<File> imageFiles = getImagesFromFolder(new File(groupAvatarPath));
         for (File file : imageFiles) {
             Image image = new Image(file.toURI().toString());
             ImageView imageView = new ImageView(image);
@@ -496,6 +560,7 @@ public class ChatAppClientController{
         currentChat.setVvalue(1.0);
     }
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
+        newFriendList.getItems().clear();
         for(int i = 0;i<newFriends.size();i++){
             RequestInfo requestInfo = newFriends.get(i);
             newFriendList.getItems().add(requestInfo);
@@ -506,7 +571,7 @@ public class ChatAppClientController{
     static class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
-        private final ImageView imageView = new ImageView();;
+        private final ImageView imageView = new ImageView();
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -538,6 +603,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
+                        client.sendRequestFeedback(item.from,true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -545,6 +611,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
+                        client.sendRequestFeedback(item.from,false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -562,6 +629,7 @@ public class ChatAppClientController{
         // 可以添加其他方法和处理逻辑
     }
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
+        searchFriendListView.getItems().clear();
         for(int i = 0;i<friends.size();i++){
             UserInfo userInfo = friends.get(i);
             searchFriendListView.getItems().add(userInfo);
@@ -611,7 +679,7 @@ public class ChatAppClientController{
                 else{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
-                        //TODO 发送请求
+                        client.addFriendRequest(item.account, item.name,item.avatarPath);
                         type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();
@@ -628,5 +696,17 @@ public class ChatAppClientController{
             }
         }
         // 可以添加其他方法和处理逻辑
+    }
+    public void initChat(ArrayList<ChatInfo>chatInfos){
+        currentChatVbox.getChildren().clear();
+        for(int i=0;i<chatInfos.size();i++){
+            ChatInfo chatInfo = chatInfos.get(i);
+            if(chatInfo.fromUser.account.equals(onlineUser.getAccount())){
+                updateOnlineUserMessage(chatInfo.content);
+            }
+            else{
+                updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
+            }
+        }
     }
 }
