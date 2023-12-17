@@ -10,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,8 +43,8 @@ public class ChatAppClient extends Application {
         groups =  user.getGroups();
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
-        ArrayList<RequestInfo> newFriendRequest = user.getRequests();
-        //改为测试请求
+        newFriendRequest = user.getRequests();
+        initDark();
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
                 //System.out.println("Window is closing...");
@@ -51,11 +53,7 @@ public class ChatAppClient extends Application {
                 // event.consume();
             }
         });
-
-        newFriendRequest = user.getRequests();
-        initDark();
         primaryStage.show();
-
     }
     public void initDark(){
         initDarkRootStyle();
