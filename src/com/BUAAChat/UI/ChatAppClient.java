@@ -29,6 +29,7 @@ public class ChatAppClient extends Application {
     ArrayList<RequestInfo> newFriendRequest;
     private String toAccount;
     private boolean isStart=false;
+    private int Style;
     @Override
     public void start(Stage primaryStage) throws Exception {
         isStart=true;
@@ -139,7 +140,17 @@ public class ChatAppClient extends Application {
         return primaryStage;
     }
 
-
+    public void setStyle(int style) {
+        Style = style;
+    }
+    public void updateChat(ChatInfo chatInfo){
+        if(Style==1){
+            whiteController.updateChatObject(chatInfo);
+        }
+        else {
+            darkController.updateChatObject(chatInfo);
+        }
+    }
     public static void main(String[] args) throws Exception {
         launch(args);
     }

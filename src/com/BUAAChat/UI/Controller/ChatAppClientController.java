@@ -150,14 +150,21 @@ public class ChatAppClientController{
             newPasswordField.clear();
             if(!newName.isEmpty()){
                 //TODO 更改名字
+                onlineUserName.setText(newName);
             }
             if(!newPassword.isEmpty()&& !MyUtil.judgePassword(newPassword)){
                 //TODO 更改密码
             }
         });
         changeStyleButton.setOnAction(event -> {
-            if(Style==0)chatAppClient.initWhite();
-            else chatAppClient.initDark();
+            if(Style==0){
+                chatAppClient.setStyle(1);
+                chatAppClient.initWhite();
+            }
+            else{
+                chatAppClient.setStyle(0);
+                chatAppClient.initDark();
+            }
         });
     }
     void initMessageArea(){
@@ -720,7 +727,11 @@ public class ChatAppClientController{
             }
         }
     }
-
+    public void updateChatObject(ChatInfo chatInfo){
+        if(ObjectAccount.equals(chatInfo.fromUser.account)){
+            updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
+        }
+    }
     public void setStyle(int style) {
         Style = style;
     }
