@@ -3,7 +3,6 @@ package com.BUAAChat.UI.Controller;
 import com.BUAAChat.Client.*;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
-import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,7 +21,6 @@ import java.util.List;
 import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClientDarkController{
-    private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
     @FXML
     private Label sendToObjectName;
@@ -61,8 +59,6 @@ public class ChatAppClientDarkController{
     private ListView<UserInfo> searchFriendListView;
     @FXML
     private Button changeStyleButton;
-
-
     @FXML
     private AnchorPane newFriendScene;
     @FXML
@@ -92,10 +88,19 @@ public class ChatAppClientDarkController{
     @FXML
     private Button createGroupButton;
     @FXML
-    private HBox createGroupAvatarHbox;
+    private  AnchorPane changeIdentityScene;
+    @FXML
+    private  ImageView newAvatar;
+    @FXML
+    private  TextField newNameField;
+    @FXML
+    private Button changeIdentityButton;
+    @FXML
+    private FlowPane AvatarFlowPane;
     private VBox currentChatVbox;
     private static ArrayList<UserInfo> selectedUserInfo;
     private String ObjectAccount;
+    private User onlineUser;
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -105,6 +110,7 @@ public class ChatAppClientDarkController{
         initFriendList();//设置好友列表点击事件
         initGroupView();//设置群聊列表点击事件
         //initCreateGroupView();//设置创建群聊列表对象被选中的事件
+        initChangeIdentity();
         initSearchField();//初始化搜索好友文本框
         initScene();//设置初始时界面显示
         initTab();
@@ -125,9 +131,12 @@ public class ChatAppClientDarkController{
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             getSelectedUserInfo();
-            //TODO
+            //TODO 创建新群聊
             clearAddGroupFriends();
             initCreateGroup();
+        });
+        changeIdentityButton.setOnAction(event -> {
+            //TODO 发送更改信息
         });
         changeStyleButton.setOnAction(event -> {
             chatAppClient.changeWhiteStyle();
@@ -150,13 +159,17 @@ public class ChatAppClientDarkController{
             if(selectedUser.account.equals("newFriend")){
                 initNewFriends(client.getUser().getRequests());
                 newFriendScene.setVisible(true);
+                changeIdentityScene.setVisible(false);
             }
             else{
                 sendToObjectName.setText(selectedUser.name);
+                changeIdentityScene.setVisible(false);
                 sendMessage.setEditable(true);
                 newFriendScene.setVisible(false);
                 ObjectAccount = selectedUser.account;
                 chatAppClient.setToAccount(ObjectAccount);
+                ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesF().get(ObjectAccount);
+                initChat(chatInfos);
                 System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
             }
             // 执行你想要的操作
@@ -169,9 +182,14 @@ public class ChatAppClientDarkController{
             sendMessage.setEditable(true);
             ObjectAccount = selectedGroup.account;
             chatAppClient.setToAccount(ObjectAccount);
+            ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesG().get(ObjectAccount);
+            initChat(chatInfos);
             System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             // 执行你想要的操作
         });
+    }
+    void initChangeIdentity(){
+
     }
     void initSearchField(){
         searchField.setOnKeyPressed(event -> {
@@ -206,6 +224,7 @@ public class ChatAppClientDarkController{
         searchListScene.setVisible(false);
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
+        changeIdentityScene.setVisible(false);
     }
     void send(String message) {
         if (message.isEmpty()) return;
@@ -220,6 +239,7 @@ public class ChatAppClientDarkController{
         this.chatAppClient = chatAppClient;
     }
     public void initUser(User user){
+        this.onlineUser = user;
         onlineUserName.setText(user.getName());
         Image AvatarImage = new Image(user.getAvatarPath());
         AvatarShow.setImage(AvatarImage);
@@ -339,6 +359,7 @@ public class ChatAppClientDarkController{
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
             //cleanRight();
             initCreateGroup();
         });
@@ -346,12 +367,14 @@ public class ChatAppClientDarkController{
             addGroupScene.setVisible(false);
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
+            changeIdentityScene.setVisible(false);
         });
     }
     public void cleanRight(){
@@ -369,7 +392,9 @@ public class ChatAppClientDarkController{
     }
     public void initAddGroupAvatar() {
         // 获取特定文件夹内的所有图片
-        List<File> imageFiles = getImagesFromFolder(new File(folderPath));
+        // 指定文件夹路径
+        String groupAvatarPath = "src/com/BUAAChat/image/GroupImage";
+        List<File> imageFiles = getImagesFromFolder(new File(groupAvatarPath));
         for (File file : imageFiles) {
             Image image = new Image(file.toURI().toString());
             ImageView imageView = new ImageView(image);
@@ -562,6 +587,7 @@ public class ChatAppClientDarkController{
         // 可以添加其他方法和处理逻辑
     }
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
+        searchFriendListView.getItems().clear();
         for(int i = 0;i<friends.size();i++){
             UserInfo userInfo = friends.get(i);
             searchFriendListView.getItems().add(userInfo);
@@ -628,5 +654,17 @@ public class ChatAppClientDarkController{
             }
         }
         // 可以添加其他方法和处理逻辑
+    }
+
+    public void initChat(ArrayList<ChatInfo>chatInfos){
+        for(int i=0;i<chatInfos.size();i++){
+            ChatInfo chatInfo = chatInfos.get(i);
+            if(chatInfo.fromUser.account.equals(onlineUser.getAccount())){
+                updateOnlineUserMessage(chatInfo.content);
+            }
+            else{
+                updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
+            }
+        }
     }
 }

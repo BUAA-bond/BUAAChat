@@ -37,7 +37,7 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    loginClient.throwError("账号格式不正确");
+                    loginClient.throwLoginError("账号格式不正确");
                 }else if(!MyUtil.judgePassword(loginPassword)){
                     try {
                         if(client.getSocket()!=null)
@@ -45,7 +45,7 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    loginClient.throwError("密码格式不正确");
+                    loginClient.throwLoginError("密码格式不正确");
                 }else if(client.login(loginAccount,loginPassword)){
                     loginClient.close();
                     try {
@@ -60,7 +60,7 @@ public class Main {
                         e.printStackTrace();
                     }
                 }else{
-                    loginClient.throwError("账号或密码错误");
+                    loginClient.throwLoginError("账号或密码错误");
                 }
             });
             loginClient.registerSetButtonClickListener(messages -> {
