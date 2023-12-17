@@ -895,12 +895,11 @@ public class Client implements Runnable {
     }
     /**
      * 反馈好友申请
-     * @param info
+     * @param
      * @param choose
      */
-    public void sendRequestFeedback(UserInfo info,boolean choose){
+    public void sendRequestFeedback(String toUser,boolean choose){
         JsonObject jsonObject = new JsonObject();
-        String toUser=info.account;
         ArrayList<RequestInfo> requestInfos=user.getRequests();
         if(choose){
             jsonObject.addProperty("code","202");

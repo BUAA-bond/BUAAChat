@@ -31,8 +31,20 @@ public class Main {
                 String loginAccount = message[0];    //account
                 String loginPassword = message[1];   //password
                 if(!MyUtil.judgeAccount(loginAccount)){
+                    try {
+                        if(client.getSocket()!=null)
+                            client.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     loginClient.throwError("账号格式不正确");
                 }else if(!MyUtil.judgePassword(loginPassword)){
+                    try {
+                        if(client.getSocket()!=null)
+                            client.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     loginClient.throwError("密码格式不正确");
                 }else if(client.login(loginAccount,loginPassword)){
                     loginClient.close();

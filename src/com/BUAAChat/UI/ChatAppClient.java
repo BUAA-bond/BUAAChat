@@ -1,9 +1,7 @@
 package com.BUAAChat.UI;
 
-import com.BUAAChat.Client.GroupInfo;
-import com.BUAAChat.Client.RequestInfo;
-import com.BUAAChat.Client.User;
-import com.BUAAChat.Client.UserInfo;
+import com.BUAAChat.Client.*;
+import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
 import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
@@ -27,8 +25,11 @@ public class ChatAppClient extends Application {
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
+    private String toAccount;
+    private boolean isStart=false;
     @Override
     public void start(Stage primaryStage) throws Exception {
+        isStart=true;
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
@@ -64,7 +65,7 @@ public class ChatAppClient extends Application {
         darkController.initFriends(friends);
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
-        darkController.initNewFriends(newFriendRequest);
+        //darkController.initNewFriends(newFriendRequest);
 
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
@@ -74,8 +75,33 @@ public class ChatAppClient extends Application {
         whiteController.initNewFriends(newFriendRequest);
         changeDarkStyle();
         primaryStage.show();
-        //showPersonOverview();
+
     }
+    public void openThread(){//当前聊天对象的账号
+        new Thread(()->{
+            while(isStart){
+                if(toAccount!=null){
+                    ArrayList<ChatInfo> chatInfos=null;
+                    if(MyUtil.judgeAccount(toAccount)){//好友
+                        chatInfos=user.getMessagesF().get(toAccount);
+                    }else{
+                        chatInfos=user.getMessagesG().get(toAccount);
+                    }
+                    //TODO
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void setToAccount(String toAccount) {
+        this.toAccount = toAccount;
+    }
+
     /**
      * Initializes the root layout.
      */
