@@ -604,7 +604,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.receiveAddFriendFeedback(item.from,true);
+                        client.sendRequestFeedback(item.from,true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -612,7 +612,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.receiveAddFriendFeedback(item.from,false);
+                        client.sendRequestFeedback(item.from,false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
