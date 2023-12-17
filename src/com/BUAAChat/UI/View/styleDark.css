@@ -126,7 +126,6 @@
     -fx-border-width: 2;
     -fx-background-radius: 0;
     -fx-background-color: #0c3654;
-
     -fx-font-size: 11pt;
     -fx-text-fill: #d8d8d8;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
@@ -192,13 +191,9 @@
 
 
 /* 修改Tab中文本的颜色 */
-.tab-label {
-    -fx-text-fill: #e6e6e6;
-}
+
 /* 子代选择器，Tab选中的时候选择其子元素tab-label */
-.tab:selected .tab-label {
-    -fx-text-fill: #003333ff;
-}
+
 /* tab选中时设置背景颜色 */
 .tab:selected {
     -fx-background-color: #487da2ff;

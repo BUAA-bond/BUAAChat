@@ -953,7 +953,7 @@ public class Client implements Runnable {
      * @param
      * @param choose
      */
-    public void receiveAddFriendFeedback(String toUser,boolean choose){
+    public void sendRequestFeedback(String toUser,boolean choose){
         System.out.println("receiveAddFriendFeedback:"+toUser);
         JsonObject jsonObject = new JsonObject();
         ArrayList<RequestInfo> requestInfos=user.getRequests();
