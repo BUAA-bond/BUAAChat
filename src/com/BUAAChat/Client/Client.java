@@ -21,6 +21,7 @@ public class Client implements Runnable {
     private ObjectInputStream ois=null;
     private ObjectOutputStream oos=null;
     private boolean isLogin =false;
+    private boolean isLive=false;
     private User user=new User();
     private static Message receiveMsg =null;
     private final Object lock = new Object();
@@ -82,6 +83,12 @@ public class Client implements Runnable {
             json=msg.getContent();
             System.out.println("requests:"+json);
             user.setRequests(getAllRequestInfoFeedback(json));
+            ArrayList<UserInfo> tmp=searchUser("100003");
+            for (int i = 0; i < tmp.size(); i++) {
+                UserInfo userInfo1=tmp.get(i);
+                System.out.println(userInfo1.name);
+                System.out.println(userInfo1.account);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -116,13 +123,13 @@ public class Client implements Runnable {
     public UserInfo getUserInfo(String account){
         pauseThread();
         getInfoRequest(account,"401");
-        System.out.println(1111);
+        System.out.println(123123123);
         UserInfo userInfo=getUserInfoFeedback();
         resumeThread();
         return userInfo;
     }
     public ArrayList<UserInfo> searchUser(String account){
-        ArrayList<UserInfo> tmp=new ArrayList<UserInfo>();
+        ArrayList<UserInfo> tmp=new ArrayList<>();
         tmp.add(getUserInfo(account));
         return tmp;
     }
@@ -974,6 +981,7 @@ public class Client implements Runnable {
         thread.start();
     }
     public void run() {
+        new Thread(()->{
             synchronized (lock) {
                 while (isLogin) {
                     try {
@@ -988,6 +996,10 @@ public class Client implements Runnable {
                     }
                 }
             }
+        });
+        while(isLive){
+
+        }
         if (!isLogin) {
             try {
                 synchronized (lock) {
@@ -1023,5 +1035,9 @@ public class Client implements Runnable {
 
     public Socket getSocket() {
         return socket;
+    }
+
+    public void setLive(boolean live) {
+        isLive = live;
     }
 }

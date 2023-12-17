@@ -40,6 +40,7 @@ public class Main {
                         //创建客户端线程
                         //TODO
                         client.setLogin(true);
+                        client.setLive(true);
                         client.userInit(loginAccount,loginPassword);//先初始化，在登录进去
                         client.start();
                         chatAppClient.start(new Stage());

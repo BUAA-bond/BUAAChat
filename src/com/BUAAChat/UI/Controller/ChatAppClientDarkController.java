@@ -19,6 +19,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.BUAAChat.Constant.Constant.client;
+
 public class ChatAppClientDarkController{
     private final String folderPath = "src/com/BUAAChat/image/GroupImage"; // 指定文件夹路径
     private ChatAppClient chatAppClient;
@@ -38,7 +40,7 @@ public class ChatAppClientDarkController{
     @FXML
     private ListView<UserInfo> addGroupListView;
     @FXML
-    private static ListView<UserInfo> friendListView;
+    private ListView<UserInfo> friendListView;
     @FXML
     private ListView<GroupInfo> groupListView;
     @FXML
@@ -173,7 +175,7 @@ public class ChatAppClientDarkController{
         searchField.setOnKeyPressed(event -> {
             if (event.getCode().getName().equals("Enter")) {
                 searchFriend(searchField.getText().replaceAll("[\r\n]", ""));
-                System.out.println(searchField.getText().replaceAll("[\r\n]", ""));
+                //System.out.println(searchField.getText().replaceAll("[\r\n]", ""));
                 searchField.clear(); // 清空 TextArea 内容
                 //searchFriends = getFriends;
                 //getSearchFriendListView(searchFriends);
@@ -214,6 +216,10 @@ public class ChatAppClientDarkController{
     }
     void searchFriend(String s){
         //TODO
+        System.out.println("start");
+        ArrayList<UserInfo> users =client.searchUser(s);
+        System.out.println("over");
+        getSearchFriendListView(users);
     }
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
@@ -563,7 +569,7 @@ public class ChatAppClientDarkController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         searchFriendListView.setCellFactory(param -> new searchFriendListCell<UserInfo>());
     }
-    static class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
+    class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
         private final ImageView imageView = new ImageView();;
@@ -592,8 +598,7 @@ public class ChatAppClientDarkController{
                 int type = 0;
                 for(int i = 0;i<size;i++){
                     UserInfo userInfo = friends.get(i);
-                    if(userInfo.account.equals(item.account));
-                    type = 1;
+                    if(userInfo.account.equals(item.account)) type = 1;
                 }
                 if(type==1){
                     Type.setText("已添加");
