@@ -1,9 +1,8 @@
 package com.BUAAChat.UI.Controller;
 
-import com.BUAAChat.Client.GroupInfo;
-import com.BUAAChat.Client.User;
-import com.BUAAChat.Client.UserInfo;
+import com.BUAAChat.Client.*;
 import com.BUAAChat.UI.ChatAppClient;
+import javafx.collections.ObservableList;
 import javafx.event.*;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -39,7 +38,7 @@ public class ChatAppClientDarkController{
     @FXML
     private ListView<UserInfo> addGroupListView;
     @FXML
-    private ListView<UserInfo> friendListView;
+    private static ListView<UserInfo> friendListView;
     @FXML
     private ListView<GroupInfo> groupListView;
     @FXML
@@ -65,9 +64,7 @@ public class ChatAppClientDarkController{
     @FXML
     private AnchorPane newFriendScene;
     @FXML
-    private ListView<UserInfo> newFriendList;
-    @FXML
-    private AnchorPane newGroupScene;
+    private ListView<RequestInfo> newFriendList;
     @FXML
     private AnchorPane addGroupScene;
     @FXML
@@ -97,17 +94,6 @@ public class ChatAppClientDarkController{
     private VBox currentChatVbox;
     private static ArrayList<UserInfo> selectedUserInfo;
     private String ObjectAccount;
-    class UserEvent extends Event {
-        public static final EventType<UserEvent> ANY = new EventType<>(Event.ANY, "ANY");
-
-        public static final EventType<UserEvent> CLICKED = new EventType<>(ANY,"CLICKED");
-
-
-        public UserEvent(EventType<? extends Event> eventType) {
-            super(eventType);
-        }
-    }
-
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -176,18 +162,10 @@ public class ChatAppClientDarkController{
     void initGroupView(){
         groupListView.setOnMouseClicked(event -> {
             GroupInfo selectedGroup = groupListView.getSelectionModel().getSelectedItem();
-            //处理新的群聊事件
-            if(selectedGroup.account.equals("newGroup")){
-                //TODO
-                newGroupScene.setVisible(true);
-            }
-            else{
-                sendToObjectName.setText(selectedGroup.name);
-                sendMessage.setEditable(true);
-                newGroupScene.setVisible(false);
-                ObjectAccount = selectedGroup.account;
-                System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
-            }
+            sendToObjectName.setText(selectedGroup.name);
+            sendMessage.setEditable(true);
+            ObjectAccount = selectedGroup.account;
+            System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             // 执行你想要的操作
         });
     }
@@ -223,7 +201,6 @@ public class ChatAppClientDarkController{
     }
     void initScene(){
         searchListScene.setVisible(false);
-        newGroupScene.setVisible(false);
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
     }
@@ -329,6 +306,8 @@ public class ChatAppClientDarkController{
         // 可以添加其他方法和处理逻辑
     }
     public void initFriends(ArrayList<UserInfo> friends){
+        UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
+        friendListView.getItems().add(newFriend);
         for(int i = 0;i<friends.size();i++){
             UserInfo userInfo = friends.get(i);
             friendListView.getItems().add(userInfo);
@@ -353,18 +332,9 @@ public class ChatAppClientDarkController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         addGroupListView.setCellFactory(param -> new addGroupListCell<>());
     }
-    public void getSearchFriendListView(ArrayList<UserInfo> friends){
-        for(int i = 0;i<friends.size();i++){
-            UserInfo userInfo = friends.get(i);
-            searchFriendListView.getItems().add(userInfo);
-        }
-        // 设置列表的单元格工厂，以便自定义单元格显示内容
-        searchFriendListView.setCellFactory(param -> new FriendListCell<UserInfo>());
-    }
     public void initTab(){
         chooseAddGroupTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(true);
-            newGroupScene.setVisible(false);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
             //cleanRight();
@@ -372,7 +342,6 @@ public class ChatAppClientDarkController{
         });
         chooseFriendTab.setOnSelectionChanged(event -> {
             addGroupScene.setVisible(false);
-            newGroupScene.setVisible(false);
             ChatScene.setVisible(true);
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
@@ -394,8 +363,7 @@ public class ChatAppClientDarkController{
         selectedUserInfo.clear();
         //addGroupListView.refresh();
     }
-    public void initAddGroupAvatar()
-    {
+    public void initAddGroupAvatar() {
         // 获取特定文件夹内的所有图片
         List<File> imageFiles = getImagesFromFolder(new File(folderPath));
         for (File file : imageFiles) {
@@ -521,7 +489,133 @@ public class ChatAppClientDarkController{
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
     }
-    public void getNewFriends(ArrayList<UserInfo> newFriends){
-        
+    public void initNewFriends(ArrayList<RequestInfo> newFriends){
+        for(int i = 0;i<newFriends.size();i++){
+            RequestInfo requestInfo = newFriends.get(i);
+            newFriendList.getItems().add(requestInfo);
+        }
+        // 设置列表的单元格工厂，以便自定义单元格显示内容
+        newFriendList.setCellFactory(param -> new newFriendListCell<RequestInfo>());
+    }
+    static class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
+        private final Label userInfoName = new Label();
+        private final Label Type = new Label();
+        private final ImageView imageView = new ImageView();;
+        @Override
+        protected void updateItem(T item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+                setBackground(Background.EMPTY);
+            } else {
+                HBox content = new HBox();
+                content.setSpacing(10);
+                userInfoName.setText(item.name);
+                Image image = new Image(item.avatarPath);
+                imageView.setImage(image);
+                imageView.setFitHeight(40); // 设置图片高度
+                imageView.setFitWidth(40); // 设置图片宽度
+                content.getChildren().addAll(imageView,userInfoName);
+                Type.setAlignment(Pos.CENTER_RIGHT);
+                HBox rightHbox = new HBox();
+                HBox.setHgrow(rightHbox, Priority.ALWAYS);
+                rightHbox.setAlignment(Pos.CENTER_RIGHT);
+                if(item.type==1){
+                    Type.setText("已接受");
+                    rightHbox.getChildren().add(Type);
+                } else if (item.type == -1) {
+                    Type.setText("已拒绝");
+                    rightHbox.getChildren().add(Type);
+                }
+                else{
+                    Button accept = new Button("接受");
+                    Button reject = new Button("拒绝");
+                    accept.setOnAction(event -> {
+                        item.type = 1;
+                        Type.setText("已接受");
+                        rightHbox.getChildren().clear();
+                        content.getChildren().add(Type);
+                        updateItem(item,false);
+                    });
+                    reject.setOnAction(event -> {
+                        item.type = -1;
+                        Type.setText("已拒绝");
+                        rightHbox.getChildren().clear();
+                        content.getChildren().add(Type);
+                        updateItem(item,false);
+                    });
+                    rightHbox.getChildren().addAll(accept,reject);
+                    rightHbox.setSpacing(10);
+                }
+                content.getChildren().add(rightHbox);
+                setGraphic(content);/**/
+                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
+            }
+        }
+        // 可以添加其他方法和处理逻辑
+    }
+    public void getSearchFriendListView(ArrayList<UserInfo> friends){
+        for(int i = 0;i<friends.size();i++){
+            UserInfo userInfo = friends.get(i);
+            searchFriendListView.getItems().add(userInfo);
+        }
+        // 设置列表的单元格工厂，以便自定义单元格显示内容
+        searchFriendListView.setCellFactory(param -> new searchFriendListCell<UserInfo>());
+    }
+    static class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
+        private final Label userInfoName = new Label();
+        private final Label Type = new Label();
+        private final ImageView imageView = new ImageView();;
+        @Override
+        protected void updateItem(T item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null || empty) {
+                setText(null);
+                setGraphic(null);
+                setBackground(Background.EMPTY);
+            } else {
+                HBox content = new HBox();
+                content.setSpacing(10);
+                userInfoName.setText(item.name);
+                Image image = new Image(item.avatarPath);
+                imageView.setImage(image);
+                imageView.setFitHeight(40); // 设置图片高度
+                imageView.setFitWidth(40); // 设置图片宽度
+                content.getChildren().addAll(imageView,userInfoName);
+                Type.setAlignment(Pos.CENTER_RIGHT);
+                HBox rightHbox = new HBox();
+                HBox.setHgrow(rightHbox, Priority.ALWAYS);
+                rightHbox.setAlignment(Pos.CENTER_RIGHT);
+                ObservableList<UserInfo> friends =  friendListView.getItems();
+                int size =friends.size();
+                int type = 0;
+                for(int i = 0;i<size;i++){
+                    UserInfo userInfo = friends.get(i);
+                    if(userInfo.account.equals(item.account));
+                    type = 1;
+                }
+                if(type==1){
+                    Type.setText("已添加");
+                    rightHbox.getChildren().add(Type);
+                }
+                else{
+                    Button add = new Button("加好友");
+                    add.setOnAction(event -> {
+                        //TODO 发送请求
+                        Type.setText("已申请");
+                        rightHbox.getChildren().clear();
+                        content.getChildren().add(Type);
+                        updateItem(item,false);
+                    });
+                    rightHbox.getChildren().add(add);
+                    rightHbox.setSpacing(10);
+                }
+                content.getChildren().add(rightHbox);
+                setGraphic(content);/**/
+                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
+            }
+        }
+        // 可以添加其他方法和处理逻辑
     }
 }

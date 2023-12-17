@@ -1,6 +1,7 @@
 package com.BUAAChat.UI;
 
 import com.BUAAChat.Client.GroupInfo;
+import com.BUAAChat.Client.RequestInfo;
 import com.BUAAChat.Client.User;
 import com.BUAAChat.Client.UserInfo;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
@@ -35,21 +36,29 @@ public class ChatAppClient extends Application {
         //ArrayList<UserInfo> friends =  user.getFriends();
         //改为测试好友
         ArrayList<UserInfo> friends = new ArrayList<>();
-        UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
         UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
         UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
         //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
-        //friends.put("121212",group1);
-        friends.add(newFriend);
+
         friends.add(friend1);
         friends.add(friend2);
         //ArrayList<GroupInfo> groups =  user.getGroups();
         //改为测试群聊
         ArrayList<GroupInfo> groups = new ArrayList<>();
-        GroupInfo newGroup = new GroupInfo("newGroup","新的群聊","com/BUAAChat/image/Controller/newGroup.png");
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
-        groups.add(newGroup);
         groups.add(group1);
+
+        //ArrayList<RequestInfo> newFriendRequest = user.getRequests();
+        //改为测试请求
+        ArrayList<RequestInfo> newFriendRequest = new ArrayList<>();
+        RequestInfo requestInfo1 = new RequestInfo("zhongli","hutao","钟离","com/BUAAChat/image/AvatarImage/zhongli.png",1);
+        RequestInfo requestInfo2 = new RequestInfo("naxida","hutao","纳西妲","com/BUAAChat/image/AvatarImage/naxida.png",0);
+        RequestInfo requestInfo3 = new RequestInfo("ying","hutao","莹","com/BUAAChat/image/AvatarImage/ying.png",-1);
+        newFriendRequest.add(requestInfo1);
+        newFriendRequest.add(requestInfo2);
+        newFriendRequest.add(requestInfo3);
+
+
         initWhiteRootLayout();
         initDarkRootStyle();
         darkController.setChatAppClient(this);
@@ -57,6 +66,7 @@ public class ChatAppClient extends Application {
         darkController.initFriends(friends);
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
+        darkController.initNewFriends(newFriendRequest);
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);
