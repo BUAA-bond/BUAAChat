@@ -560,6 +560,7 @@ public class ChatAppClientController{
     }
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
         newFriendList.getItems().clear();
+        if(newFriends==null) return;
         for (RequestInfo requestInfo : newFriends) {
             newFriendList.getItems().add(requestInfo);
         }
@@ -601,7 +602,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.receiveAddFriendFeedback(item.from,true);
+                        client.sendRequestFeedback(item.from,true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -609,7 +610,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.receiveAddFriendFeedback(item.from,false);
+                        client.sendRequestFeedback(item.from,false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -628,6 +629,7 @@ public class ChatAppClientController{
     }
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
         searchFriendListView.getItems().clear();
+        if(friends==null) return;
         for (UserInfo userInfo : friends) {
             searchFriendListView.getItems().add(userInfo);
         }
@@ -697,6 +699,7 @@ public class ChatAppClientController{
     }
     public void initChat(ArrayList<ChatInfo>chatInfos){
         currentChatVbox.getChildren().clear();
+        if(chatInfos==null) return;
         for (ChatInfo chatInfo : chatInfos) {
             if (chatInfo.fromUser.account.equals(onlineUser.getAccount())) {
                 updateOnlineUserMessage(chatInfo.content);
