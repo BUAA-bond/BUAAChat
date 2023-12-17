@@ -18,6 +18,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.BUAAChat.Constant.Constant.client;
+
 public class ChatAppClientDarkController{
     private ChatAppClient chatAppClient;
     @FXML
@@ -154,7 +156,7 @@ public class ChatAppClientDarkController{
             UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
             //处理新的好友事件
             if(selectedUser.account.equals("newFriend")){
-                //TODO
+                initNewFriends(client.getUser().getRequests());
                 newFriendScene.setVisible(true);
                 changeIdentityScene.setVisible(false);
             }
@@ -164,6 +166,7 @@ public class ChatAppClientDarkController{
                 sendMessage.setEditable(true);
                 newFriendScene.setVisible(false);
                 ObjectAccount = selectedUser.account;
+                chatAppClient.setToAccount(ObjectAccount);
                 System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
             }
             // 执行你想要的操作
@@ -175,6 +178,7 @@ public class ChatAppClientDarkController{
             sendToObjectName.setText(selectedGroup.name);
             sendMessage.setEditable(true);
             ObjectAccount = selectedGroup.account;
+            chatAppClient.setToAccount(ObjectAccount);
             System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             // 执行你想要的操作
         });
@@ -219,17 +223,11 @@ public class ChatAppClientDarkController{
     }
     void send(String message) {
         if (message.isEmpty()) return;
-        //com.BUAAChat.Constant.Client.sendTextTo(ObjectAccount,message);
+        client.sendText(ObjectAccount,message);
         updateOnlineUserMessage(message);
-        //TODO
-        //需要一个能获取当前聊天对象account的东西
-        //if(client!=null) client.sendText(message,"");
     }
     void searchFriend(String s){
-        //TODO
-        ArrayList<UserInfo> users = new ArrayList<>();
-        UserInfo userInfo = new UserInfo("12345","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
-        users.add(userInfo);
+        ArrayList<UserInfo> users=client.searchUser(s);
         getSearchFriendListView(users);
     }
     public void setChatAppClient(ChatAppClient chatAppClient){
@@ -525,7 +523,7 @@ public class ChatAppClientDarkController{
     static class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
-        private final ImageView imageView = new ImageView();;
+        private final ImageView imageView = new ImageView();
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -557,6 +555,7 @@ public class ChatAppClientDarkController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
+                        client.sendRequestFeedback(item.from,true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -564,6 +563,7 @@ public class ChatAppClientDarkController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
+                        client.sendRequestFeedback(item.from,false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -630,7 +630,7 @@ public class ChatAppClientDarkController{
                 else{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
-                        //TODO 发送请求
+                        client.addFriendRequest(item.account, item.name,item.avatarPath);
                         type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();

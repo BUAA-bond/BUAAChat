@@ -1,9 +1,7 @@
 package com.BUAAChat.UI;
 
-import com.BUAAChat.Client.GroupInfo;
-import com.BUAAChat.Client.RequestInfo;
-import com.BUAAChat.Client.User;
-import com.BUAAChat.Client.UserInfo;
+import com.BUAAChat.Client.*;
+import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
 import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
@@ -16,6 +14,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.BUAAChat.Constant.Constant.client;
+
 public class ChatAppClient extends Application {
     private Stage primaryStage;
     private AnchorPane darkRootLayout;
@@ -25,26 +25,25 @@ public class ChatAppClient extends Application {
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
+    private String toAccount;
+    private boolean isStart=false;
     @Override
     public void start(Stage primaryStage) throws Exception {
+        isStart=true;
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
-        //user = client.getUser();
+        user = client.getUser();
         //改为测试用户
-        user = new User("114514","胡桃","123456ccf","com/BUAAChat/image/AvatarImage/hutao.png");
-        //ArrayList<UserInfo> friends =  user.getFriends();
+        ArrayList<UserInfo> friends =  user.getFriends();
         //改为测试好友
-        ArrayList<UserInfo> friends = new ArrayList<>();
         UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
         UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
         //UserInfo group1 = new UserInfo("121212","群聊","image/GroupImage/1.png");
-
         friends.add(friend1);
         friends.add(friend2);
-        //ArrayList<GroupInfo> groups =  user.getGroups();
+        ArrayList<GroupInfo> groups =  user.getGroups();
         //改为测试群聊
-        ArrayList<GroupInfo> groups = new ArrayList<>();
         GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
         groups.add(group1);
 
@@ -66,7 +65,7 @@ public class ChatAppClient extends Application {
         darkController.initFriends(friends);
         darkController.initGroups(groups);
         darkController.initAddGroup(friends);
-        darkController.initNewFriends(newFriendRequest);
+        //darkController.initNewFriends(newFriendRequest);
 
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
@@ -76,8 +75,33 @@ public class ChatAppClient extends Application {
         whiteController.initNewFriends(newFriendRequest);
         changeDarkStyle();
         primaryStage.show();
-        //showPersonOverview();
+
     }
+    public void openThread(){//当前聊天对象的账号
+        new Thread(()->{
+            while(isStart){
+                if(toAccount!=null){
+                    ArrayList<ChatInfo> chatInfos=null;
+                    if(MyUtil.judgeAccount(toAccount)){//好友
+                        chatInfos=user.getMessagesF().get(toAccount);
+                    }else{
+                        chatInfos=user.getMessagesG().get(toAccount);
+                    }
+                    //TODO
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void setToAccount(String toAccount) {
+        this.toAccount = toAccount;
+    }
+
     /**
      * Initializes the root layout.
      */

@@ -31,19 +31,31 @@ public class Main {
                 String loginAccount = message[0];    //account
                 String loginPassword = message[1];   //password
                 if(!MyUtil.judgeAccount(loginAccount)){
+                    try {
+                        if(client.getSocket()!=null)
+                            client.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     loginClient.throwError("账号格式不正确");
                 }else if(!MyUtil.judgePassword(loginPassword)){
+                    try {
+                        if(client.getSocket()!=null)
+                            client.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     loginClient.throwError("密码格式不正确");
                 }else if(client.login(loginAccount,loginPassword)){
                     loginClient.close();
                     try {
                         //创建客户端线程
                         //TODO
-                        chatAppClient.start(new Stage());
                         client.setLogin(true);
                         client.setLive(true);
                         client.userInit(loginAccount,loginPassword);//先初始化，在登录进去
                         client.start();
+                        chatAppClient.start(new Stage());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
