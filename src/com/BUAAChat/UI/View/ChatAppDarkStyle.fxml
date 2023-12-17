@@ -127,7 +127,7 @@
                            </children></AnchorPane>
                         <Label id="sendToObjectName" prefHeight="33.0" prefWidth="396.0" text="创建群聊" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children></AnchorPane>
-                  <AnchorPane fx:id="changeIdentityScene" prefHeight="673.0" prefWidth="667.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <AnchorPane fx:id="changeIdentityScene" prefHeight="673.0" prefWidth="667.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <AnchorPane prefHeight="673.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
                            <children>
