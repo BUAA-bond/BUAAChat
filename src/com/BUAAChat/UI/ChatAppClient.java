@@ -17,8 +17,6 @@ import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClient extends Application {
     private Stage primaryStage;
-    private AnchorPane darkRootLayout;
-    private AnchorPane whiteRootLayout;
     private ChatAppClientController darkController;
     private ChatAppClientController whiteController;
     private  Scene darkScene;
@@ -110,7 +108,7 @@ public class ChatAppClient extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("com/BUAAChat/UI/View/ChatApp.fxml");
             loader.setLocation(url);
-            whiteRootLayout = loader.load();
+            AnchorPane whiteRootLayout = loader.load();
             whiteController = loader.getController();
             whiteController.setStyle(1);
             // Show the scene containing the root layout.
@@ -125,7 +123,7 @@ public class ChatAppClient extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("com/BUAAChat/UI/View/ChatAppDarkStyle.fxml");
             loader.setLocation(url);
-            darkRootLayout = loader.load();
+            AnchorPane darkRootLayout = loader.load();
             // 设置控制器
             darkController = loader.getController();
             darkController.setStyle(0);

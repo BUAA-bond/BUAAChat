@@ -3,7 +3,6 @@ import com.BUAAChat.Box.PasswordInputBox;
 import com.BUAAChat.Button.MyButton;
 import com.BUAAChat.Box.InputBox;
 import com.BUAAChat.MyInterface.LoginButtonClickListener;
-import com.BUAAChat.MyInterface.RegisterButtonClickListener;
 import com.BUAAChat.MyUtil.MyUtil;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -30,7 +29,6 @@ import java.util.List;
 
 public class LoginClient extends Application {
     private LoginButtonClickListener messageListener;
-    private RegisterButtonClickListener registerClickListener;
     private final String folderPath = "src/com/BUAAChat/image/AvatarImage"; // 指定文件夹路径
     Stage privateStage;
     Group loginGroup;
@@ -107,12 +105,9 @@ public class LoginClient extends Application {
                 imageView.setFitHeight(60);
                 // 添加点击事件监听器
                 imageView.setOnMouseClicked(newEvent -> {
-                    File selectedFile = file;
-                    if (selectedFile != null) {
-                        Avatar.setImage(image);
-                        privateStage.setScene(registerScene);
-                        AvatarName[0] = selectedFile.getName();
-                    }
+                    Avatar.setImage(image);
+                    privateStage.setScene(registerScene);
+                    AvatarName[0] = file.getName();
                 });
                 flowPane.getChildren().add(imageView);
             }
