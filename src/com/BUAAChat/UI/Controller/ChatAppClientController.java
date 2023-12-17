@@ -362,6 +362,7 @@ public class ChatAppClientController{
         // 可以添加其他方法和处理逻辑
     }
     public void initFriends(ArrayList<UserInfo> friends){
+        if(friends==null)return;
         friendListView.getItems().clear();
         UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
         friendListView.getItems().add(newFriend);
@@ -372,6 +373,7 @@ public class ChatAppClientController{
         friendListView.setCellFactory(param -> new FriendListCell<UserInfo>());
     }
     public void initGroups(ArrayList<GroupInfo> groups){
+        if (groups==null)return;
         groupListView.getItems().clear();
         for (GroupInfo groupInfo : groups) {
             groupListView.getItems().add(groupInfo);
@@ -381,6 +383,7 @@ public class ChatAppClientController{
     }
     // 设置创建群聊的好友列表显示及其功能
     public void initAddGroup(ArrayList<UserInfo> friends){
+        if(friends==null)return;
         addGroupListView.getItems().clear();
         for (UserInfo userInfo : friends) {
             if (!userInfo.account.equals("newFriend")) addGroupListView.getItems().add(userInfo);
