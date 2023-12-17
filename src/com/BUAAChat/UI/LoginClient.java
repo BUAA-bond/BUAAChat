@@ -79,6 +79,7 @@ public class LoginClient extends Application {
     }
     public void initRegisterScene()
     {
+        final String[] AvatarName = {"hutao.png"};
         registerGroup = new Group();
         BorderPane root = new BorderPane();
         Image backgroundImage = new Image("com/BUAAChat/image/RegisterImage/registerImage.jpg");
@@ -110,6 +111,7 @@ public class LoginClient extends Application {
                     if (selectedFile != null) {
                         Avatar.setImage(image);
                         privateStage.setScene(registerScene);
+                        AvatarName[0] = selectedFile.getName();
                     }
                 });
                 flowPane.getChildren().add(imageView);
@@ -281,10 +283,8 @@ public class LoginClient extends Application {
             String name = registerGetName();
             String password = registerGetPassword();
             String againPassword = registerGetAgainPassword();
-            Image reggisterImage = Avatar.getImage();
-            String registerAvatarPath = reggisterImage.getUrl();
+            String registerAvatarPath = "com/BUAAChat/image/AvatarImage/"+AvatarName[0];
             String[] messages = {account,name,password,againPassword,registerAvatarPath};
-
             registerNotifyCallbackMessage(messages);
         }));
         registerScene = new Scene(registerGroup, 400,300);//内容长宽
@@ -440,6 +440,15 @@ public class LoginClient extends Application {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("注册失败");
+        alert.setContentText(string);
+        alert.showAndWait();
+
+    }
+    public void throwLoginError(String string){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("登录失败");
         alert.setContentText(string);
         alert.showAndWait();
 

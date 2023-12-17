@@ -100,6 +100,7 @@ public class ChatAppClientDarkController{
     private VBox currentChatVbox;
     private static ArrayList<UserInfo> selectedUserInfo;
     private String ObjectAccount;
+    private User onlineUser;
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -167,6 +168,8 @@ public class ChatAppClientDarkController{
                 newFriendScene.setVisible(false);
                 ObjectAccount = selectedUser.account;
                 chatAppClient.setToAccount(ObjectAccount);
+                ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesF().get(ObjectAccount);
+                initChat(chatInfos);
                 System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
             }
             // 执行你想要的操作
@@ -179,6 +182,8 @@ public class ChatAppClientDarkController{
             sendMessage.setEditable(true);
             ObjectAccount = selectedGroup.account;
             chatAppClient.setToAccount(ObjectAccount);
+            ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesG().get(ObjectAccount);
+            initChat(chatInfos);
             System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
             // 执行你想要的操作
         });
@@ -234,6 +239,7 @@ public class ChatAppClientDarkController{
         this.chatAppClient = chatAppClient;
     }
     public void initUser(User user){
+        this.onlineUser = user;
         onlineUserName.setText(user.getName());
         Image AvatarImage = new Image(user.getAvatarPath());
         AvatarShow.setImage(AvatarImage);
@@ -581,6 +587,7 @@ public class ChatAppClientDarkController{
         // 可以添加其他方法和处理逻辑
     }
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
+        searchFriendListView.getItems().clear();
         for(int i = 0;i<friends.size();i++){
             UserInfo userInfo = friends.get(i);
             searchFriendListView.getItems().add(userInfo);
@@ -650,6 +657,14 @@ public class ChatAppClientDarkController{
     }
 
     public void initChat(ArrayList<ChatInfo>chatInfos){
-
+        for(int i=0;i<chatInfos.size();i++){
+            ChatInfo chatInfo = chatInfos.get(i);
+            if(chatInfo.fromUser.account.equals(onlineUser.getAccount())){
+                updateOnlineUserMessage(chatInfo.content);
+            }
+            else{
+                updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
+            }
+        }
     }
 }
