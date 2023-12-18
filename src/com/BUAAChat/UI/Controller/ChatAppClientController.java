@@ -585,7 +585,7 @@ public class ChatAppClientController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         newFriendList.setCellFactory(param -> new newFriendListCell<RequestInfo>());
     }
-    static class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
+    class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
         private final ImageView imageView = new ImageView();
@@ -607,6 +607,7 @@ public class ChatAppClientController{
                 content.getChildren().addAll(imageView,userInfoName);
                 Type.setAlignment(Pos.CENTER_RIGHT);
                 HBox rightHbox = new HBox();
+                rightHbox.setMaxHeight(40);
                 HBox.setHgrow(rightHbox, Priority.ALWAYS);
                 rightHbox.setAlignment(Pos.CENTER_RIGHT);
                 if(item.type==1){
@@ -642,6 +643,7 @@ public class ChatAppClientController{
                 setGraphic(content);/**/
                 setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.55);");
             }
+            newFriendList.requestLayout();
         }
         // 可以添加其他方法和处理逻辑
     }
@@ -731,6 +733,11 @@ public class ChatAppClientController{
         System.out.println(chatInfo.fromUser.account);
         System.out.println("-------------");
         if(ObjectAccount.equals(chatInfo.fromUser.account)){
+            updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
+        }
+    }
+    public void updateChatObject(ChatInfo chatInfo,String account){
+        if(ObjectAccount.equals(account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
     }
