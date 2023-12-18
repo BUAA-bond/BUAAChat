@@ -11,10 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.security.GuardedObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import static com.BUAAChat.Constant.Constant.*;
 
 public class Client implements Runnable {
@@ -26,9 +24,7 @@ public class Client implements Runnable {
     private boolean isLogin =false;
     private boolean isLive=false;
     private User user=new User();
-    private static Message receiveMsg =null;
     private final Object lock = new Object();
-    private boolean isPaused = false;
     private static int sleepTime=200;
     public Client() {
     }
@@ -66,26 +62,27 @@ public class Client implements Runnable {
         System.out.println("userInit");
         System.out.println(userInfo.name);
         System.out.println(userInfo.account);
-        System.out.println(userInfo.avatarPath);
         try {
             //初始化朋友
             getAllFriendsInfoRequest(account);//发送请求
             msg=(Message)ois.readObject();
             json=msg.getContent();
+            System.out.println("friends初始化");
             System.out.println("friends:"+json);
             user.setFriends(getAllFriendsInfoFeedback(json,0));
             //初始化群
             getAllGroupsInfoRequest(account);//发送请求
             msg=(Message)ois.readObject();
             json=msg.getContent();
-            System.out.println("groups:"+json);
+            System.out.println("groups初始化");
+            System.out.println("groups"+json);
             user.setGroups(getAllGroupsInfoFeedback(json,0));
             //初始化请求
             getAllRequestInfoRequest(account);
             msg=(Message)ois.readObject();
             json=msg.getContent();
-            System.out.println("requests:"+json);
             user.setRequests(getAllRequestInfoFeedback(json));
+            System.out.println("requests初始化");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -681,6 +678,7 @@ public class Client implements Runnable {
      */
     boolean tmpBuildGroup=false;
     public boolean buildGroup(String gAccount,String name,String avatar,ArrayList<UserInfo> members){
+        System.out.println("buildGroup:"+gAccount);
         buildGroupRequest(gAccount,name,avatar);
         sleep(sleepTime);
         boolean sign=tmpBuildGroup;
@@ -705,8 +703,8 @@ public class Client implements Runnable {
         JsonObject data=new JsonObject();
         data.addProperty("uAccount",user.getAccount());
         data.addProperty("gAccount",gAccount);
-        data.addProperty("gName",name);
-        data.addProperty("gAvatar",avatar);
+        data.addProperty("name",name);
+        data.addProperty("avatar",avatar);
         jsonObject.add("data",data);
         Message message = new Message(user.getAccount(),"0",new Gson().toJson(jsonObject));
         try {
@@ -717,7 +715,6 @@ public class Client implements Runnable {
         }
     }
     public boolean buildGroupFeedback(String json){
-        //JsonObject jsonObject=getJsonObjectFromMsg("209");
         JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if(jsonObject.get("status").getAsInt()==9000){
             tmpBuildGroup=true;
@@ -732,6 +729,7 @@ public class Client implements Runnable {
      */
     boolean tmpJoinGroup=false;
     public boolean joinGroup(UserInfo userInfo,String groupAccount){
+        System.out.println(userInfo.account+" joinGroup:"+groupAccount);
         joinGroupRequest(userInfo.account,groupAccount);
         sleep(sleepTime);
         boolean sign=tmpJoinGroup;
@@ -1171,6 +1169,7 @@ public class Client implements Runnable {
                                 handleMessage(message);
                             }).start();
                         }
+                        sleep(100);
                     }
                 }
         }).start();

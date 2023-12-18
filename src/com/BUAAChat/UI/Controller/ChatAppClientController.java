@@ -118,20 +118,22 @@ public class ChatAppClientController{
         sendButton.setOnAction(event -> {
             send(sendMessage.getText());
             sendMessage.clear();
-            UserInfo testUserInfo = new UserInfo("123456","zhongli","com/BUAAChat/image/AvatarImage/zhongli.png");
-            updateOtherUserMessage(testUserInfo,"你好");
+            //todo
             // 处理按钮点击事件
         });
         createGroupButton.setOnAction(event -> {
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
-            getSelectedUserInfo();
+            System.out.println("gName:"+name+" gAccount:"+account);
+            ArrayList<UserInfo> selectedUserInfos=getSelectedUserInfo();
             //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
+            //client.buildGroup(account,name,newGroupAvatarPath,selectedUserInfos);
+            System.out.println("创建成功");
             clearAddGroupFriends();
             initCreateGroup();
         });
         changeIdentityButton.setOnAction(event -> {
-            //TODO 更改头像 newAvatarPath
+            //更改头像 newAvatarPath
             if(newAvatarPath!=null && !newAvatarPath.isEmpty()){
                 Image image = new Image(newAvatarPath);
                 client.modifyUserAvatar(newAvatarPath);
@@ -142,12 +144,13 @@ public class ChatAppClientController{
             String newPassword = newPasswordField.getText();
             newPasswordField.clear();
             if(!newName.isEmpty()){
-                //TODO 更改名字
+                //更改名字
                 client.modifyUserName(newName);
                 onlineUserName.setText(newName);
             }
-            if(!newPassword.isEmpty()&& MyUtil.judgePassword(newPassword)){
+            if(!newPassword.isEmpty() && MyUtil.judgePassword(newPassword)){
                 //TODO 更改密码
+                System.out.println("newPassword: "+newPassword+" hh");
                 client.changePassword(newPassword);
             }
         });
@@ -481,11 +484,14 @@ public class ChatAppClientController{
     public void clearCurrentChat(){
         currentChatVbox.getChildren().clear();
     }
-    public void getSelectedUserInfo() {
+    public ArrayList<UserInfo> getSelectedUserInfo() {
         System.out.println("Selected Items:");
+        ArrayList<UserInfo> items=new ArrayList<>();
         for (UserInfo selectedItem : selectedUserInfo) {
             System.out.println(selectedItem.account+" "+selectedItem.name);
+            items.add(selectedItem);
         }
+        return items;
     }
     public void clearAddGroupFriends() {
         selectedUserInfo.clear();
