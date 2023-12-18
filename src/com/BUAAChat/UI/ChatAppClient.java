@@ -134,6 +134,17 @@ public class ChatAppClient extends Application {
                 darkController.updateChatObject(chatInfo);
         }
     }
+    public void updateGroupChat(ChatInfo chatInfo,String account){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.updateChatObject(chatInfo,account);
+            }
+        }
+        else {
+            if(darkController!=null)
+                darkController.updateChatObject(chatInfo,account);
+        }
+    }
     public void updateFriendList(){
         if(Style==1){
             if(whiteController!=null){
