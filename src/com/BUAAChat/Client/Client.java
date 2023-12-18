@@ -703,6 +703,7 @@ public class Client implements Runnable {
             }
         }
         tmpBuildGroup=false;
+        updateGroupList();
         return sign;
     }
     public void buildGroupRequest(String gAccount,String name,String avatar){
@@ -905,13 +906,14 @@ public class Client implements Runnable {
             HashMap<String, ArrayList<ChatInfo>> map=null;
             if(MyUtil.judgeAccount(toUser))
                 map=user.getMessagesF();
-            else if(MyUtil.judgeGroupAccount(toUser))
-                map=user.getMessagesG();
+            else map=user.getMessagesG();
             if(map.containsKey(toUser)){
+                System.out.println("toAccount:"+toUser);
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(toUser);
                 msgs.add(new ChatInfo(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()),content));
             }else{
+                System.out.println("toAccount:"+toUser);
                 ArrayList<ChatInfo> msgs=new ArrayList<>();
                 msgs.add(new ChatInfo(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()),content));
                 map.put(toUser,msgs);
@@ -925,6 +927,11 @@ public class Client implements Runnable {
         JsonObject jsonObject=new Gson().fromJson(json,JsonObject.class);
         if(jsonObject.get("status").getAsInt()==9000){
             return;
+        }else{
+            JsonObject data=jsonObject.get("data").getAsJsonObject();
+            if(data.get("from").getAsString().equals(user.getAccount())){
+                return;
+            }
         }
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String content=data.get("content").getAsString();
@@ -974,11 +981,13 @@ public class Client implements Runnable {
                 ChatInfo chatInfo=new ChatInfo(userInfo,content);
                 msgs.add(chatInfo);
                 map.put(to,msgs);
+                System.out.println("===================================");
                 updateChat(chatInfo);
             }else{
                 ArrayList<ChatInfo> msgs=map.get(to);
                 ChatInfo chatInfo=new ChatInfo(userInfo,content);
                 msgs.add(chatInfo);
+                System.out.println("===================================");
                 updateChat(chatInfo);
                 //map.put(to,msgs);
             }
@@ -1162,7 +1171,6 @@ public class Client implements Runnable {
             Message msg=null;
             if(!socket.isClosed())
                 msg = (Message) ois.readObject();
-            System.out.println("receiveMessage"+msg);
             return msg;
         } catch (IOException e) {
             e.printStackTrace();
@@ -1203,6 +1211,7 @@ public class Client implements Runnable {
      * @param chatInfo
      */
     public void updateChat(ChatInfo chatInfo){
+        System.out.println("update");
         Platform.runLater(() -> {
             chatAppClient.updateChat(chatInfo);
         });
@@ -1220,9 +1229,17 @@ public class Client implements Runnable {
      * 更新好友列表界面
      */
     public void updateFriendList(){
-        System.out.println("updateFriendList++++++");
         Platform.runLater(() -> {
             chatAppClient.updateFriendList();
+        });
+    }
+
+    /**
+     * 更新群聊界面
+     */
+    public void updateGroupList(){
+        Platform.runLater(() -> {
+            chatAppClient.updateGroupList();
         });
     }
     public void setLogin(boolean login) {

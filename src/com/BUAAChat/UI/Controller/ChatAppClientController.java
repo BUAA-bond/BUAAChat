@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.io.File;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,6 +209,8 @@ public class ChatAppClientController{
                 sendToObjectName.setText(selectedGroup.name);
                 sendMessage.setEditable(true);
                 ObjectAccount = selectedGroup.account;
+                System.out.println(ObjectAccount);
+                System.out.println("iosjdaodjoasjdsa");
                 chatAppClient.setToAccount(ObjectAccount);
                 ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesG().get(ObjectAccount);
                 initChat(chatInfos);
@@ -724,6 +727,9 @@ public class ChatAppClientController{
         }
     }
     public void updateChatObject(ChatInfo chatInfo){
+        System.out.println(ObjectAccount);
+        System.out.println(chatInfo.fromUser.account);
+        System.out.println("-------------");
         if(ObjectAccount.equals(chatInfo.fromUser.account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
