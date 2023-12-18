@@ -15,7 +15,6 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import javafx.stage.WindowEvent;
 import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClient extends Application {
@@ -73,26 +72,6 @@ public class ChatAppClient extends Application {
         whiteController.initNewFriends(newFriendRequest);
         changeWhiteStyle();
     }
-    public void openThread(){//当前聊天对象的账号
-        new Thread(()->{
-            while(isStart){
-                if(toAccount!=null){
-                    ArrayList<ChatInfo> chatInfos=null;
-                    if(MyUtil.judgeAccount(toAccount)){//好友
-                        chatInfos=user.getMessagesF().get(toAccount);
-                    }else{
-                        chatInfos=user.getMessagesG().get(toAccount);
-                    }
-                    //TODO
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 
     public void setToAccount(String toAccount) {
         this.toAccount = toAccount;
@@ -149,12 +128,51 @@ public class ChatAppClient extends Application {
     }
     public void updateChat(ChatInfo chatInfo){
         if(Style==1){
-            if(whiteController!=null);
-            whiteController.updateChatObject(chatInfo);
+            if(whiteController!=null){
+                whiteController.updateChatObject(chatInfo);
+            }
         }
         else {
             if(darkController!=null)
                 darkController.updateChatObject(chatInfo);
+        }
+    }
+    public void updateFriendList(){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.initFriends(friends);
+                whiteController.initAddGroup(friends);
+            }
+        }
+        else {
+            if(darkController!=null){
+                darkController.initFriends(friends);
+                darkController.initAddGroup(friends);
+            }
+        }
+    }
+    public void updateNewFriend(){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.initNewFriends(newFriendRequest);
+            }
+        }
+        else {
+            if(darkController!=null){
+                darkController.initNewFriends(newFriendRequest);
+            }
+        }
+    }
+    public void updateGroupList(){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.initGroups(groups);
+            }
+        }
+        else {
+            if(darkController!=null){
+                darkController.initGroups(groups);
+            }
         }
     }
     public static void main(String[] args) throws Exception {
