@@ -125,7 +125,6 @@ public class ChatAppClientController{
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             System.out.println("gName:"+name+" gAccount:"+account);
-            ArrayList<UserInfo> selectedUserInfos=getSelectedUserInfo();
             //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
             //client.buildGroup(account,name,newGroupAvatarPath,selectedUserInfos);
             System.out.println("创建成功");
@@ -576,7 +575,7 @@ public class ChatAppClientController{
         newFriendList.getItems().clear();
         if(newFriends==null) return;
         for (RequestInfo requestInfo : newFriends) {
-            newFriendList.getItems().add(requestInfo);
+            if(!requestInfo.from.equals(onlineUser.getAccount())) newFriendList.getItems().add(requestInfo);
         }
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         newFriendList.setCellFactory(param -> new newFriendListCell<RequestInfo>());
@@ -616,7 +615,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.sendRequestFeedback(item.from,true);
+                        client.sendRequestFeedback(item.from,item.name, item.avatarPath, true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -624,7 +623,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.sendRequestFeedback(item.from,false);
+                        client.sendRequestFeedback(item.from,item.name, item.avatarPath, false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -636,7 +635,7 @@ public class ChatAppClientController{
                 }
                 content.getChildren().add(rightHbox);
                 setGraphic(content);/**/
-                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.50);");
+                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.55);");
             }
         }
         // 可以添加其他方法和处理逻辑

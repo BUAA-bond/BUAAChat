@@ -75,14 +75,15 @@ public class Client implements Runnable {
             msg=(Message)ois.readObject();
             json=msg.getContent();
             System.out.println("groups初始化");
-            System.out.println("groups"+json);
+            System.out.println("groups:"+json);
             user.setGroups(getAllGroupsInfoFeedback(json,0));
             //初始化请求
             getAllRequestInfoRequest(account);
             msg=(Message)ois.readObject();
             json=msg.getContent();
-            user.setRequests(getAllRequestInfoFeedback(json));
             System.out.println("requests初始化");
+            System.out.println("requests:"+json);
+            user.setRequests(getAllRequestInfoFeedback(json));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -1010,11 +1011,15 @@ public class Client implements Runnable {
         System.out.println("addFriendFeedback:"+json);
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-        if(jsonObject.get("status").getAsInt()==9000) return false;
+        if(jsonObject.get("status").getAsInt()==9000){
+            JsonObject data=jsonObject.get("data").getAsJsonObject();
+            if(data.has("msg"))
+                return false;
+        }
         ArrayList<RequestInfo> requestInfos=user.getRequests();
         JsonObject data=jsonObject.get("data").getAsJsonObject();
         String account=data.get("account_B").getAsString();
-        if(jsonObject.get("code").getAsString().equals("203")){
+        if(jsonObject.get("code").getAsString().equals("203")){//拒绝
             for (int i = 0; i < requestInfos.size(); i++) {
                 RequestInfo requestInfo=requestInfos.get(i);
                 if(requestInfo.to.equals(account)){
@@ -1023,14 +1028,16 @@ public class Client implements Runnable {
             }
             return false;
         }
-        for (int i = 0; i < requestInfos.size(); i++) {
+        for (int i = 0; i < requestInfos.size(); i++) {//同意
             RequestInfo requestInfo=requestInfos.get(i);
             if(requestInfo.to.equals(account)){
                 requestInfo.type=1;
             }
         }
         UserInfo userInfo=getUserInfo(account);
+        System.out.println("加的好友:"+userInfo.account);
         user.getFriends().add(userInfo);
+        updateFriendList();
         return true;
     }
     /**
@@ -1046,10 +1053,9 @@ public class Client implements Runnable {
         String account_A=data.get("account_A").getAsString();
         String account_B=data.get("account_B").getAsString();
         ArrayList<RequestInfo> requestInfos=user.getRequests();
-        System.out.println("start");
         UserInfo userInfo=getUserInfo(account_A);
-        //todo 加好友的时候会报错
         requestInfos.add(new RequestInfo(account_A,account_B,userInfo.name,userInfo.avatarPath,0));
+        updateFriendsRequest();
         return userInfo;
     }
     /**
@@ -1057,7 +1063,7 @@ public class Client implements Runnable {
      * @param
      * @param choose
      */
-    public void sendRequestFeedback(String toUser,boolean choose){
+    public void sendRequestFeedback(String toUser,String name,String avatar,boolean choose){
         System.out.println("receiveAddFriendFeedback:"+toUser);
         JsonObject jsonObject = new JsonObject();
         ArrayList<RequestInfo> requestInfos=user.getRequests();
@@ -1066,15 +1072,19 @@ public class Client implements Runnable {
             for (int i = 0; i < requestInfos.size(); i++) {
                 RequestInfo requestInfo=requestInfos.get(i);
                 if(requestInfo.from.equals(toUser)){
-                    requestInfo.type=-1;
+                    requestInfo.type=1;
                 }
             }
+            user.getFriends().add(new UserInfo(toUser,name,avatar));
+            System.out.println("已经将"+toUser+"加入好友集合");
+            //同意，更新列表
+            updateFriendList();
         } else {
             jsonObject.addProperty("code","203");
             for (int i = 0; i < requestInfos.size(); i++) {
                 RequestInfo requestInfo=requestInfos.get(i);
                 if(requestInfo.from.equals(toUser)){
-                    requestInfo.type=1;
+                    requestInfo.type=-1;
                 }
             }
         }
@@ -1126,7 +1136,7 @@ public class Client implements Runnable {
             case "301"://修改名字
                 modifyUserNameFeedback(json);
                 break;
-            case "302":
+            case "302"://修改头像
                 modifyUserAvatarFeedback(json);
                 break;
             case "401"://获取用户信息
@@ -1181,10 +1191,32 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 更新当前对象的聊天记录界面
+     * @param chatInfo
+     */
     public void updateChat(ChatInfo chatInfo){
         Platform.runLater(() -> {
-            // 在这里执行需要在 JavaFX 应用程序线程上执行的 UI 操作
             chatAppClient.updateChat(chatInfo);
+        });
+    }
+    /**
+     * 更新好友请求界面
+     */
+    public void updateFriendsRequest(){
+        Platform.runLater(() -> {
+            chatAppClient.updateNewFriend();
+        });
+    }
+
+    /**
+     * 更新好友列表界面
+     */
+    public void updateFriendList(){
+        System.out.println("updateFriendList++++++");
+        Platform.runLater(() -> {
+            chatAppClient.updateFriendList();
         });
     }
     public void setLogin(boolean login) {
