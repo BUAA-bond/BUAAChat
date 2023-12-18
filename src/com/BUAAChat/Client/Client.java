@@ -421,6 +421,7 @@ public class Client implements Runnable {
         ArrayList<UserInfo> tmp=new ArrayList<>();
         if(jsonArray!=null)
             for(JsonElement friend:jsonArray){
+                if(friend==null || friend.isJsonNull()) continue;
                 JsonObject friendObject = friend.getAsJsonObject();
                 String name = friendObject.get("name").getAsString();
                 String account = friendObject.get("account").getAsString();
@@ -442,11 +443,12 @@ public class Client implements Runnable {
         ArrayList<GroupInfo> tmp=new ArrayList<>();
         if(jsonArray!=null)
             for(JsonElement group:jsonArray){
+                if(group==null || group.isJsonNull()) continue;
                 JsonObject groupObject = group.getAsJsonObject();
                 String groupName=groupObject.get("name").getAsString();
                 String groupAccount=groupObject.get("account").getAsString();
                 String groupAvatar=groupObject.get("avatar").getAsString();
-                GroupInfo groupInfo = new GroupInfo(groupName, groupAccount, groupAvatar);
+                GroupInfo groupInfo = new GroupInfo(groupAccount,groupName, groupAvatar);
                 JsonArray members=groupObject.get("members").getAsJsonArray();
                 ArrayList<UserInfo> list=groupInfo.members;
                 if(members!=null)
@@ -473,6 +475,7 @@ public class Client implements Runnable {
     public void setMessages(UserInfo userInfo,JsonArray jsonArray){
         ArrayList<ChatInfo> chats=new ArrayList<>();
         for (JsonElement messageElement : jsonArray) {
+            if(messageElement==null && messageElement.isJsonNull()) continue;
             // 在这里处理每个 "messages" 数组元素
             JsonObject messageObject = messageElement.getAsJsonObject();
             String sendTime = messageObject.get("sendTime").getAsString();
@@ -489,6 +492,7 @@ public class Client implements Runnable {
         ArrayList<ChatInfo> chats=new ArrayList<>();
         ArrayList<UserInfo> members=groupInfo.members;
         for (JsonElement messageElement : jsonArray) {
+            if(messageElement==null || messageElement.isJsonNull())continue;
             // 在这里处理每个 "messages" 数组元素
             JsonObject messageObject = messageElement.getAsJsonObject();
             String content = messageObject.get("content").getAsString();
@@ -679,18 +683,21 @@ public class Client implements Runnable {
      */
     boolean tmpBuildGroup=false;
     public boolean buildGroup(String gAccount,String name,String avatar,ArrayList<UserInfo> members){
-        System.out.println("buildGroup:"+gAccount);
+        System.out.println("buildGroup:"+gAccount+" name:"+name);
         buildGroupRequest(gAccount,name,avatar);
         sleep(sleepTime);
         boolean sign=tmpBuildGroup;
+        System.out.println("buildGroup_sign:"+sign);
         if(sign){
             //建群
             GroupInfo groupInfo = new GroupInfo(gAccount, name, avatar);
+            //先把自己加入群members
             groupInfo.members.add(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()));
             user.getGroups().add(groupInfo);
             user.getMessagesG().put(gAccount,new ArrayList<ChatInfo>());
             //将所有成员加进去
             for (int i = 0; i < members.size(); i++) {
+                System.out.println("===="+i);
                 UserInfo userInfo=members.get(i);
                 joinGroup(userInfo,gAccount);
             }
@@ -772,7 +779,6 @@ public class Client implements Runnable {
         tmpJoinGroup=true;
         return true;
     }
-
     /**
      * 退群
      * @param groupAccount

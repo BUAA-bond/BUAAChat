@@ -38,10 +38,7 @@ public class ChatAppClient extends Application {
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
         user = client.getUser();
         friends =  user.getFriends();
-        //测试群聊
         groups =  user.getGroups();
-        GroupInfo group1 = new GroupInfo("1234","群聊1","com/BUAAChat/image/GroupImage/1.png");
-        groups.add(group1);
         newFriendRequest = user.getRequests();
         initDark();
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

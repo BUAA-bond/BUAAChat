@@ -118,16 +118,17 @@ public class ChatAppClientController{
         sendButton.setOnAction(event -> {
             send(sendMessage.getText());
             sendMessage.clear();
-            //todo
-            // 处理按钮点击事件
         });
         createGroupButton.setOnAction(event -> {
             String name = createGroupName.getText();
             String account = createGroupAccount.getText();
             System.out.println("gName:"+name+" gAccount:"+account);
-            //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
-            //client.buildGroup(account,name,newGroupAvatarPath,selectedUserInfos);
-            System.out.println("创建成功");
+            System.out.println("gAvatar:"+newGroupAvatarPath);
+            if(!account.isEmpty() && !name.isEmpty() && MyUtil.judgeGroupAccount(account)){
+                //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
+                client.buildGroup(account,name,newGroupAvatarPath,selectedUserInfo);
+                System.out.println("创建成功");
+            }
             clearAddGroupFriends();
             initCreateGroup();
         });
@@ -439,6 +440,7 @@ public class ChatAppClientController{
         // 获取特定文件夹内的所有图片
         // 指定文件夹路径
         String groupAvatarPath = "src/com/BUAAChat/image/GroupImage";
+        newGroupAvatarPath = "com/BUAAChat/image/GroupImage/7.png";
         List<File> imageFiles = getImagesFromFolder(new File(groupAvatarPath));
         for (File file : imageFiles) {
             Image image = new Image(file.toURI().toString());
@@ -451,7 +453,7 @@ public class ChatAppClientController{
                 if (selectedFile != null) {
                     createGroupAvatar.setImage(image);
                     groupAvatarFlowPane.setVisible(false);
-                    newGroupAvatarPath = "com/BUAAChat/image/GroupImage"+selectedFile.getName();
+                    newGroupAvatarPath = "com/BUAAChat/image/GroupImage/"+selectedFile.getName();
                 }
             });
             groupAvatarFlowPane.getChildren().add(imageView);
