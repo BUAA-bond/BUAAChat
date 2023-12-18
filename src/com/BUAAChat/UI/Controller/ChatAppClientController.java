@@ -630,7 +630,7 @@ public class ChatAppClientController{
                 }
                 content.getChildren().add(rightHbox);
                 setGraphic(content);/**/
-                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
+                setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.50);");
             }
         }
         // 可以添加其他方法和处理逻辑
