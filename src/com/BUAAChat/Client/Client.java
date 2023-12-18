@@ -3,6 +3,8 @@ package com.BUAAChat.Client;
 import com.BUAAChat.Message;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.google.gson.*;
+import javafx.application.Platform;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -12,8 +14,8 @@ import java.net.Socket;
 import java.security.GuardedObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import static com.BUAAChat.Constant.Constant.host;
-import static com.BUAAChat.Constant.Constant.port;
+
+import static com.BUAAChat.Constant.Constant.*;
 
 public class Client implements Runnable {
     private Socket socket;
@@ -120,8 +122,11 @@ public class Client implements Runnable {
         getInfoRequest(account,"401");
         System.out.println("getUserInfo:"+account);
         sleep(sleepTime);
+        System.out.println("============");
+        System.out.println(tmpGetUserInfo);
         UserInfo userInfo=tmpGetUserInfo;
-        tmpGetUserInfo=null;
+        System.out.println(userInfo);
+        System.out.println("==============");
         return userInfo;
     }
     public ArrayList<UserInfo> searchUser(String account){
@@ -202,7 +207,6 @@ public class Client implements Runnable {
      * @return
      */
     public UserInfo getUserInfoFeedback(String json){
-        //JsonObject jsonObject = getJsonObjectFromMsg("401");
         System.out.println("getUserInfoFeedback"+json);
         JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if (jsonObject.get("status").getAsInt() != 9000) return null;
@@ -829,6 +833,51 @@ public class Client implements Runnable {
         System.out.println("修改名字成功");
         return true;
     }
+
+    /**
+     * 修改头像
+     * @return
+     */
+    boolean tmpModifyUserAvatar=false;
+    public boolean modifyUserAvatar(String avatarPath){
+        modifyUserAvatarRequest(avatarPath);
+        sleep(sleepTime);
+        boolean sign=tmpModifyUserAvatar;
+        if(sign){
+            user.setAvatarPath(avatarPath);
+        }
+        tmpModifyUserAvatar=false;
+        return sign;
+    }
+    public void modifyUserAvatarRequest(String avatarPath){
+        JsonObject jsonObject=new JsonObject();
+        jsonObject.addProperty("code","302");
+        JsonObject data=new JsonObject();
+        data.addProperty("avatar",avatarPath);
+        data.addProperty("account",user.getAccount());
+        jsonObject.add("data",data);
+        Gson gson=new Gson();
+        String content=gson.toJson(jsonObject);
+        Message message = new Message(user.getAccount(), "0", content);
+        try {
+            oos.writeObject(message);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public boolean modifyUserAvatarFeedback(String json){
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
+        if(jsonObject.get("status").getAsInt()!=9000){
+            tmpModifyUserAvatar=false;
+            System.out.println("修改头像失败");
+            return false;
+        }else{
+            tmpModifyUserAvatar=true;
+            System.out.println("修改头像成功");
+            return true;
+        }
+    }
     /**
      * 用于发送信息,给用户或者群聊
      * @param content
@@ -888,12 +937,16 @@ public class Client implements Runnable {
             if(map.containsKey(from)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(from);
-                msgs.add(new ChatInfo(userInfo,content));
+                ChatInfo chatInfo=new ChatInfo(userInfo,content);
+                msgs.add(chatInfo);
+                updateChat(chatInfo);
                 //map.put(from,msgs);
             }else{
                 ArrayList<ChatInfo> msgs=new ArrayList<>();
-                msgs.add(new ChatInfo(userInfo,content));
+                ChatInfo chatInfo=new ChatInfo(userInfo,content);
+                msgs.add(chatInfo);
                 map.put(from,msgs);
+                updateChat(chatInfo);
             }
         }else{
             //to是群聊号，from是群里那个发这条信息的人
@@ -913,11 +966,15 @@ public class Client implements Runnable {
             if(!map.containsKey(to)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=new ArrayList<>();
-                msgs.add(new ChatInfo(userInfo,content));
+                ChatInfo chatInfo=new ChatInfo(userInfo,content);
+                msgs.add(chatInfo);
                 map.put(to,msgs);
+                updateChat(chatInfo);
             }else{
                 ArrayList<ChatInfo> msgs=map.get(to);
-                msgs.add(new ChatInfo(userInfo,content));
+                ChatInfo chatInfo=new ChatInfo(userInfo,content);
+                msgs.add(chatInfo);
+                updateChat(chatInfo);
                 //map.put(to,msgs);
             }
         }
@@ -991,7 +1048,9 @@ public class Client implements Runnable {
         String account_A=data.get("account_A").getAsString();
         String account_B=data.get("account_B").getAsString();
         ArrayList<RequestInfo> requestInfos=user.getRequests();
+        System.out.println("start");
         UserInfo userInfo=getUserInfo(account_A);
+        //todo 加好友的时候会报错
         requestInfos.add(new RequestInfo(account_A,account_B,userInfo.name,userInfo.avatarPath,0));
         return userInfo;
     }
@@ -1044,7 +1103,7 @@ public class Client implements Runnable {
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         String  code=jsonObject.get("code").getAsString();
         switch (code){
-            case "103":
+            case "103"://修改密码
                 changePasswordFeedback(json);
                 break;
             case "109"://这里是登出
@@ -1057,16 +1116,22 @@ public class Client implements Runnable {
             case "203":
                 addFriendFeedback(json);
                 break;
-            case "204":
+            case "204"://删除好友
                 removeFriendFeedback(json);
                 break;
-            case "209":
+            case "209"://建群
                 buildGroupFeedback(json);
                 break;
-            case "210":
+            case "210"://加入群
                 joinGroupFeedback(json);
                 break;
-            case "401":
+            case "301"://修改名字
+                modifyUserNameFeedback(json);
+                break;
+            case "302":
+                modifyUserAvatarFeedback(json);
+                break;
+            case "401"://获取用户信息
                 getUserInfoFeedback(json);
                 break;
             case "501"://收消息
@@ -1080,7 +1145,9 @@ public class Client implements Runnable {
      */
     public Message receiveMessage(){
         try {
-            Message msg = (Message) ois.readObject();
+            Message msg=null;
+            if(!socket.isClosed())
+                msg = (Message) ois.readObject();
             System.out.println("receiveMessage"+msg);
             return msg;
         } catch (IOException e) {
@@ -1098,22 +1165,14 @@ public class Client implements Runnable {
         new Thread(()->{
             synchronized (lock) {
                 while (isLogin) {
-                    try {
-                        while (isPaused) {
-                            //System.out.println("lock");
-                            lock.wait(); // 当 isPaused 为 true 时，线程进入等待状态
-                        }
-                        //System.out.println(1);
                         Message message = receiveMessage();
-                        //System.out.println(2);
-                        if(message!=null)
-                            handleMessage(message);
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        if(message!=null){
+                            new Thread(()->{
+                                handleMessage(message);
+                            }).start();
+                        }
                     }
                 }
-            }
         }).start();
     }
     public void sleep(int time){
@@ -1122,6 +1181,12 @@ public class Client implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    public void updateChat(ChatInfo chatInfo){
+        Platform.runLater(() -> {
+            // 在这里执行需要在 JavaFX 应用程序线程上执行的 UI 操作
+            chatAppClient.updateChat(chatInfo);
+        });
     }
     public void setLogin(boolean login) {
         isLogin = login;

@@ -149,10 +149,12 @@ public class ChatAppClient extends Application {
     }
     public void updateChat(ChatInfo chatInfo){
         if(Style==1){
+            if(whiteController!=null);
             whiteController.updateChatObject(chatInfo);
         }
         else {
-            darkController.updateChatObject(chatInfo);
+            if(darkController!=null)
+                darkController.updateChatObject(chatInfo);
         }
     }
     public static void main(String[] args) throws Exception {

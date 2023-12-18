@@ -132,18 +132,23 @@ public class ChatAppClientController{
         });
         changeIdentityButton.setOnAction(event -> {
             //TODO 更改头像 newAvatarPath
-            Image image = new Image(newAvatarPath);
-            AvatarShow.setImage(image);
+            if(newAvatarPath!=null && !newAvatarPath.isEmpty()){
+                Image image = new Image(newAvatarPath);
+                client.modifyUserAvatar(newAvatarPath);
+                AvatarShow.setImage(image);
+            }
             String newName = newNameField.getText();
             newNameField.clear();
             String newPassword = newPasswordField.getText();
             newPasswordField.clear();
             if(!newName.isEmpty()){
                 //TODO 更改名字
+                client.modifyUserName(newName);
                 onlineUserName.setText(newName);
             }
-            if(!newPassword.isEmpty()&& !MyUtil.judgePassword(newPassword)){
+            if(!newPassword.isEmpty()&& MyUtil.judgePassword(newPassword)){
                 //TODO 更改密码
+                client.changePassword(newPassword);
             }
         });
         changeStyleButton.setOnAction(event -> {

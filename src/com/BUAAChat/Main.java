@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import static com.BUAAChat.Constant.Constant.client;
+import static com.BUAAChat.Constant.Constant.chatAppClient;
 public class Main {
     public static void main(String[] args) {
         // 在 JavaFX 主线程中启动应用程序
@@ -18,7 +19,7 @@ public class Main {
     public void start(){
         javafx.application.Platform.startup(() -> {
             LoginClient loginClient = new LoginClient();
-            ChatAppClient chatAppClient=new ChatAppClient();
+            chatAppClient=new ChatAppClient();
             RegisterInfo registerInfo = new RegisterInfo();
             client = new Client();
             // 启动 JavaFX 应用程序
