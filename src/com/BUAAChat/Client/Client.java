@@ -982,13 +982,13 @@ public class Client implements Runnable {
                 msgs.add(chatInfo);
                 map.put(to,msgs);
                 System.out.println("===================================");
-                updateChat(chatInfo);
+                updateGroupChat(chatInfo,to);
             }else{
                 ArrayList<ChatInfo> msgs=map.get(to);
                 ChatInfo chatInfo=new ChatInfo(userInfo,content);
                 msgs.add(chatInfo);
                 System.out.println("===================================");
-                updateChat(chatInfo);
+                updateGroupChat(chatInfo,to);
                 //map.put(to,msgs);
             }
         }
@@ -1225,6 +1225,16 @@ public class Client implements Runnable {
         });
     }
 
+    /**
+     * 更新群聊天界面
+     * @param chatInfo
+     * @param to
+     */
+    public void updateGroupChat(ChatInfo chatInfo,String to){
+        Platform.runLater(() -> {
+            chatAppClient.updateGroupChat(chatInfo,to);
+        });
+    }
     /**
      * 更新好友列表界面
      */
