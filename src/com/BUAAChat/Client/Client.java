@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.security.GuardedObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import static com.BUAAChat.Constant.Constant.host;
@@ -26,6 +27,7 @@ public class Client implements Runnable {
     private static Message receiveMsg =null;
     private final Object lock = new Object();
     private boolean isPaused = false;
+    private static int sleepTime=200;
     public Client() {
     }
     /**
@@ -53,9 +55,8 @@ public class Client implements Runnable {
         Message msg=null;
         String json=null;
         //初始化用户
-        //user.setName("ccf");
-        UserInfo userInfo = getUserInfo(account);
-        //System.out.println(userInfo.name);
+        getInfoRequest(account,"401");//请求
+        UserInfo userInfo = getUserInfoFeedback();
         user.setName(userInfo.name);
         user.setAvatarPath(userInfo.avatarPath);
         user.setAccount(account);
@@ -114,13 +115,13 @@ public class Client implements Runnable {
      * 请求获取某个用户信息
      * @param account
      */
+    UserInfo tmpGetUserInfo=null;
     public UserInfo getUserInfo(String account){
-        //pauseThread();
         getInfoRequest(account,"401");
         System.out.println("getUserInfo:"+account);
-        //System.out.println(123123123);
-        UserInfo userInfo=getUserInfoFeedback();
-        //resumeThread();
+        sleep(sleepTime);
+        UserInfo userInfo=tmpGetUserInfo;
+        tmpGetUserInfo=null;
         return userInfo;
     }
     public ArrayList<UserInfo> searchUser(String account){
@@ -200,17 +201,29 @@ public class Client implements Runnable {
      * 获取用户信息的反馈
      * @return
      */
-    public UserInfo getUserInfoFeedback(){
-        JsonObject jsonObject = getJsonObjectFromMsg("401");
+    public UserInfo getUserInfoFeedback(String json){
+        //JsonObject jsonObject = getJsonObjectFromMsg("401");
+        System.out.println("getUserInfoFeedback"+json);
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if (jsonObject.get("status").getAsInt() != 9000) return null;
         JsonObject data = jsonObject.get("data").getAsJsonObject();
         String name = data.get("name").getAsString();
         String account = data.get("account").getAsString();
         String avatar = data.get("avatar").getAsString();
         UserInfo userInfo = new UserInfo(account,name, avatar);
+        tmpGetUserInfo=userInfo;
         return userInfo;
     }
-
+    public UserInfo getUserInfoFeedback(){
+        JsonObject jsonObject = getJsonObjectFromMsg("401");
+        if (jsonObject.get("status").getAsInt() != 9000) return null;
+        JsonObject data = jsonObject.get("data").getAsJsonObject();
+        String avatar = data.get("avatar").getAsString();
+        String account = data.get("account").getAsString();
+        String name = data.get("name").getAsString();
+        UserInfo userInfo = new UserInfo(account,name, avatar);
+        return userInfo;
+    }
     /**
      * 获取 好友请求信息 反馈
      * @return
@@ -518,11 +531,13 @@ public class Client implements Runnable {
      * 修改密码
      * @param password
      */
+    boolean tmpChangePassword=false;
     public boolean changePassword(String password){
-        //pauseThread();
         changePasswordRequest(password);
-        boolean sign=changePasswordFeedback(password);
-        //resumeThread();
+        sleep(sleepTime);
+        boolean sign=tmpChangePassword;
+        tmpChangePassword=false;
+        if(sign) user.setPassword(password);
         return sign;
     }
     public void changePasswordRequest(String password){
@@ -541,10 +556,9 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean changePasswordFeedback(String password){
-        JsonObject jsonObject=getJsonObjectFromMsg("103");
+    public boolean changePasswordFeedback(String json){
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if(jsonObject.get("status").getAsInt()==9000){
-            user.setPassword(password);
             System.out.println("密码修改成功");
             return true;
         }else{
@@ -555,16 +569,12 @@ public class Client implements Runnable {
     /**
      * 登出
      */
+    boolean tmpLogout=false;
     public boolean logout(){
-        System.out.println(1);
-        //pauseThread();
-        System.out.println(2);
         logoutRequest();
-        System.out.println(3);
-        boolean sign = logoutFeedback();
-        System.out.println(4);
-        //resumeThread();
-        System.out.println(5);
+        sleep(sleepTime);
+        boolean sign=tmpLogout;
+        tmpLogout=false;
         return sign;
     }
     public void logoutRequest(){
@@ -582,8 +592,9 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean logoutFeedback(){
-        JsonObject jsonObject=getJsonObjectFromMsg("109");
+    public boolean logoutFeedback(String json){
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
+        //JsonObject jsonObject=getJsonObjectFromMsg("109");
         if(jsonObject.get("status").getAsInt()==9000){
             isLogin=false;
             isLive=false;
@@ -608,11 +619,23 @@ public class Client implements Runnable {
      * 删除好友TODO
      * @param account
      */
+    boolean tmpRemoveFriend=false;
     public boolean removeFriend(String account){
-        //pauseThread();
         removeFriendRequest(account);
-        boolean sign=removeFriendFeedback(account);
-        //resumeThread();
+        sleep(sleepTime);
+        boolean sign=tmpRemoveFriend;
+        if(sign){
+            ArrayList<UserInfo> friends=user.getFriends();
+            for (int i = 0; i < friends.size(); i++) {
+                UserInfo userInfo=friends.get(i);
+                if(userInfo.account.equals(account)){
+                    friends.remove(userInfo);
+                    break;
+                }
+            }
+            HashMap<String ,ArrayList<ChatInfo>> messages=user.getMessagesF();
+            messages.remove(account);
+        }
         return sign;
     }
     public void removeFriendRequest(String account){
@@ -631,34 +654,45 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean removeFriendFeedback(String account){
-        JsonObject jsonObject=getJsonObjectFromMsg("204");
+    public boolean removeFriendFeedback(String json){
+        //JsonObject jsonObject=getJsonObjectFromMsg("204");
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if(jsonObject.get("status").getAsInt()==9000){
+            tmpRemoveFriend=true;
             System.out.println("删除成功");
-            ArrayList<UserInfo> friends=user.getFriends();
-            for (int i = 0; i < friends.size(); i++) {
-                UserInfo userInfo=friends.get(i);
-                if(userInfo.account.equals(account)){
-                    friends.remove(userInfo);
-                    break;
-                }
-            }
-            HashMap<String ,ArrayList<ChatInfo>> messages=user.getMessagesF();
-            messages.remove(account);
             return true;
-        }else return false;
+        }
+        System.out.println("删除失败");
+        tmpRemoveFriend=false;
+        return false;
     }
+
+    /**
+     * 建群
+     * @param gAccount
+     * @param name
+     * @param avatar
+     * @param members
+     * @return
+     */
+    boolean tmpBuildGroup=false;
     public boolean buildGroup(String gAccount,String name,String avatar,ArrayList<UserInfo> members){
-        //pauseThread();
         buildGroupRequest(gAccount,name,avatar);
-        boolean sign=buildGroupFeedback(gAccount,name,avatar);
+        sleep(sleepTime);
+        boolean sign=tmpBuildGroup;
         if(sign){
+            //建群
+            GroupInfo groupInfo = new GroupInfo(gAccount, name, avatar);
+            groupInfo.members.add(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()));
+            user.getGroups().add(groupInfo);
+            user.getMessagesG().put(gAccount,new ArrayList<ChatInfo>());
+            //将所有成员加进去
             for (int i = 0; i < members.size(); i++) {
                 UserInfo userInfo=members.get(i);
                 joinGroup(userInfo,gAccount);
             }
         }
-        //resumeThread();
+        tmpBuildGroup=false;
         return sign;
     }
     public void buildGroupRequest(String gAccount,String name,String avatar){
@@ -678,23 +712,35 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean buildGroupFeedback(String gAccount,String name,String avatar){
-        JsonObject jsonObject=getJsonObjectFromMsg("209");
+    public boolean buildGroupFeedback(String json){
+        //JsonObject jsonObject=getJsonObjectFromMsg("209");
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         if(jsonObject.get("status").getAsInt()==9000){
-            GroupInfo groupInfo = new GroupInfo(gAccount, name, avatar);
-            groupInfo.members.add(new UserInfo(user.getAccount(),user.getName(),user.getAvatarPath()));
-            user.getGroups().add(groupInfo);
-            user.getMessagesG().put(gAccount,new ArrayList<ChatInfo>());
+            tmpBuildGroup=true;
             return true;
-        } else return false;
+        }
+        tmpBuildGroup=false;
+        return false;
     }
     /**
      * 加入群聊申请
      * @param groupAccount
      */
+    boolean tmpJoinGroup=false;
     public boolean joinGroup(UserInfo userInfo,String groupAccount){
         joinGroupRequest(userInfo.account,groupAccount);
-        boolean sign=joinGroupFeedback(userInfo,groupAccount);
+        sleep(sleepTime);
+        boolean sign=tmpJoinGroup;
+        if(sign){
+            ArrayList<GroupInfo> groups=user.getGroups();
+            GroupInfo groupInfo=null;
+            for (int i = groups.size()-1; i >= 0; i--) {
+                groupInfo=groups.get(i);
+                if(groupInfo.account.equals(groupAccount)) break;
+            }
+            groupInfo.members.add(userInfo);
+        }
+        tmpJoinGroup=false;
         return sign;
     }
     public void joinGroupRequest(String uAccount,String groupAccount){
@@ -713,16 +759,14 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean joinGroupFeedback(UserInfo userInfo,String groupAccount){
-        JsonObject jsonObject=getJsonObjectFromMsg("210");
-        if(jsonObject.get("status").getAsInt()!=9000) return false;
-        ArrayList<GroupInfo> groups=user.getGroups();
-        GroupInfo groupInfo=null;
-        for (int i = groups.size()-1; i >= 0; i--) {
-            groupInfo=groups.get(i);
-            if(groupInfo.account.equals(groupAccount)) break;
+    public boolean joinGroupFeedback(String json){
+        //JsonObject jsonObject=getJsonObjectFromMsg("210");
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
+        if(jsonObject.get("status").getAsInt()!=9000){
+            tmpJoinGroup=false;
+            return false;
         }
-        groupInfo.members.add(userInfo);
+        tmpJoinGroup=true;
         return true;
     }
 
@@ -751,11 +795,13 @@ public class Client implements Runnable {
      * 修改用户名
      * @param name
      */
+    boolean tmpModifyUserName=false;
     public boolean modifyUserName(String name){
-        //pauseThread();
         modifyUserNameRequest(name);
-        boolean sign=modifyUserNameFeedback(name);
-        //resumeThread();
+        sleep(sleepTime);
+        boolean sign=tmpModifyUserName;
+        if(sign) user.setName(name);
+        tmpModifyUserName=false;
         return sign;
     }
     public void modifyUserNameRequest(String name){
@@ -774,11 +820,12 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-    public boolean modifyUserNameFeedback(String name){
-        JsonObject jsonObject=getJsonObjectFromMsg("301");
+    public boolean modifyUserNameFeedback(String json){
+        //JsonObject jsonObject=getJsonObjectFromMsg("301");
+        JsonObject jsonObject=new Gson().fromJson(json, JsonObject.class);
         int status=jsonObject.get("status").getAsInt();
-        if(status!=9000){ System.out.println("修改名字失败");return false;}
-        user.setName(name);
+        if(status!=9000){ tmpModifyUserName=false;System.out.println("修改名字失败");return false;}
+        tmpModifyUserName=true;
         System.out.println("修改名字成功");
         return true;
     }
@@ -997,12 +1044,30 @@ public class Client implements Runnable {
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         String  code=jsonObject.get("code").getAsString();
         switch (code){
+            case "103":
+                changePasswordFeedback(json);
+                break;
+            case "109"://这里是登出
+                logoutFeedback(json);
+                break;
             case "201"://这里是别人的好友申请
                 receiveAddFriendRequest(json);
                 break;
             case "202"://这里是我给别人发，然后别人给我的回馈
             case "203":
                 addFriendFeedback(json);
+                break;
+            case "204":
+                removeFriendFeedback(json);
+                break;
+            case "209":
+                buildGroupFeedback(json);
+                break;
+            case "210":
+                joinGroupFeedback(json);
+                break;
+            case "401":
+                getUserInfoFeedback(json);
                 break;
             case "501"://收消息
                 receiveText(json);
@@ -1039,10 +1104,10 @@ public class Client implements Runnable {
                             lock.wait(); // 当 isPaused 为 true 时，线程进入等待状态
                         }
                         //System.out.println(1);
-                        //Message message = receiveMessage();
+                        Message message = receiveMessage();
                         //System.out.println(2);
-                        //if(message!=null)
-                            //handleMessage(message);
+                        if(message!=null)
+                            handleMessage(message);
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -1051,19 +1116,13 @@ public class Client implements Runnable {
             }
         }).start();
     }
-//    private void pauseThread() {
-//        synchronized (lock) {
-//            isPaused = true; // 设置为暂停状态
-//            // 其他暂停前的操作可以放在这里
-//        }
-//    }
-//    private void resumeThread() {
-//        synchronized (lock) {
-//            isPaused = false; // 设置为运行状态
-//            lock.notify(); // 唤醒等待中的线程
-//        }
-//    }
-
+    public void sleep(int time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     public void setLogin(boolean login) {
         isLogin = login;
     }
@@ -1079,4 +1138,5 @@ public class Client implements Runnable {
     public void setLive(boolean live) {
         isLive = live;
     }
+
 }

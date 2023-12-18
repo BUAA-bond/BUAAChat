@@ -45,10 +45,8 @@ public class ChatAppClient extends Application {
         //改为测试请求
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
-                //System.out.println("Window is closing...");
+                System.out.println("Window is closing...");
                 client.logout();
-                // 如果你希望阻止窗口关闭，可以调用 event.consume();
-                // event.consume();
             }
         });
 
@@ -95,7 +93,7 @@ public class ChatAppClient extends Application {
                     e.printStackTrace();
                 }
             }
-        });
+        }).start();
     }
 
     public void setToAccount(String toAccount) {
