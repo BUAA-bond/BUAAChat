@@ -1,0 +1,15 @@
+#!/bin/sh
+
+server_name=$(head -1 ./server_config)
+server_start_command=$(head -2 ./server_config|tail -1)
+server_daemon_retry_time=$(head -3 ./server_config|tail -1)
+
+while true
+do
+	res=`ps -ef|grep ${server_name}|grep -v grep|wc -l`
+	if [ ${res} -eq 0 ]
+	then
+		eval ${server_start_command}
+	fi
+	sleep ${server_daemon_retry_time}s
+done
