@@ -1,0 +1,146 @@
+#!/bin/sh
+
+server_name="YuanShenServer"
+server_port=10005
+server_debug_mode="false"
+server_daemon_retry_time=10
+
+server_start_command_basic="nohup java -jar ./"${server_name}".jar "
+server_start_command=${server_start_command_basic}
+
+server_daemon_start="nohup ./ServerDaemon >> "${server_name}".log 2>&1 &"
+
+server_process="$(ps -ef|grep ${server_name}|grep -v grep|awk '{print ${2}}')"
+server_daemon_process="$(ps -ef|grep ServerDaemon|grep -v grep|awk '{print ${2}}')"
+
+getStartCommand(){
+    tmp_port="-p "${server_port}
+    if [ ${server_debug_mode} = "true" ]
+    then
+        server_start_command=${server_start_command_basic}"-d "${tmp_port}" >> "${server_name}".log 2>&1 &"
+    else
+        server_start_command=${server_start_command_basic}${tmp_port}" >> "${server_name}".log 2>&1 &"
+    fi
+    echo ${server_name} > server_config
+    echo ${server_start_command} >> server_config
+    echo ${server_daemon_retry_time} >> server_config
+}
+
+server_start(){
+    getStartCommand
+    eval ${server_start_command}
+    eval ${server_daemon_start}
+    echo "Server started at port "${server_port}"."
+}
+
+server_stop(){
+    if [ ${server_process} ]
+    then
+        eval "kill -9 "${server_process}
+        eval "kill -9 "${server_daemon_process}
+        echo "Server stopped."
+    else
+        echo "Server is not running."
+    fi
+}
+
+server_reload(){
+    if [ ${server_process} ]
+    then
+        server_stop
+        server_start
+        echo "Server reloaded."
+    else
+        echo "Server is not running."
+    fi
+}
+
+server_print_help(){
+    echo ""
+    echo "Usage:"
+    echo " ./Server [command] [<options>...]"
+    echo ""
+    echo "Commands:"
+    echo " start                      Start server"
+    echo " stop                       Stop server and quit"
+    echo " reload                     Stop server and restart"
+    echo ""
+    echo "Options:"
+    echo " -h, --help                 Print this page and quit"
+    echo " -d, --debug                Debug mode, print additional messages"
+    echo " -t TIME, --time TIME       Set server daemon retry time (unit: s) [default: 10s]"
+    echo " -p PORT, --port PORT       Set the port server listens [default: 10005]"
+    echo ""
+}
+
+# --- Function above ---
+
+if [ ! -f "./"${server_name}".jar" ]
+then
+    echo "Downloading server file..."
+    eval "wget https://github.com/BUAA-bond/BUAAChat/raw/feature-server/YuanShenServer.jar"
+    eval "wget https://github.com/BUAA-bond/BUAAChat/raw/feature-server/ServerDaemon"
+    echo "Done."
+fi
+
+server_args=`getopt -q -o "p:dht:" -l "start, stop, reload, port:, debug, help, time:" -- "$@"`
+if [ $? != 0 ]
+then
+    echo "ERROR. PLEASE CHECK YOUR INPUT."
+    server_print_help
+    exit 1
+fi
+
+eval set -- "${server_args}"
+while :
+do
+    case ${1} in
+        -p|--port)
+            server_port=${2}
+            shift 2
+            ;;
+        -d|--debug)
+            server_debug_mode="true"
+            shift
+            ;;
+        -h|--help)
+            server_print_help
+            exit 0
+            ;;
+        -t|--time)
+            server_daemon_retry_time=${2}
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Unknown option '${1}'."
+            server_print_help
+            exit 1
+            ;;
+    esac
+done
+
+for arg
+do
+    case ${arg} in
+        start)
+            server_start
+            break
+            ;;
+        stop)
+            server_stop
+            break
+            ;;
+        reload)
+            server_reload
+            break
+            ;;
+        *)
+            echo "Unknown option '${1}'."
+            exit 1
+            ;;
+    esac
+done
