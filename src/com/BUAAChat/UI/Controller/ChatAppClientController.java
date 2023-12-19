@@ -129,9 +129,20 @@ public class ChatAppClientController{
                 //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
                 client.buildGroup(account,name,newGroupAvatarPath,selectedUserInfo);
                 System.out.println("创建成功");
+                clearAddGroupFriends();
+                initCreateGroup();
             }
-            clearAddGroupFriends();
-            initCreateGroup();
+            else {
+                if(name.isEmpty()){
+                    throwError("请设置群名");
+                }
+                else if(account.isEmpty()){
+                    throwError("请设置群号");
+                }
+                else if(!MyUtil.judgeGroupAccount(account)){
+                    throwError("群号不正确");
+                }
+            }
         });
         changeIdentityButton.setOnAction(event -> {
             //更改头像 newAvatarPath
@@ -175,6 +186,7 @@ public class ChatAppClientController{
             }
         });
         sendMessage.setEditable(false);
+        createGroupAccount.setPromptText("5位数字");
     }
     void initFriendList(){
         friendListView.setOnMouseClicked(event -> {
@@ -748,6 +760,15 @@ public class ChatAppClientController{
         if(ObjectAccount.equals(account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
+    }
+    public void throwError(String string){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("创建失败");
+        alert.setContentText(string);
+        alert.showAndWait();
+
     }
     public void setStyle(int style) {
         Style = style;
