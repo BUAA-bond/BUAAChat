@@ -27,7 +27,11 @@ public class MyUtil {
      * @return
      */
     public static boolean judgeGroupAccount(String account) {
+<<<<<<< HEAD
         String account_pattern = "^\\d{5}$";
+=======
+        String account_pattern = "^\\d{2,5}$";
+>>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
         return account.matches(account_pattern);
     }
     /**
