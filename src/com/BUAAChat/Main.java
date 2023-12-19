@@ -53,8 +53,11 @@ public class Main {
                         //创建客户端线程
                         client.setLogin(true);
                         client.setLive(true);
-                        client.userInit(loginAccount,loginPassword);//先初始化，在登录进去
                         client.start();
+<<<<<<< HEAD
+                        client.userInit(loginAccount,loginPassword);//先初始化，在登录进去
+=======
+>>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
                         chatAppClient.start(new Stage());
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -404,6 +404,37 @@ public class ChatAppClientController{
     }
     public void initTab(){
         chooseAddGroupTab.setOnSelectionChanged(event -> {
+<<<<<<< HEAD
+            if(chooseAddGroupTab.isSelected()){
+                addGroupScene.setVisible(true);
+                newFriendScene.setVisible(false);
+                ChatScene.setVisible(false);
+                searchListScene.setVisible(false);
+                changeIdentityScene.setVisible(false);
+                //cleanRight();
+                initCreateGroup();
+            }
+
+        });
+        chooseFriendTab.setOnSelectionChanged(event -> {
+            if(chooseFriendTab.isSelected()){
+                addGroupScene.setVisible(false);
+                ChatScene.setVisible(true);
+                searchListScene.setVisible(false);
+                changeIdentityScene.setVisible(false);
+            }
+        });
+        chooseGroupTab.setOnSelectionChanged(event -> {
+            if(chooseGroupTab.isSelected()) {
+                //todo
+                client.getAllGroupsInfoRequest(onlineUser.getAccount());
+                addGroupScene.setVisible(false);
+                newFriendScene.setVisible(false);
+                ChatScene.setVisible(true);
+                searchListScene.setVisible(false);
+                changeIdentityScene.setVisible(false);
+            }
+=======
             addGroupScene.setVisible(true);
             newFriendScene.setVisible(false);
             ChatScene.setVisible(false);
@@ -424,6 +455,7 @@ public class ChatAppClientController{
             ChatScene.setVisible(true);
             searchListScene.setVisible(false);
             changeIdentityScene.setVisible(false);
+>>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
         });
     }
     public void cleanRight(){
@@ -729,14 +761,22 @@ public class ChatAppClientController{
         }
     }
     public void updateChatObject(ChatInfo chatInfo){
+<<<<<<< HEAD
+        if(chatInfo==null) return;
+=======
         System.out.println(ObjectAccount);
         System.out.println(chatInfo.fromUser.account);
         System.out.println("-------------");
+>>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
         if(ObjectAccount.equals(chatInfo.fromUser.account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
     }
     public void updateChatObject(ChatInfo chatInfo,String account){
+<<<<<<< HEAD
+        if(chatInfo==null || account==null) return;
+=======
+>>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
         if(ObjectAccount.equals(account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
