@@ -174,19 +174,13 @@ public class ChatAppClient extends Application {
     public void updateGroupList(){
         if(Style==1){
             if(whiteController!=null){
-<<<<<<< HEAD
                 groups=user.getGroups();
-=======
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
                 whiteController.initGroups(groups);
             }
         }
         else {
             if(darkController!=null){
-<<<<<<< HEAD
                 groups=user.getGroups();
-=======
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
                 darkController.initGroups(groups);
             }
         }

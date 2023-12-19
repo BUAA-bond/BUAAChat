@@ -53,13 +53,8 @@ public class Client implements Runnable {
         Message msg=null;
         String json=null;
         //初始化用户
-<<<<<<< HEAD
         //getInfoRequest(account,"401");//请求
         UserInfo userInfo = getUserInfo(account);
-=======
-        getInfoRequest(account,"401");//请求
-        UserInfo userInfo = getUserInfoFeedback();
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
         user.setName(userInfo.name);
         user.setAvatarPath(userInfo.avatarPath);
         user.setAccount(account);
@@ -67,27 +62,26 @@ public class Client implements Runnable {
         System.out.println("userInit");
         System.out.println(userInfo.name);
         System.out.println(userInfo.account);
-<<<<<<< HEAD
 //        try {
-            //初始化朋友
-            getAllFriendsInfoRequest(account);//发送请求
-            sleep(sleepTime);
+        //初始化朋友
+        getAllFriendsInfoRequest(account);//发送请求
+        sleep(sleepTime);
 //            msg=(Message)ois.readObject();
 //            json=msg.getContent();
 //            System.out.println("friends初始化");
 //            System.out.println("friends:"+json);
 //            user.setFriends(getAllFriendsInfoFeedback(json,0));
-            //初始化群
-            getAllGroupsInfoRequest(account);//发送请求
-            sleep(sleepTime);
+        //初始化群
+        getAllGroupsInfoRequest(account);//发送请求
+        sleep(sleepTime);
 //            msg=(Message)ois.readObject();
 //            json=msg.getContent();
 //            System.out.println("groups初始化");
 //            System.out.println("groups:"+json);
 //            user.setGroups(getAllGroupsInfoFeedback(json,0));
-            //初始化请求
-            getAllRequestInfoRequest(account);
-            sleep(sleepTime);
+        //初始化请求
+        getAllRequestInfoRequest(account);
+        sleep(sleepTime);
 //            msg=(Message)ois.readObject();
 //            json=msg.getContent();
 //            System.out.println("requests初始化");
@@ -98,35 +92,6 @@ public class Client implements Runnable {
 //        } catch (ClassNotFoundException e) {
 //            e.printStackTrace();
 //        }
-=======
-        try {
-            //初始化朋友
-            getAllFriendsInfoRequest(account);//发送请求
-            msg=(Message)ois.readObject();
-            json=msg.getContent();
-            System.out.println("friends初始化");
-            System.out.println("friends:"+json);
-            user.setFriends(getAllFriendsInfoFeedback(json,0));
-            //初始化群
-            getAllGroupsInfoRequest(account);//发送请求
-            msg=(Message)ois.readObject();
-            json=msg.getContent();
-            System.out.println("groups初始化");
-            System.out.println("groups:"+json);
-            user.setGroups(getAllGroupsInfoFeedback(json,0));
-            //初始化请求
-            getAllRequestInfoRequest(account);
-            msg=(Message)ois.readObject();
-            json=msg.getContent();
-            System.out.println("requests初始化");
-            System.out.println("requests:"+json);
-            user.setRequests(getAllRequestInfoFeedback(json));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
     }
     /**
      * 发送获取信息请求
@@ -298,7 +263,6 @@ public class Client implements Runnable {
                 else if(type.equals("accepted")) requestInfo.type=1;
                 else if(type.equals("rejected")) requestInfo.type=-1;
                 tmp.add(requestInfo);
-                //System.out.println("getAllRequestInfoFeedback===end");
             }
         return tmp;
     }
@@ -990,10 +954,7 @@ public class Client implements Runnable {
                 userInfo=tmpFriends.get(i);
                 if(userInfo.account.equals(from)) break;
             }
-<<<<<<< HEAD
             if(userInfo==null) return;
-=======
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
             if(map.containsKey(from)){
                 //将信息记录
                 ArrayList<ChatInfo> msgs=map.get(from);
@@ -1017,11 +978,8 @@ public class Client implements Runnable {
                 groupInfo=tmpGroups.get(i);
                 if(groupInfo.account.equals(to)) break;
             }
-<<<<<<< HEAD
             //todo 2023.12.19 不知道为什么会报错
             if(groupInfo==null) return;
-=======
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
             ArrayList<UserInfo> tmpMembers=groupInfo.members;
             UserInfo userInfo=null;
             for (int i = 0; i < tmpMembers.size(); i++) {
@@ -1034,19 +992,11 @@ public class Client implements Runnable {
                 ChatInfo chatInfo=new ChatInfo(userInfo,content);
                 msgs.add(chatInfo);
                 map.put(to,msgs);
-<<<<<<< HEAD
-=======
-                System.out.println("===================================");
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
                 updateGroupChat(chatInfo,to);
             }else{
                 ArrayList<ChatInfo> msgs=map.get(to);
                 ChatInfo chatInfo=new ChatInfo(userInfo,content);
                 msgs.add(chatInfo);
-<<<<<<< HEAD
-=======
-                System.out.println("===================================");
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
                 updateGroupChat(chatInfo,to);
                 //map.put(to,msgs);
             }
@@ -1215,7 +1165,6 @@ public class Client implements Runnable {
                 break;
             case "401"://获取用户信息
                 getUserInfoFeedback(json);
-<<<<<<< HEAD
                 break;
             case "402"://初始化朋友
                 user.setFriends(getAllFriendsInfoFeedback(json,0));
@@ -1226,8 +1175,6 @@ public class Client implements Runnable {
                 break;
             case "405":
                 user.setRequests(getAllRequestInfoFeedback(json));
-=======
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
                 break;
             case "501"://收消息
                 receiveText(json);
@@ -1259,15 +1206,15 @@ public class Client implements Runnable {
         new Thread(()->{
             synchronized (lock) {
                 while (isLogin) {
-                        Message message = receiveMessage();
-                        if(message!=null){
-                            new Thread(()->{
-                                handleMessage(message);
-                            }).start();
-                        }
-                        sleep(100);
+                    Message message = receiveMessage();
+                    if(message!=null){
+                        new Thread(()->{
+                            handleMessage(message);
+                        }).start();
                     }
+                    sleep(100);
                 }
+            }
         }).start();
     }
     public void sleep(int time){
@@ -1315,10 +1262,6 @@ public class Client implements Runnable {
             chatAppClient.updateFriendList();
         });
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> efddc70c7909c86902e83e4b89fcebc44ed22a3d
     /**
      * 更新群聊界面
      */
