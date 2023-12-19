@@ -10,6 +10,10 @@
 .transparent-background {
     -fx-background-color: transparent;
 }
+.loadBackground{
+    -fx-background-image: url('../../image/ChatClientImage/whiteTheme/RightAreaImage3.jpg');
+    -fx-background-size: cover;
+}
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -18,9 +22,9 @@
 }
 
 .label-bright {
-    -fx-font-size: 11pt;
+    -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-text-fill: #333333;
     -fx-opacity: 1;
 }
 
@@ -97,14 +101,21 @@
 }
 
 .text-field {
-    -fx-font-size: 6pt;
+    -fx-font-size: 8pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
-    -fx-background-radius: 15;
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
 }
-
+. addGroupTextfield{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
+}
 /*
- * Metro style Push Button
+ * Metro style Push com.BUAAChat.Constant.Button
  * Author: Pedro Duque Vieira
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
@@ -197,64 +208,63 @@
     -fx-border-width: 1px 1px 1px 1px;
     -fx-border-color: transparent;
 }
-.tab-pane #chooseChatTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIcon.png');
+.tab-pane #chooseAddGroupTab .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/chatIcon.png');
 
     -fx-scale-shape: true; /* 图标缩放 */
 
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
-.tab-pane #chooseChatTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIconHovered.png');
+.tab-pane #chooseAddGroupTab:hover .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/chatIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
-.tab-pane #chooseChatTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/chatIconClicked.png');
+.tab-pane #chooseAddGroupTab:selected .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/chatIconClicked.png');
     -fx-scale-shape: true;
 
 }
 .tab-pane #chooseFriendTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/friendIcon.png');
-
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/friendIcon.png');
     -fx-scale-shape: true; /* 图标缩放 */
 
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseFriendTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/friendIconHovered.png');
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/friendIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseFriendTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/friendIconClicked.png');
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/friendIconClicked.png');
     -fx-scale-shape: true;
 }
 .tab-pane #chooseGroupTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/groupIcon.png');
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/groupIcon.png');
     -fx-scale-shape: true; /* 图标缩放 */
 
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseGroupTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/groupIconHovered.png');
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/groupIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseGroupTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/groupIconClicked.png');
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/groupIconClicked.png');
     -fx-scale-shape: true;
 
 }
 #changeStyleButton {
     /* 在这里定义按钮的样式 */
-    -fx-graphic: url('../../Image/ChatClientImage/whiteTheme/changeStyleButton.png');
+    -fx-graphic: url('../../image/ChatClientImage/whiteTheme/changeStyleButton.png');
     -fx-background-color: #91c3d6;
     -fx-border-width: 0px; /* 设置边框宽度 */
 }

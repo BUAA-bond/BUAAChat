@@ -1,6 +1,7 @@
 package com.BUAAChat.Constant;
 
 import com.BUAAChat.Client.Client;
+import com.BUAAChat.UI.ChatAppClient;
 
 /**
  * @author 西西弗
@@ -15,5 +16,5 @@ public class Constant {
     public static final int port=10005;
     public static String hexCharSet = "0123456789ABCDEF";
     public static Client client;
-
+    public static ChatAppClient chatAppClient;
 }

@@ -10,6 +10,10 @@
 .transparent-background {
     -fx-background-color: transparent;
 }
+.loadBackground{
+    -fx-background-image: url('../../image/ChatClientImage/darkTheme/RightAreaImage2.jpg');
+    -fx-background-size: cover;
+}
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -18,7 +22,7 @@
 }
 
 .label-bright {
-    -fx-font-size: 11pt;
+    -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: white;
     -fx-opacity: 1;
@@ -97,14 +101,22 @@
 }
 
 .text-field {
-    -fx-font-size: 6pt;
+    -fx-font-size: 8pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
-    -fx-background-radius: 15;
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
+}
+. addGroupTextfield{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-background-color: rgba(255, 255, 255, 0.9); /* 设置文本框背景颜色和透明度 */
+    -fx-background-radius: 15; /* 设置圆角半径 */
+    -fx-border-radius: 15;
 }
 
 /*
- * Metro style Push Button
+ * Metro style Push com.BUAAChat.Constant.Button
  * Author: Pedro Duque Vieira
  * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
  */
@@ -114,7 +126,6 @@
     -fx-border-width: 2;
     -fx-background-radius: 0;
     -fx-background-color: #0c3654;
-
     -fx-font-size: 11pt;
     -fx-text-fill: #d8d8d8;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
@@ -180,13 +191,9 @@
 
 
 /* 修改Tab中文本的颜色 */
-.tab-label {
-    -fx-text-fill: #e6e6e6;
-}
+
 /* 子代选择器，Tab选中的时候选择其子元素tab-label */
-.tab:selected .tab-label {
-    -fx-text-fill: #003333ff;
-}
+
 /* tab选中时设置背景颜色 */
 .tab:selected {
     -fx-background-color: #487da2ff;
@@ -197,27 +204,27 @@
     -fx-border-width: 1px 1px 1px 1px;
     -fx-border-color: transparent;
 }
-.tab-pane #chooseChatTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIcon.png');
+.tab-pane #chooseAddGroupTab .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/chatIcon.png');
 
     -fx-scale-shape: true; /* 图标缩放 */
 
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
-.tab-pane #chooseChatTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIconHovered.png');
+.tab-pane #chooseAddGroupTab:hover .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/chatIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
-.tab-pane #chooseChatTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/chatIconClicked.png');
+.tab-pane #chooseAddGroupTab:selected .tab-label {
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/chatIconClicked.png');
     -fx-scale-shape: true;
 
 }
 .tab-pane #chooseFriendTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIcon.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/friendIcon.png');
 
     -fx-scale-shape: true; /* 图标缩放 */
 
@@ -225,36 +232,36 @@
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseFriendTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIconHovered.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/friendIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseFriendTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/friendIconClicked.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/friendIconClicked.png');
     -fx-scale-shape: true;
 }
 .tab-pane #chooseGroupTab .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIcon.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/groupIcon.png');
     -fx-scale-shape: true; /* 图标缩放 */
 
 }
 
 /* 设置 Tab 鼠标悬停时的图标 */
 .tab-pane #chooseGroupTab:hover .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIconHovered.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/groupIconHovered.png');
     -fx-scale-shape: true; /* 图标缩放 */
 }
 
 /* 设置 Tab 被选中时的图标 */
 .tab-pane #chooseGroupTab:selected .tab-label {
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/groupIconClicked.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/groupIconClicked.png');
     -fx-scale-shape: true;
 
 }
 #changeStyleButton {
     /* 在这里定义按钮的样式 */
-    -fx-graphic: url('../../Image/ChatClientImage/darkTheme/changeStyleButton.png');
+    -fx-graphic: url('../../image/ChatClientImage/darkTheme/changeStyleButton.png');
     -fx-border-width: 0px; /* 设置边框宽度 */
 }
 #sendToObjectName{

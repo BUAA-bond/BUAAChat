@@ -9,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane minWidth="800.0" prefHeight="674.0" prefWidth="954.0" styleClass="background" stylesheets="@styleDark.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.BUAAChat.UI.Controller.ChatAppClientDarkController">
+<AnchorPane minWidth="800.0" prefHeight="674.0" prefWidth="954.0" styleClass="background" stylesheets="@styleDark.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.BUAAChat.UI.Controller.ChatAppClientController">
    <children>
       <SplitPane dividerPositions="0.29571577847439917" layoutX="155.0" layoutY="137.0" prefHeight="674.0" prefWidth="959.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -17,30 +17,45 @@
                <children>
                 <AnchorPane layoutY="83.0" minHeight="0.0" minWidth="0.0" prefHeight="589.0" prefWidth="299.0" styleClass="leftBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="100.0">
                      <children>
-                        <ImageView fitHeight="573.0" fitWidth="238.0" layoutX="40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.6568450927734375">
+                        <ImageView fitHeight="571.0" fitWidth="232.0" layoutX="40.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <image>
                               <Image url="@../../image/ChatClientImage/darkTheme/leftColumnImage.jpg" />
                            </image>
                         </ImageView>
-                        <TabPane maxWidth="300.0" minWidth="200.0" prefHeight="573.0" prefWidth="276.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="10.0" tabMinWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <tabs>
-                            <Tab id="chooseChatTab" fx:id="chooseChatTab" text="chat">
-                                 <content>
-                                    <ListView fx:id="chatHistoryListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
-                                 </content>
-                            </Tab>
-                            <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
-                                 <content>
-                                    <ListView id="friendListView" fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
-                                 </content>
-                            </Tab>
-                              <Tab id="chooseGroupTab" fx:id="chooseGroupTab" text="group">
-                                 <content>
-                                    <ListView fx:id="groupListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
-                                 </content>
-                              </Tab>
-                          </tabs>
-                        </TabPane>
+                        <AnchorPane id="listScene" prefHeight="573.0" prefWidth="276.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <TabPane maxWidth="300.0" minWidth="200.0" prefHeight="573.0" prefWidth="276.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="10.0" tabMinWidth="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <tabs>
+                                  <Tab id="chooseFriendTab" fx:id="chooseFriendTab" text="fridend">
+                                       <content>
+                                          <ListView id="friendListView" fx:id="friendListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
+                                       </content>
+                                  </Tab>
+                                    <Tab id="chooseGroupTab" fx:id="chooseGroupTab" text="group">
+                                       <content>
+                                          <ListView fx:id="groupListView" prefHeight="200.0" prefWidth="200.0" styleClass="transparent-background" />
+                                       </content>
+                                    </Tab>
+                                  <Tab id="chooseAddGroupTab" fx:id="chooseAddGroupTab" text="chat">
+                                       <content>
+                                          <ListView fx:id="addGroupListView" prefHeight="573.0" prefWidth="238.0" styleClass="transparent-background" />
+                                       </content>
+                                  </Tab>
+                                </tabs>
+                              </TabPane>
+                              <AnchorPane id="searchListScene" fx:id="searchListScene" layoutX="44.0" layoutY="2.0" prefHeight="571.0" prefWidth="232.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="44.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0">
+                                 <children>
+                                    <AnchorPane prefHeight="573.0" prefWidth="230.0" styleClass="leftBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <ImageView fitHeight="571.0" fitWidth="232.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                       <image>
+                                          <Image url="@../../image/ChatClientImage/darkTheme/leftColumnImage.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <ListView id="searchFriendListView" fx:id="searchFriendListView" layoutX="6.0" prefHeight="571.0" prefWidth="232.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
                         <Button fx:id="changeStyleButton" layoutX="36.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" />
                      </children>
                   </AnchorPane>
@@ -60,27 +75,78 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <SplitPane dividerPositions="0.5" layoutX="323.0" layoutY="236.0" orientation="VERTICAL" prefHeight="672.0" prefWidth="670.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="667.0" styleClass="transparent-background">
-                           <children>
-                              <AnchorPane layoutY="100.0" prefHeight="384.0" prefWidth="667.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+                  <AnchorPane id="ChatScene" fx:id="ChatScene" prefHeight="673.0" prefWidth="667.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="672.0" prefWidth="670.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="667.0" styleClass="transparent-background">
                                  <children>
-                                    <ScrollPane layoutY="-42.0" prefHeight="426.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-42.0" />
+                                    <AnchorPane layoutY="100.0" prefHeight="384.0" prefWidth="667.0" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
+                                       <children>
+                                          <ScrollPane fx:id="currentChat" layoutY="-42.0" prefHeight="426.0" prefWidth="667.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </AnchorPane>
-                              <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="14.0" layoutY="6.0" prefHeight="40.0" prefWidth="415.0" />
-                           </children>
-                        </AnchorPane>
-                      <AnchorPane maxHeight="180.0" minHeight="150.0" minWidth="600.0" prefWidth="160.0" styleClass="transparent-background">
+                            <AnchorPane maxHeight="180.0" minHeight="150.0" minWidth="600.0" prefWidth="160.0" styleClass="transparent-background">
+                                 <children>
+                                    <AnchorPane prefHeight="180.0" prefWidth="670.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <TextArea fx:id="sendMessage" layoutX="134.0" layoutY="30.0" prefHeight="161.0" prefWidth="668.0" styleClass="rightBackground" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+                                    <Button id="sendButton" fx:id="sendButton" ellipsisString="" layoutX="576.0" layoutY="133.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="80.0" text="发送" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                        <Label id="sendToObjectName" fx:id="sendToObjectName" layoutX="8.0" layoutY="-4.0" prefHeight="0.0" prefWidth="396.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane id="newFriendScene" fx:id="newFriendScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label id="sendToObjectName" layoutX="10.0" layoutY="-50.0" prefHeight="43.0" prefWidth="396.0" text="新的好友" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <AnchorPane layoutY="54.0" prefHeight="619.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
                            <children>
-                              <AnchorPane prefHeight="180.0" prefWidth="670.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <TextArea fx:id="sendMessage" layoutX="134.0" layoutY="30.0" prefHeight="161.0" prefWidth="668.0" styleClass="rightBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-                              <Button id="sendButton" fx:id="sendButton" ellipsisString="" layoutX="576.0" layoutY="133.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="80.0" text="发送" textAlignment="CENTER" textOverrun="CLIP" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+                              <ListView id="newFriendList" fx:id="newFriendList" prefHeight="573.0" prefWidth="667.0" styleClass="transparent-background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="30.0" />
                            </children>
                         </AnchorPane>
-                    </items>
-                  </SplitPane>
+                     </children></AnchorPane>
+                  <AnchorPane id="addGroupScene" fx:id="addGroupScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="673.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
+                           <children>
+                              <Button fx:id="createGroupButton" layoutX="295.0" layoutY="505.0" mnemonicParsing="false" text="创建" AnchorPane.leftAnchor="295.0" AnchorPane.rightAnchor="294.0" />
+                              <TextField fx:id="createGroupAccount" layoutX="201.0" layoutY="393.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" />
+                              <Label layoutX="100.0" layoutY="284.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="名字" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="487.0" />
+                              <TextField fx:id="createGroupName" layoutX="202.0" layoutY="286.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="201.0" />
+                              <Label layoutX="100.0" layoutY="391.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="群号" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="487.0" />
+                              <HBox fx:id="createGroupAvatarHbox" alignment="CENTER" layoutX="284.0" layoutY="129.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="284.0" AnchorPane.rightAnchor="283.0">
+                                 <children>
+                                    <ImageView id="createGroupAvatar" fx:id="createGroupAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                              <FlowPane fx:id="groupAvatarFlowPane" hgap="20.0" prefHeight="615.0" prefWidth="667.0" styleClass="loadBackground" vgap="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children></AnchorPane>
+                        <Label id="sendToObjectName" prefHeight="33.0" prefWidth="396.0" text="创建群聊" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                     </children></AnchorPane>
+                  <AnchorPane fx:id="changeIdentityScene" prefHeight="673.0" prefWidth="667.0" styleClass="rightBackground" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="673.0" prefWidth="667.0" styleClass="loadBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="58.0">
+                           <children>
+                              <HBox layoutX="284.0" layoutY="134.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.leftAnchor="284.0" AnchorPane.rightAnchor="283.0">
+                                 <children>
+                                    <ImageView fx:id="newAvatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </HBox>
+                              <Label layoutX="114.0" layoutY="276.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="昵称" />
+                              <TextField fx:id="newNameField" layoutX="212.0" layoutY="278.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" />
+                              <Label layoutX="114.0" layoutY="372.0" prefHeight="48.0" prefWidth="80.0" styleClass="label-bright" text="密码" AnchorPane.leftAnchor="114.0" AnchorPane.rightAnchor="473.0" />
+                              <TextField fx:id="newPasswordField" layoutX="212.0" layoutY="374.0" prefHeight="43.0" prefWidth="265.0" styleClass="addGroupTextfield" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="190.0" />
+                              <Button fx:id="changeIdentityButton" layoutX="295.0" layoutY="503.0" mnemonicParsing="false" text="更改" />
+                              <FlowPane fx:id="AvatarFlowPane" hgap="20.0" prefHeight="615.0" prefWidth="667.0" styleClass="loadBackground" vgap="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <Label id="sendToObjectName" prefHeight="33.0" prefWidth="396.0" text="修改个人信息" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
         </items>
