@@ -14,13 +14,12 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.BUAAChat.Client.Client.updateFriendList;
+import static com.BUAAChat.MyUtil.MyUtil.*;
 
 /**
  * @author 西西弗
  * @Description:
- * @date 2023/12/21 22:55
+ * @date 2023/11/17 10:08
  */
 public class Sender {
     /**

@@ -1,8 +1,9 @@
 package com.BUAAChat.Info;
 
 /**
- * @author 86188
- * @date 2023/12/21
+ * @author 西西弗
+ * @Description: 保存用户的信息
+ * @date 2023/11/17 20:57
  */
 public class UserInfo {
     /**

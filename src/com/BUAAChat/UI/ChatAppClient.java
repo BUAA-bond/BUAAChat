@@ -1,5 +1,9 @@
 package com.BUAAChat.UI;
 import com.BUAAChat.Client.*;
+import com.BUAAChat.Info.ChatInfo;
+import com.BUAAChat.Info.GroupInfo;
+import com.BUAAChat.Info.RequestInfo;
+import com.BUAAChat.Info.UserInfo;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
 import javafx.application.Application;
 import javafx.event.EventHandler;

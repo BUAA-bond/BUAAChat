@@ -1,6 +1,10 @@
 package com.BUAAChat.UI.Controller;
 
 import com.BUAAChat.Client.*;
+import com.BUAAChat.Info.ChatInfo;
+import com.BUAAChat.Info.GroupInfo;
+import com.BUAAChat.Info.RequestInfo;
+import com.BUAAChat.Info.UserInfo;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
@@ -440,7 +444,7 @@ public class ChatAppClientController{
      */
     void send(String message) {
         if (message.isEmpty()) return;
-        client.sendText(ObjectAccount,message);
+        client.getSender().sendText(ObjectAccount,message);
         updateOnlineUserMessage(message);
     }
 
@@ -644,7 +648,7 @@ public class ChatAppClientController{
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             if(chooseGroupTab.isSelected()) {
-                client.getAllGroupsInfoRequest(onlineUser.getAccount());
+                client.getSender().getAllGroupsInfoRequest(onlineUser.getAccount());
                 addGroupScene.setVisible(false);
                 newFriendScene.setVisible(false);
                 ChatScene.setVisible(true);
@@ -884,7 +888,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.sendRequestFeedback(item.from,item.name, item.avatarPath, true);
+                        client.getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -892,7 +896,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.sendRequestFeedback(item.from,item.name, item.avatarPath, false);
+                        client.getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -973,7 +977,7 @@ public class ChatAppClientController{
                 else{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
-                        client.addFriendRequest(item.account, item.name,item.avatarPath);
+                        client.getSender().addFriendRequest(item.account, item.name,item.avatarPath);
                         type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();

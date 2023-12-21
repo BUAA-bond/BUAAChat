@@ -1,4 +1,10 @@
 package com.BUAAChat.MyUtil;
+
+import com.BUAAChat.Info.ChatInfo;
+import javafx.application.Platform;
+
+import static com.BUAAChat.Constant.Constant.chatAppClient;
+
 /**
  * @author 西西弗
  * @Description: 工具类
@@ -64,5 +70,50 @@ public class MyUtil {
      */
     public static boolean confirmPassword(String password, String password2) {
         return password.equals(password2);
+    }
+    /**
+     * 更新当前对象的聊天记录界面
+     * @param chatInfo
+     */
+    public static void updateChat(ChatInfo chatInfo){
+        System.out.println("update");
+        Platform.runLater(() -> {
+            chatAppClient.updateChat(chatInfo);
+        });
+    }
+    /**
+     * 更新好友请求界面
+     */
+    public static void updateFriendsRequest(){
+        Platform.runLater(() -> {
+            chatAppClient.updateNewFriend();
+        });
+    }
+
+    /**
+     * 更新群聊天界面
+     * @param chatInfo
+     * @param to
+     */
+    public static void updateGroupChat(ChatInfo chatInfo,String to){
+        Platform.runLater(() -> {
+            chatAppClient.updateGroupChat(chatInfo,to);
+        });
+    }
+    /**
+     * 更新好友列表界面
+     */
+    public static void updateFriendList(){
+        Platform.runLater(() -> {
+            chatAppClient.updateFriendList();
+        });
+    }
+    /**
+     * 更新群聊界面
+     */
+    public static void updateGroupList(){
+        Platform.runLater(() -> {
+            chatAppClient.updateGroupList();
+        });
     }
 }

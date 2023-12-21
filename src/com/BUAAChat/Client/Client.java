@@ -1,11 +1,5 @@
 package com.BUAAChat.Client;
 
-/**
- * @author 西西弗
- * @Description: 客户端类，用于处理各种交互
- * @date 2023/11/17 10:05
- */
-
 import com.BUAAChat.Info.ChatInfo;
 import com.BUAAChat.Info.GroupInfo;
 import com.BUAAChat.Info.RequestInfo;
@@ -19,40 +13,44 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import static com.BUAAChat.Constant.Constant.*;
+import static com.BUAAChat.MyUtil.MyUtil.*;
 
+/**
+ * @author 西西弗
+ * @Description: 客户端类，用于处理各种交互
+ * @date 2023/11/17 10:05
+ */
 public class Client implements Runnable {
     /**
      *用于建立连接的socket
      */
     private Socket socket;
+    /**
+     *用于发送的自定义类对象
+     */
     private Sender sender;
     /**
      *输入流，从socket获取
      */
     private InputStream is=null;
-
     /**
      *对象输入流，用于读取Message
      */
     private ObjectInputStream ois=null;
-
     /**
      *记录用户是否处于登录状态
      */
     private boolean isLogin =false;
-
     /**
      *与client绑定的当前用户
      */
     private User user=new User();
-
     /**
      *每个操作规定的统一等待时间
      */
     private static int sleepTime=200;
     public Client() {
     }
-
     /**
      *与服务器建立连接
      */
@@ -68,7 +66,6 @@ public class Client implements Runnable {
             e.printStackTrace();
         }
     }
-
     /**
      * 登录成功后初始化用户
      * @param account
@@ -94,8 +91,6 @@ public class Client implements Runnable {
         sender.getAllRequestInfoRequest(account);
         sleep(sleepTime);
     }
-
-
     /**
      * 获取指定用户的信息
      * @param account
@@ -120,6 +115,7 @@ public class Client implements Runnable {
         tmp.add(getUserInfo(account));
         return tmp;
     }
+
     /**
      * 获取指定群的信息
      * @param account
@@ -130,8 +126,6 @@ public class Client implements Runnable {
         GroupInfo groupInfo=getGroupInfoFeedback();
         return groupInfo;
     }
-
-
 
     /**
      * 获取某个群聊信息的反馈
@@ -188,6 +182,7 @@ public class Client implements Runnable {
         UserInfo userInfo = new UserInfo(account,name, avatar);
         return userInfo;
     }
+
     /**
      * 获取 好友请求信息 反馈
      * @param json
@@ -271,6 +266,7 @@ public class Client implements Runnable {
         }
         return setGroups(groupsJson,sign);
     }
+
     /**
      * 用于注册，只判断用户名有咩有没注册过
      * @param account
@@ -365,6 +361,7 @@ public class Client implements Runnable {
             }
         return tmp;
     }
+
     /**
      * 初始化群
      * @param jsonArray
@@ -425,6 +422,7 @@ public class Client implements Runnable {
         //保存在user里
         this.user.getMessagesF().put(userInfo.account,chats);
     }
+
     /**
      * 保存与群的消息
      * @param groupInfo
@@ -510,6 +508,7 @@ public class Client implements Runnable {
             return false;
         }
     }
+
     /**
      * 登出
      */
@@ -626,7 +625,6 @@ public class Client implements Runnable {
         updateGroupList();
         return sign;
     }
-
 
     /**
      * 建群 反馈
@@ -751,7 +749,6 @@ public class Client implements Runnable {
         }
     }
 
-
     /**
      * 接收 消息
      * @param json
@@ -832,8 +829,6 @@ public class Client implements Runnable {
 
     }
 
-
-
     /**
      * 处理好友申请的反馈，通过的话就将好友加入列表
      * @param json
@@ -897,7 +892,6 @@ public class Client implements Runnable {
         updateFriendsRequest();
         return userInfo;
     }
-
 
     /**
      * 处理系统返回的信息，好友申请、好友申请反馈......
@@ -1013,51 +1007,6 @@ public class Client implements Runnable {
         }
     }
 
-    /**
-     * 更新当前对象的聊天记录界面
-     * @param chatInfo
-     */
-    public static void updateChat(ChatInfo chatInfo){
-        System.out.println("update");
-        Platform.runLater(() -> {
-            chatAppClient.updateChat(chatInfo);
-        });
-    }
-    /**
-     * 更新好友请求界面
-     */
-    public static void updateFriendsRequest(){
-        Platform.runLater(() -> {
-            chatAppClient.updateNewFriend();
-        });
-    }
-
-    /**
-     * 更新群聊天界面
-     * @param chatInfo
-     * @param to
-     */
-    public static void updateGroupChat(ChatInfo chatInfo,String to){
-        Platform.runLater(() -> {
-            chatAppClient.updateGroupChat(chatInfo,to);
-        });
-    }
-    /**
-     * 更新好友列表界面
-     */
-    public static void updateFriendList(){
-        Platform.runLater(() -> {
-            chatAppClient.updateFriendList();
-        });
-    }
-    /**
-     * 更新群聊界面
-     */
-    public void updateGroupList(){
-        Platform.runLater(() -> {
-            chatAppClient.updateGroupList();
-        });
-    }
     public void setLogin(boolean login) {
         isLogin = login;
     }
