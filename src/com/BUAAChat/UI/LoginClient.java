@@ -2,7 +2,7 @@ package com.BUAAChat.UI;
 import com.BUAAChat.UI.Box.PasswordInputBox;
 import com.BUAAChat.UI.Button.MyButton;
 import com.BUAAChat.UI.Box.InputBox;
-import com.BUAAChat.MyInterface.LoginButtonClickListener;
+import com.BUAAChat.UI.MyInterface.ButtonClickListener;
 import com.BUAAChat.MyUtil.MyUtil;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -25,26 +25,82 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * @author 符观集
+ * @Description:   登录和注册的界面
+ * @date 2023/12/16 20:09
+ */
 
 public class LoginClient extends Application {
-    private LoginButtonClickListener messageListener;
+    /**
+     *  登录传递信息的监听者
+     */
+    private ButtonClickListener messageListener;
+    /**
+     *  头像文件夹路径
+     */
     private final String folderPath = "src/com/BUAAChat/image/AvatarImage"; // 指定文件夹路径
+    /**
+     *  应用程序的展示舞台
+     */
     Stage privateStage;
+    /**
+     *  登录界面的部件群
+     */
     Group loginGroup;
+    /**
+     *  登录的账号输入部件
+     */
     InputBox loginAccountBox;
+    /**
+     *  登录的密码输入部件
+     */
     PasswordInputBox loginPasswordBox;
+    /**
+     *  注册的昵称输入部件
+     */
     InputBox registerNameBox;
+    /**
+     *  注册的账号输入部件
+     */
     InputBox registerAccountBox;
+    /**
+     *  注册的密码输入部件
+     */
     PasswordInputBox registerPasswordBox;
+    /**
+     *  注册的确认密码输入部件
+     */
     PasswordInputBox registerAgainPasswordBox;
-    private LoginButtonClickListener registerMessageListener;
+    /**
+     *  注册传递信息的监听者
+     */
+    private ButtonClickListener registerMessageListener;
+    /**
+     *  注册部件群
+     */
     Group registerGroup;
+    /**
+     *  登录界面
+     */
     private Scene loginScene;
+    /**
+     *  注册界面
+     */
     private  Scene registerScene;
+    /**
+     *  选择头像界面
+     */
     private Scene choosseScene;
+    /**
+     *  注册成功界面
+     */
     private Scene registerSuccessScene;
 
+    /**
+     * @param stage 应用程序展现的stage
+     * @Description: 初始化登录注册的界面并显示
+     */
     @Override
     public void start(Stage stage) {
         privateStage = stage;
@@ -52,19 +108,32 @@ public class LoginClient extends Application {
         initRegisterScene();
         initRegisterSuccessScene();
         privateStage.setScene(loginScene);
-        privateStage.setTitle("缘深");//设置客户端标题
+        privateStage.setTitle("缘深");
         privateStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
         privateStage.show();
     }
+
+    /**
+     * @return {@link String} 返回登录时输入的账号
+     */
     public String getAccount(){
         return loginAccountBox.getMessage();
     }
+
+    /**
+     * @return {@link String} 返回登录时输入的密码
+     */
     public String getPassword(){
         return loginPasswordBox.getMessage();
     }
+
     public void init() throws Exception{
         super.init();
     }
+
+    /**
+     * @Description: 初始化登录成功的界面
+     */
     public void initRegisterSuccessScene(){
         Group registerSuccesGroup = new Group();
         Image backgroundImage = new Image("com/BUAAChat/image/RegisterImage/registerSuccessImage2.png");
@@ -75,8 +144,11 @@ public class LoginClient extends Application {
         registerSuccessScene = new Scene(registerSuccesGroup,400,300);
         registerSuccessScene.setOnMouseClicked((event) -> privateStage.setScene(loginScene));
     }
-    public void initRegisterScene()
-    {
+
+    /**
+     * @Description: 初始化注册的界面
+     */
+    public void initRegisterScene() {
         final String[] AvatarName = {"hutao.png"};
         registerGroup = new Group();
         BorderPane root = new BorderPane();
@@ -112,16 +184,14 @@ public class LoginClient extends Application {
                 flowPane.getChildren().add(imageView);
             }
             BorderPane chooseRoot = new BorderPane();
-            chooseRoot.setCenter(flowPane); // 将 FlowPane 放置在 BorderPane 的中间
-
-            // 设置 BorderPane 的边距
+            chooseRoot.setCenter(flowPane);
+            // 将 FlowPane 放置在 BorderPane 的中间
             chooseRoot.setPadding(new Insets(10));
-
-            // 设置 BorderPane 的边框样式
+            // 设置 BorderPane 的边距
             chooseRoot.setStyle("-fx-border-color:#947403; " +
                     "-fx-border-width: 2px;" +
                     "-fx-background-color: #7B786F");
-
+            // 设置 BorderPane 的边框样式
             choosseScene = new Scene(chooseRoot);
             privateStage.setScene(choosseScene);
         });
@@ -285,8 +355,10 @@ public class LoginClient extends Application {
         registerScene = new Scene(registerGroup, 400,300);//内容长宽
     }
 
-    public void initLoginScene()
-    {
+    /**
+     * @Description: 初始化注册的界面
+     */
+    public void initLoginScene() {
         loginGroup = new Group();
         BorderPane root = new BorderPane();
         Image backgroundImage = new Image("com/BUAAChat/image/loginImage/loginImage4.png");
@@ -391,45 +463,96 @@ public class LoginClient extends Application {
         loginScene = new Scene(loginGroup, 400,300);//内容长宽
     }
 
+    /**
+     * @param node 将部件加入登录部件群中
+     */
     public void loginAdd(Node node){
         loginGroup.getChildren().add(node);
     }
-    // 设置回调函数
-    public void setButtonClickListener(LoginButtonClickListener listener) {
+
+    /**
+     * @param listener 设置的登录事件监听者
+     */
+    public void setButtonClickListener(ButtonClickListener listener) {
         this.messageListener = listener;
     }
+
+    /**
+     * @param messages  传递的登录用户信息  message[0]:account 用户账号
+     *                                  message[1]:password 用户密码
+     */
     private void loginNotifyCallbackMessage(String[] messages) {
         if (messages != null) {
             messageListener.onLoginButtonClick(messages);
         }
     }
+
+    /**
+     * @param node 将部件加入注册部件群中
+     */
     public void registerAdd(Node node){
         registerGroup.getChildren().add(node);
     }
-    public void registerSetButtonClickListener(LoginButtonClickListener listener) {
+
+    /**
+     * @param listener  设置的注册事件监听者
+     */
+    public void registerSetButtonClickListener(ButtonClickListener listener) {
         this.registerMessageListener = listener;
     }
+
+    /**
+     * @param messages  传递的注册用户信息  message[0]:account               用户账号
+     *                                  message[1]:name                  用户昵称
+     *                                  message[2]:password              用户密码
+     *                                  message[3]:againPassword         用户输入的确认密码
+     *                                  message[4]:registerAvatarPath    用户头像路径
+     */
     private void registerNotifyCallbackMessage(String[] messages ) {
         if (messages != null) {
             registerMessageListener.onLoginButtonClick(messages);
         }
     }
+
+    /**
+     * @return {@link String}   注册时用户输入的名字
+     */
     public String registerGetName(){
         return registerNameBox.getMessage();
     }
+
+    /**
+     * @return {@link String}   注册时用户输入的密码
+     */
     public String registerGetPassword(){
         return registerPasswordBox.getMessage();
     }
+
+    /**
+     * @return {@link String}   注册时用户输入的确认密码
+     */
     public String registerGetAgainPassword(){
         return registerAgainPasswordBox.getMessage();
     }
+
+    /**
+     * @return {@link String}   注册时用户输入的账号
+     */
     public String registerGetAccount(){
         return registerAccountBox.getMessage();
     }
 
+    /**
+     *  关闭窗口
+     */
     public void close(){
         privateStage.close();
     }
+
+    /**
+     * @param string    注册失败时抛出的错误信息
+     * @Description:    用户注册失败时反馈错误信息
+     */
     public void throwError(String string){
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -439,6 +562,11 @@ public class LoginClient extends Application {
         alert.showAndWait();
 
     }
+
+    /**
+     * @param string    登录失败时抛出的错误信息
+     * @Description:    登录失败时向用户反馈错误信息
+     */
     public void throwLoginError(String string){
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -448,7 +576,11 @@ public class LoginClient extends Application {
         alert.showAndWait();
 
     }
-    // 获取特定文件夹中的所有图片文件
+
+    /**
+     * @param folder    指定的文件路径
+     * @return {@link List}<{@link File}>   指定文件夹下的所有图像文件
+     */
     private List<File> getImagesFromFolder(File folder) {
         List<File> imageFiles = new ArrayList<>();
         File[] files = folder.listFiles();
@@ -463,13 +595,21 @@ public class LoginClient extends Application {
         return imageFiles;
     }
 
-    // 检查文件是否为图片
+    /**
+     * @param file  用于判断的文件
+     * @Description: 判断文件是否为图片
+     * @return boolean
+     */
     private boolean isImage(File file) {
         String fileName = file.getName().toLowerCase();
         return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ||
                 fileName.endsWith(".png") || fileName.endsWith(".gif") ||
                 fileName.endsWith(".bmp");
     }
+
+    /**
+     * @Description: 转换为注册成功界面
+     */
     public void changeRegisterSuccess(){
         privateStage.setScene(registerSuccessScene);
     }

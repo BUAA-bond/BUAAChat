@@ -1,10 +1,6 @@
 package com.BUAAChat.UI.Controller;
 
 import com.BUAAChat.Client.*;
-import com.BUAAChat.Info.ChatInfo;
-import com.BUAAChat.Info.GroupInfo;
-import com.BUAAChat.Info.RequestInfo;
-import com.BUAAChat.Info.UserInfo;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.BUAAChat.UI.ChatAppClient;
 import javafx.collections.ObservableList;
@@ -20,87 +16,214 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.io.File;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.BUAAChat.Constant.Constant.client;
 
+/**
+ * @author 符观集
+ * @Description:
+ * @date 2023/12/3 20:09
+ */
 public class ChatAppClientController{
+    /**
+     *  控制的应用程序
+     */
     private ChatAppClient chatAppClient;
+    /**
+     *  当前聊天对象的名字（也可以是群）
+     */
     @FXML
     private Label sendToObjectName;
+    /**
+     *  当前在线用户的名字
+     */
     @FXML
     private Label onlineUserName;
 
+    /**
+     *  创建群聊的Tab
+     */
     @FXML
     private Tab chooseAddGroupTab;
 
+    /**
+     *  好友列表的Tab
+     */
     @FXML
     private Tab chooseFriendTab;
 
+    /**
+     *  群聊列表的Tab
+     */
     @FXML
     private Tab chooseGroupTab;
+    /**
+     *  创建群聊的选择好友列表
+     */
     @FXML
     private ListView<UserInfo> addGroupListView;
+    /**
+     *  好友列表
+     */
     @FXML
     private ListView<UserInfo> friendListView;
+    /**
+     *  群聊列表
+     */
     @FXML
     private ListView<GroupInfo> groupListView;
+    /**
+     *  搜索好友的界面
+     */
     @FXML
     private AnchorPane searchListScene;
+    /**
+     *  搜索好友的文本框
+     */
     @FXML
     private TextField searchField;
+    /**
+     *  搜索到的好友列表
+     */
     @FXML
     private ListView<UserInfo> searchFriendListView;
+    /**
+     *  切换界面按钮
+     */
     @FXML
     private Button changeStyleButton;
+    /**
+     *  好友申请界面
+     */
     @FXML
     private AnchorPane newFriendScene;
+    /**
+     *  好友申请列表
+     */
     @FXML
     private ListView<RequestInfo> newFriendList;
+    /**
+     *  创建群聊界面
+     */
     @FXML
     private AnchorPane addGroupScene;
+    /**
+     *  聊天界面
+     */
     @FXML
     private AnchorPane ChatScene;
+    /**
+     *  当前聊天的滚动框
+     */
     @FXML
     private ScrollPane currentChat;
 
+    /**
+     *  输入的文本框
+     */
     @FXML
     private TextArea sendMessage;
 
+    /**
+     *  发送按钮
+     */
     @FXML
     private Button sendButton;
+    /**
+     *  当前用户头像
+     */
     @FXML
     private ImageView AvatarShow;
+    /**
+     *  创建群聊选择的头像
+     */
     @FXML
     private ImageView createGroupAvatar;
+    /**
+     *  创建群聊的名字文本框
+     */
     @FXML
     private TextField createGroupName;
+    /**
+     *  创建群聊的账号文本框
+     */
     @FXML
     private TextField createGroupAccount;
+    /**
+     *  创建群聊头像选择的滚动框
+     */
     @FXML
     private FlowPane groupAvatarFlowPane;
+    /**
+     *  创建群聊按钮
+     */
     @FXML
     private Button createGroupButton;
+    /**
+     *  更改个人信息界面
+     */
     @FXML
     private  AnchorPane changeIdentityScene;
+    /**
+     *  更改个人信息时选择的新的头像
+     */
     @FXML
     private  ImageView newAvatar;
+    /**
+     *  更改的新昵称输入文本框
+     */
     @FXML
     private  TextField newNameField;
+    /**
+     *  更改的新密码输入文本框
+     */
     @FXML
     private  TextField newPasswordField;
+    /**
+     *  更改个人信息的确认更改按钮
+     */
     @FXML
     private Button changeIdentityButton;
+    /**
+     *  更改个人信息时的头像滚动框
+     */
     @FXML
     private FlowPane AvatarFlowPane;
+    /**
+     *  用于容纳当前聊天消息的容器
+     */
     private VBox currentChatVbox;
+    /**
+     *  创建群聊时选中的好友
+     */
     private static ArrayList<UserInfo> selectedUserInfo;
+    /**
+     *  当前聊天对象的账号
+     */
     private String ObjectAccount;
+    /**
+     *  当前在线的用户
+     */
     private User onlineUser;
+    /**
+     *  更改个人信息时头像的路径
+     */
     String newAvatarPath = null;
+    /**
+     *  创建群聊时群聊头像的路径
+     */
     String newGroupAvatarPath = null;
+    /**
+     *  控制器所对应的主题
+     */
     private int Style;
+
+    /**
+     *  初始化
+     */
     @FXML
     public void initialize() {
         // 在此添加控件初始化后的操作
@@ -118,6 +241,10 @@ public class ChatAppClientController{
         initCurrentChat();
         // 添加其他控件的事件监听器等
     }
+
+    /**
+     * @Description: 初始化所有按钮部件，设置点击时的事件
+     */
     public void initButton() {
         sendButton.setOnAction(event -> {
             send(sendMessage.getText());
@@ -180,6 +307,10 @@ public class ChatAppClientController{
             }
         });
     }
+
+    /**
+     * @Description: 初始化聊天输入框
+     */
     void initMessageArea(){
         sendMessage.setOnKeyPressed(event -> {
             // 如果按下的是回车键（KeyCode.ENTER）
@@ -191,6 +322,10 @@ public class ChatAppClientController{
         sendMessage.setEditable(false);
         createGroupAccount.setPromptText("5位数字");
     }
+
+    /**
+     *  @Description: 初始化好友列表点击事件
+     */
     void initFriendList(){
         friendListView.setOnMouseClicked(event -> {
             UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
@@ -207,16 +342,17 @@ public class ChatAppClientController{
                     sendMessage.setEditable(true);
                     newFriendScene.setVisible(false);
                     ObjectAccount = selectedUser.account;
-                    chatAppClient.setToAccount(ObjectAccount);
                     ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesF().get(ObjectAccount);
                     initChat(chatInfos);
                     System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
                 }
             }
-
-            // 执行你想要的操作
         });
     }
+
+    /**
+     * @Description: 初始化群聊列表点击事件
+     */
     void initGroupView(){
         groupListView.setOnMouseClicked(event -> {
             GroupInfo selectedGroup = groupListView.getSelectionModel().getSelectedItem();
@@ -225,8 +361,6 @@ public class ChatAppClientController{
                 sendMessage.setEditable(true);
                 ObjectAccount = selectedGroup.account;
                 System.out.println(ObjectAccount);
-                System.out.println("iosjdaodjoasjdsa");
-                chatAppClient.setToAccount(ObjectAccount);
                 ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesG().get(ObjectAccount);
                 initChat(chatInfos);
                 System.out.println("Selected Item: " + selectedGroup.account+" "+selectedGroup.name);
@@ -234,6 +368,10 @@ public class ChatAppClientController{
             // 执行你想要的操作
         });
     }
+
+    /**
+     * @Description: 初始化修改个人信息界面
+     */
     void initChangeIdentity(){
         AvatarShow.setOnMouseClicked(event -> {
             newAvatar.setImage(AvatarShow.getImage());
@@ -260,6 +398,10 @@ public class ChatAppClientController{
             AvatarFlowPane.setVisible(true);
         });
     }
+
+    /**
+     *  @Description: 初始化搜索好友输入栏的相关事件
+     */
     void initSearchField(){
         searchField.setOnKeyPressed(event -> {
             if (event.getCode().getName().equals("Enter")) {
@@ -281,30 +423,60 @@ public class ChatAppClientController{
             searchListScene.setVisible(newValue);
         });
     }
+
+    /**
+     *  初始化可见界面
+     */
     void initScene(){
         searchListScene.setVisible(false);
         addGroupScene.setVisible(false);
         newFriendScene.setVisible(false);
         changeIdentityScene.setVisible(false);
     }
+
+    /**
+     * @param message 用户输入的聊天消息
+     * @Description: 发送当前用户输入的消息
+     */
     void send(String message) {
         if (message.isEmpty()) return;
-        client.getSender().sendText(ObjectAccount,message);
+        client.sendText(ObjectAccount,message);
         updateOnlineUserMessage(message);
     }
+
+    /**
+     * @param s 搜索好友时输入的字符串
+     * @Description: 根据用户输入的字符串获得对应好友
+     */
     void searchFriend(String s){
         ArrayList<UserInfo> users=client.searchUser(s);
         getSearchFriendListView(users);
     }
+
+    /**
+     * @param chatAppClient 控制的主应用程序
+     * @Description: 指向应用程序
+     */
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
     }
+
+    /**
+     * @param user 当前在线用户
+     * @Description 指向当前在线用户
+     */
     public void initUser(User user){
         this.onlineUser = user;
         onlineUserName.setText(user.getName());
         Image AvatarImage = new Image(user.getAvatarPath());
         AvatarShow.setImage(AvatarImage);
     }
+
+    /**
+     * @author 符观集
+     * @date 2023/12/8
+     * @Description: 设置好友列表的展示样式
+     */
     static class FriendListCell<T extends UserInfo> extends ListCell<T> {
         @Override
         protected void updateItem(T item, boolean empty) {
@@ -326,6 +498,12 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
+
+    /**
+     * @author 符观集
+     * @date 2023/12/19
+     * @Description: 设置群聊列表的展示样式
+     */
     static class GroupListCell<T extends GroupInfo> extends ListCell<T> {
         @Override
         protected void updateItem(T item, boolean empty) {
@@ -347,6 +525,12 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
+
+    /**
+     * @author 符观集
+     * @date 2023/12/19
+     * @Description: 设置创建群聊时好友列表的展示样式
+     */
     static class addGroupListCell<T extends UserInfo> extends ListCell<T> {
         public final CheckBox checkBox = new CheckBox();
         private final Label userInfoName = new Label();
@@ -380,13 +564,21 @@ public class ChatAppClientController{
                 setStyle("-fx-control-inner-background: rgba(255, 255, 255, 0.35);");
             }
         }
+
+        /**
+         *  清空选中好友
+         */
         public void clear(){
             if (checkBox.isSelected()){
                 checkBox.setSelected(false);
             }
         }
-        // 可以添加其他方法和处理逻辑
     }
+
+    /**
+     * @param friends 好友列表
+     * @Description: 初始化/更新 好友列表
+     */
     public void initFriends(ArrayList<UserInfo> friends){
         if(friends==null)return;
         friendListView.getItems().clear();
@@ -398,6 +590,11 @@ public class ChatAppClientController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         friendListView.setCellFactory(param -> new FriendListCell<UserInfo>());
     }
+
+    /**
+     * @param groups 群聊列表
+     * @Description: 初始化/更新 群聊列表
+     */
     public void initGroups(ArrayList<GroupInfo> groups){
         if (groups==null)return;
         groupListView.getItems().clear();
@@ -407,7 +604,11 @@ public class ChatAppClientController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         groupListView.setCellFactory(param -> new GroupListCell<GroupInfo>());
     }
-    // 设置创建群聊的好友列表显示及其功能
+
+    /**
+     * @param friends   好友列表
+     * @Description: 初始化/更新 创建群聊时的好友列表
+     */
     public void initAddGroup(ArrayList<UserInfo> friends){
         if(friends==null)return;
         addGroupListView.getItems().clear();
@@ -417,6 +618,10 @@ public class ChatAppClientController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         addGroupListView.setCellFactory(param -> new addGroupListCell<>());
     }
+
+    /**
+     * @Description: 初始化所有Tab
+     */
     public void initTab(){
         chooseAddGroupTab.setOnSelectionChanged(event -> {
             if(chooseAddGroupTab.isSelected()){
@@ -425,7 +630,6 @@ public class ChatAppClientController{
                 ChatScene.setVisible(false);
                 searchListScene.setVisible(false);
                 changeIdentityScene.setVisible(false);
-                //cleanRight();
                 initCreateGroup();
             }
 
@@ -440,8 +644,7 @@ public class ChatAppClientController{
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             if(chooseGroupTab.isSelected()) {
-                //todo
-                client.getSender().getAllGroupsInfoRequest(onlineUser.getAccount());
+                client.getAllGroupsInfoRequest(onlineUser.getAccount());
                 addGroupScene.setVisible(false);
                 newFriendScene.setVisible(false);
                 ChatScene.setVisible(true);
@@ -450,22 +653,23 @@ public class ChatAppClientController{
             }
         });
     }
-    public void cleanRight(){
-        sendToObjectName.setText("");
-        sendMessage.clear();
-        sendMessage.setEditable(false);
-    }
+
+    /**
+     * @Description: 初始化创建群聊界面
+     */
     public void initCreateGroup(){
         Image firstImage = new Image("com/BUAAChat/image/GroupImage/7.png");
         createGroupAvatar.setImage(firstImage);
         createGroupName.clear();
         createGroupAccount.clear();
         selectedUserInfo.clear();
-        //addGroupListView.refresh();
     }
+
+    /**
+     * @Description: 初始化可获得的所有群聊头像（用于创建群聊）
+     */
     public void initAddGroupAvatar() {
         // 获取特定文件夹内的所有图片
-        // 指定文件夹路径
         String groupAvatarPath = "src/com/BUAAChat/image/GroupImage";
         newGroupAvatarPath = "com/BUAAChat/image/GroupImage/7.png";
         List<File> imageFiles = getImagesFromFolder(new File(groupAvatarPath));
@@ -489,6 +693,11 @@ public class ChatAppClientController{
             groupAvatarFlowPane.setVisible(true);
         });
     }
+
+    /**
+     * @param folder    文件路径
+     * @return {@link List}<{@link File}> 获取到的所有图片文件
+     */
     private List<File> getImagesFromFolder(File folder) {
         List<File> imageFiles = new ArrayList<>();
         File[] files = folder.listFiles();
@@ -502,25 +711,29 @@ public class ChatAppClientController{
         }
         return imageFiles;
     }
-    // 检查文件是否为图片
+
+    /**
+     * @param file 判断的文件
+     * @return boolean
+     * @Description: 判断文件是否为图片
+     */
     private boolean isImage(File file) {
         String fileName = file.getName().toLowerCase();
         return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") ||
                 fileName.endsWith(".png") || fileName.endsWith(".gif") ||
                 fileName.endsWith(".bmp");
     }
+
+    /**
+     * @Description: 清空当前聊天界面
+     */
     public void clearCurrentChat(){
         currentChatVbox.getChildren().clear();
     }
-    public ArrayList<UserInfo> getSelectedUserInfo() {
-        System.out.println("Selected Items:");
-        ArrayList<UserInfo> items=new ArrayList<>();
-        for (UserInfo selectedItem : selectedUserInfo) {
-            System.out.println(selectedItem.account+" "+selectedItem.name);
-            items.add(selectedItem);
-        }
-        return items;
-    }
+
+    /**
+     * @Description: 清空所有选中的好友，更改状态为未选中
+     */
     public void clearAddGroupFriends() {
         selectedUserInfo.clear();
         for (Node node : addGroupListView.lookupAll(".list-cell")) {
@@ -530,6 +743,10 @@ public class ChatAppClientController{
             }
         }
     }
+
+    /**
+     * @Description: 初始化聊天界面
+     */
     public void initCurrentChat(){
         currentChatVbox = new VBox();
         currentChatVbox.setPadding(new Insets(10));
@@ -542,6 +759,11 @@ public class ChatAppClientController{
         });
         clearCurrentChat();
     }
+
+    /**
+     * @param message   更新当前用户输入的消息
+     * @Description:    将当前用户输入的消息呈现出来
+     */
     public void updateOnlineUserMessage(String message){
         HBox content = new HBox();
         content.setSpacing(10);
@@ -569,6 +791,12 @@ public class ChatAppClientController{
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
     }
+
+    /**
+     * @param otherUser     其他用户
+     * @param message       其他用户发的消息
+     * @Description:        更新其他用户传来的信息并呈现出来
+     */
     public void updateOtherUserMessage(UserInfo otherUser,String message){
         HBox content = new HBox();
         content.setSpacing(10);
@@ -600,6 +828,11 @@ public class ChatAppClientController{
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
     }
+
+    /**
+     * @param newFriends 好友申请
+     * @Description: 初始化/更新 好友申请
+     */
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
         newFriendList.getItems().clear();
         if(newFriends==null) return;
@@ -609,6 +842,12 @@ public class ChatAppClientController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         newFriendList.setCellFactory(param -> new newFriendListCell<RequestInfo>());
     }
+
+    /**
+     * @author 符观集
+     * @date 2023/12/17
+     * @Description: 设置好友申请呈现的样式
+     */
     class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
@@ -645,7 +884,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, true);
+                        client.sendRequestFeedback(item.from,item.name, item.avatarPath, true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -653,7 +892,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, false);
+                        client.sendRequestFeedback(item.from,item.name, item.avatarPath, false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -671,6 +910,11 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
+
+    /**
+     * @param friends 搜索到的好友信息列表
+     * @Description: 更新搜索到的好友列表
+     */
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
         searchFriendListView.getItems().clear();
         if(friends==null) return;
@@ -680,6 +924,12 @@ public class ChatAppClientController{
         // 设置列表的单元格工厂，以便自定义单元格显示内容
         searchFriendListView.setCellFactory(param -> new searchFriendListCell<UserInfo>());
     }
+
+    /**
+     * @author 符观集
+     * @date 2023/12/17
+     * @Description: 设置搜索到的好友展示的样式
+     */
     class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
         private final Label Type = new Label();
@@ -723,7 +973,7 @@ public class ChatAppClientController{
                 else{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
-                        client.getSender().addFriendRequest(item.account, item.name,item.avatarPath);
+                        client.addFriendRequest(item.account, item.name,item.avatarPath);
                         type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();
@@ -741,6 +991,11 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
+
+    /**
+     * @param chatInfos 聊天消息
+     * @Description: 初始化聊天消息
+     */
     public void initChat(ArrayList<ChatInfo>chatInfos){
         currentChatVbox.getChildren().clear();
         if(chatInfos==null) return;
@@ -752,18 +1007,34 @@ public class ChatAppClientController{
             }
         }
     }
+
+    /**
+     * @param chatInfo 其他用户发送的聊天消息
+     * @Description: 判断发来的消息是否为当前聊天对象并决定是否呈现
+     */
     public void updateChatObject(ChatInfo chatInfo){
         if(chatInfo==null) return;
         if(ObjectAccount.equals(chatInfo.fromUser.account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
     }
+
+    /**
+     * @param chatInfo  其他用户在群聊中发送的消息
+     * @param account   群聊账号
+     * @Description:    判断群聊是否为当前聊天对象并决定是否呈现聊天消息
+     */
     public void updateChatObject(ChatInfo chatInfo,String account){
         if(chatInfo==null || account==null) return;
         if(ObjectAccount.equals(account)){
             updateOtherUserMessage(chatInfo.fromUser,chatInfo.content);
         }
     }
+
+    /**
+     * @param string    创建群聊失败的具体错误信息
+     * @Description:    向用户反馈创建群聊失败的具体信息
+     */
     public void throwError(String string){
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -773,6 +1044,10 @@ public class ChatAppClientController{
         alert.showAndWait();
 
     }
+
+    /**
+     * @param style 设置当前部件所对应的主题
+     */
     public void setStyle(int style) {
         Style = style;
     }
