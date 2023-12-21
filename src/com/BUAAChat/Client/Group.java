@@ -1,16 +1,27 @@
 package com.BUAAChat.Client;
 
+import com.BUAAChat.Info.UserInfo;
+
 import java.util.HashMap;
 
 /**
  * @author 西西弗
- * @Description:
+ * @Description: 群
  * @date 2023/11/17 16:48
  */
 public class Group {
+    /**
+     *群的名字
+     */
     private String name;
+    /**
+     *群账号
+     */
     private String account;
-    private HashMap<String,UserInfo> member=new HashMap<>();
+    /**
+     *群的群成员
+     */
+    private HashMap<String, UserInfo> member=new HashMap<>();
 
     public Group(HashMap<String, UserInfo> member) {
 

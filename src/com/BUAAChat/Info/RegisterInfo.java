@@ -1,18 +1,42 @@
-package com.BUAAChat.MyUtil;
+package com.BUAAChat.Info;
 
 import com.BUAAChat.MyUtil.MyUtil;
 
 /**
  * @author 西西弗
- * @Description:
+ * @Description: 主要用于判断注册账号等等信息的格式
  * @date 2023/11/23 18:07
  */
 public class RegisterInfo {
+    /**
+     *注册用户密码
+     */
     private String password;
+
+    /**
+     *注册用户账号
+     */
     private String account;
+
+    /**
+     *注册用户名字
+     */
     private String name;
+
+    /**
+     *确认密码
+     */
     private String passwordAgain;
+
+    /**
+     *注册用户头像路径
+     */
     private String avatarPath;
+
+    /**
+     * 判断一系列的注册信息格式、是否为空
+     * @return {@link String}
+     */
     public String judgeAndRegister(){
         if(account==null){
             return "请输入账号";

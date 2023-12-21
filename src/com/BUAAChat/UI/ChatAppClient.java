@@ -1,66 +1,82 @@
 package com.BUAAChat.UI;
 
-import com.BUAAChat.Client.User;
-import com.BUAAChat.Client.UserInfo;
+import com.BUAAChat.Client.*;
+import com.BUAAChat.Info.ChatInfo;
+import com.BUAAChat.Info.GroupInfo;
+import com.BUAAChat.Info.RequestInfo;
+import com.BUAAChat.Info.UserInfo;
 import com.BUAAChat.UI.Controller.ChatAppClientController;
-import com.BUAAChat.UI.Controller.ChatAppClientDarkController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-
-import javafx.scene.control.Button;
-
+import java.util.ArrayList;
 import static com.BUAAChat.Constant.Constant.client;
 
 public class ChatAppClient extends Application {
     private Stage primaryStage;
-    private AnchorPane darkRootLayout;
-    private AnchorPane whiteRootLayout;
-    private ChatAppClientDarkController darkController;
+    private ChatAppClientController darkController;
     private ChatAppClientController whiteController;
     private  Scene darkScene;
     private  Scene whiteScene;
     private User user;
-    Button sendButton;
+    ArrayList<GroupInfo> groups;
+    ArrayList<UserInfo> friends;
+    ArrayList<RequestInfo> newFriendRequest;
+    private String toAccount;
+    private boolean isStart=false;
+    private int Style;
     @Override
     public void start(Stage primaryStage) throws Exception {
+        isStart=true;
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
-        //user = client.getUser();
-        //改为测试用户
-        user = new User("114514","胡桃","123456ccf","com/BUAAChat/image/AvatarImage/hutao.png");
-
-        //HashMap<String, UserInfo> friends = user.getFriends();
-        //改为测试好友
-        UserInfo newFriend = new UserInfo("newFriend","新的好友","com/BUAAChat/image/Controller/newFriend.png");
-        UserInfo addFriend = new UserInfo("addFriend","添加好友","com/BUAAChat/image/Controller/addFriend.png");
-        UserInfo friend1 = new UserInfo("123456","钟离","com/BUAAChat/image/AvatarImage/zhongli.png");
-        UserInfo friend2 = new UserInfo("123123","ganyu","com/BUAAChat/image/AvatarImage/ganyu.png");
-        HashMap<String, UserInfo> friends = new HashMap<>();
-        friends.put("newFriend",newFriend);
-        friends.put("addFriend",addFriend);
-        friends.put("123456",friend1);
-        friends.put("123123",friend2);
-        //
-        initWhiteRootLayout();
+        user = client.getUser();
+        friends =  user.getFriends();
+        groups =  user.getGroups();
+        newFriendRequest = user.getRequests();
+        initDark();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent event) {
+                System.out.println("Window is closing...");
+                client.logout();
+            }
+        });
+        primaryStage.show();
+    }
+    public void initDark(){
         initDarkRootStyle();
         darkController.setChatAppClient(this);
         darkController.initUser(user);
         darkController.initFriends(friends);
+        darkController.initGroups(groups);
+        darkController.initAddGroup(friends);
+        darkController.initNewFriends(newFriendRequest);
+        changeDarkStyle();
+    }
+    public void initWhite(){
+        initWhiteRootLayout();
         whiteController.setChatAppClient(this);
         whiteController.initUser(user);
         whiteController.initFriends(friends);
-        changeDarkStyle();
-        primaryStage.show();
-        //showPersonOverview();
+        whiteController.initGroups(groups);
+        whiteController.initAddGroup(friends);
+        whiteController.initNewFriends(newFriendRequest);
+        changeWhiteStyle();
     }
+
+    public void setToAccount(String toAccount) {
+        this.toAccount = toAccount;
+    }
+
     /**
      * Initializes the root layout.
      */
@@ -77,9 +93,9 @@ public class ChatAppClient extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("com/BUAAChat/UI/View/ChatApp.fxml");
             loader.setLocation(url);
-            whiteRootLayout = loader.load();
+            AnchorPane whiteRootLayout = loader.load();
             whiteController = loader.getController();
-
+            whiteController.setStyle(1);
             // Show the scene containing the root layout.
             whiteScene = new Scene(whiteRootLayout);
         } catch (IOException e) {
@@ -92,11 +108,10 @@ public class ChatAppClient extends Application {
             FXMLLoader loader = new FXMLLoader();
             URL url = loader.getClassLoader().getResource("com/BUAAChat/UI/View/ChatAppDarkStyle.fxml");
             loader.setLocation(url);
-            darkRootLayout = loader.load();
-
+            AnchorPane darkRootLayout = loader.load();
             // 设置控制器
             darkController = loader.getController();
-
+            darkController.setStyle(0);
             // Show the scene containing the root layout.
             darkScene = new Scene(darkRootLayout);
             changeDarkStyle();
@@ -108,7 +123,71 @@ public class ChatAppClient extends Application {
         return primaryStage;
     }
 
-
+    public void setStyle(int style) {
+        Style = style;
+    }
+    public void updateChat(ChatInfo chatInfo){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.updateChatObject(chatInfo);
+            }
+        }
+        else {
+            if(darkController!=null)
+                darkController.updateChatObject(chatInfo);
+        }
+    }
+    public void updateGroupChat(ChatInfo chatInfo,String account){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.updateChatObject(chatInfo,account);
+            }
+        }
+        else {
+            if(darkController!=null)
+                darkController.updateChatObject(chatInfo,account);
+        }
+    }
+    public void updateFriendList(){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.initFriends(friends);
+                whiteController.initAddGroup(friends);
+            }
+        }
+        else {
+            if(darkController!=null){
+                darkController.initFriends(friends);
+                darkController.initAddGroup(friends);
+            }
+        }
+    }
+    public void updateNewFriend(){
+        if(Style==1){
+            if(whiteController!=null){
+                whiteController.initNewFriends(newFriendRequest);
+            }
+        }
+        else {
+            if(darkController!=null){
+                darkController.initNewFriends(newFriendRequest);
+            }
+        }
+    }
+    public void updateGroupList(){
+        if(Style==1){
+            if(whiteController!=null){
+                groups=user.getGroups();
+                whiteController.initGroups(groups);
+            }
+        }
+        else {
+            if(darkController!=null){
+                groups=user.getGroups();
+                darkController.initGroups(groups);
+            }
+        }
+    }
     public static void main(String[] args) throws Exception {
         launch(args);
     }

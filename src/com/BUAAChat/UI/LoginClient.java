@@ -1,12 +1,10 @@
 package com.BUAAChat.UI;
-import com.BUAAChat.Box.PasswordInputBox;
-import com.BUAAChat.Button.MyButton;
-import com.BUAAChat.Box.InputBox;
+import com.BUAAChat.UI.Box.PasswordInputBox;
+import com.BUAAChat.UI.Button.MyButton;
+import com.BUAAChat.UI.Box.InputBox;
 import com.BUAAChat.MyInterface.LoginButtonClickListener;
-import com.BUAAChat.MyInterface.RegisterButtonClickListener;
 import com.BUAAChat.MyUtil.MyUtil;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -14,7 +12,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -23,9 +20,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.input.KeyCode;
 
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -35,7 +29,6 @@ import java.util.List;
 
 public class LoginClient extends Application {
     private LoginButtonClickListener messageListener;
-    private RegisterButtonClickListener registerClickListener;
     private final String folderPath = "src/com/BUAAChat/image/AvatarImage"; // 指定文件夹路径
     Stage privateStage;
     Group loginGroup;
@@ -84,6 +77,7 @@ public class LoginClient extends Application {
     }
     public void initRegisterScene()
     {
+        final String[] AvatarName = {"hutao.png"};
         registerGroup = new Group();
         BorderPane root = new BorderPane();
         Image backgroundImage = new Image("com/BUAAChat/image/RegisterImage/registerImage.jpg");
@@ -111,11 +105,9 @@ public class LoginClient extends Application {
                 imageView.setFitHeight(60);
                 // 添加点击事件监听器
                 imageView.setOnMouseClicked(newEvent -> {
-                    File selectedFile = file;
-                    if (selectedFile != null) {
-                        Avatar.setImage(image);
-                        privateStage.setScene(registerScene);
-                    }
+                    Avatar.setImage(image);
+                    privateStage.setScene(registerScene);
+                    AvatarName[0] = file.getName();
                 });
                 flowPane.getChildren().add(imageView);
             }
@@ -286,10 +278,8 @@ public class LoginClient extends Application {
             String name = registerGetName();
             String password = registerGetPassword();
             String againPassword = registerGetAgainPassword();
-            Image reggisterImage = Avatar.getImage();
-            String registerAvatarPath = reggisterImage.getUrl();
+            String registerAvatarPath = "com/BUAAChat/image/AvatarImage/"+AvatarName[0];
             String[] messages = {account,name,password,againPassword,registerAvatarPath};
-
             registerNotifyCallbackMessage(messages);
         }));
         registerScene = new Scene(registerGroup, 400,300);//内容长宽
@@ -445,6 +435,15 @@ public class LoginClient extends Application {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("注册失败");
+        alert.setContentText(string);
+        alert.showAndWait();
+
+    }
+    public void throwLoginError(String string){
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("登录失败");
         alert.setContentText(string);
         alert.showAndWait();
 

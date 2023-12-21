@@ -1,4 +1,4 @@
-package com.BUAAChat.Button;
+package com.BUAAChat.UI.Button;
 
 import javafx.scene.control.Button;
 

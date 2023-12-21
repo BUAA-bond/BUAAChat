@@ -4,12 +4,21 @@ import java.io.Serializable;
 
 /**
  * @author 西西弗
- * @Description:
+ * @Description: 用于客户端和服务器的信息传输
  * @date 2023/11/9 20:12
  */
 public class Message implements Serializable {
-    private String from;//Account
-    private String to;//
+    /**
+     *发送人的账号
+     */
+    private String from;
+    /**
+     *接收人的账号
+     */
+    private String to;
+    /**
+     *信息的内容，用json保存
+     */
     private String content;
 
     public Message(String from, String to, String content) {
