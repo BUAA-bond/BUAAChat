@@ -224,6 +224,14 @@ public class ChatAppClientController{
      *  控制器所对应的主题
      */
     private int Style;
+    /**
+     * 右键选择好友时显示的菜单栏
+     */
+    private ContextMenu friendContextMenu;
+    /**
+     *  被选中的好友（删除用）
+     */
+    private UserInfo chooseFriend;
 
     /**
      *  初始化
@@ -330,17 +338,21 @@ public class ChatAppClientController{
     /**
      *  @Description: 初始化好友列表点击事件
      */
-    void initFriendList(){
+    void initFriendList() {
+        friendContextMenu = new ContextMenu();
+        initFriendContextMenu();
+        friendListView.setContextMenu(friendContextMenu);
         friendListView.setOnMouseClicked(event -> {
             UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
             //处理新的好友事件
-            if (selectedUser!=null){
-                if(selectedUser.account.equals("newFriend")){
+            if (selectedUser != null) {
+                if (selectedUser.account.equals("newFriend")) {
                     initNewFriends(client.getUser().getRequests());
                     newFriendScene.setVisible(true);
                     changeIdentityScene.setVisible(false);
-                }
-                else{
+                    friendContextMenu.hide();
+                } else {
+                    chooseFriend = selectedUser;
                     sendToObjectName.setText(selectedUser.name);
                     changeIdentityScene.setVisible(false);
                     sendMessage.setEditable(true);
@@ -348,12 +360,33 @@ public class ChatAppClientController{
                     ObjectAccount = selectedUser.account;
                     ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesF().get(ObjectAccount);
                     initChat(chatInfos);
-                    System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
+                    System.out.println("Selected Item: " + selectedUser.account + " " + selectedUser.name);
                 }
+            }
+        });
+        friendListView.setOnContextMenuRequested(event -> {
+            // 检查所选对象
+            UserInfo selectedItem = friendListView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null && selectedItem.account.equals("newFriend")) {
+                friendContextMenu.hide();
+                event.consume(); // 消耗事件，防止显示 ContextMenu
             }
         });
     }
 
+    /**
+     * @Description: 初始化右键点击好友列表时显示的菜单栏
+     */
+    public void initFriendContextMenu(){
+        MenuItem deleteItem = new MenuItem("删除好友");
+        friendContextMenu.getItems().add(deleteItem);
+        deleteItem.setOnAction(event -> {
+            //TODO 删除好友 ：chooseFriend
+
+            System.out.println("删除该好友:"+chooseFriend.account+" "+chooseFriend.name);
+            chatAppClient.updateFriendList();
+        });
+    }
     /**
      * @Description: 初始化群聊列表点击事件
      */
