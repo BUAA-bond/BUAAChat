@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * @author 符观集
- * @Description:
+ * @Description:    控制界面布局的部件
  * @date 2023/12/3 20:09
  */
 public class ChatAppClientController{
@@ -252,7 +252,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化所有按钮部件，设置点击时的事件
+     *  初始化所有按钮部件，设置点击时的事件
      */
     public void initButton() {
         sendButton.setOnAction(event -> {
@@ -318,7 +318,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化聊天输入框
+     *  初始化聊天输入框
      */
     void initMessageArea(){
         sendMessage.setOnKeyPressed(event -> {
@@ -333,7 +333,7 @@ public class ChatAppClientController{
     }
 
     /**
-     *  @Description: 初始化好友列表点击事件
+     *   初始化好友列表点击事件
      */
     void initFriendList() {
         friendContextMenu = new ContextMenu();
@@ -372,7 +372,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化右键点击好友列表时显示的菜单栏
+     *  初始化右键点击好友列表时显示的菜单栏
      */
     public void initFriendContextMenu(){
         MenuItem deleteItem = new MenuItem("删除好友");
@@ -385,7 +385,7 @@ public class ChatAppClientController{
         });
     }
     /**
-     * @Description: 初始化群聊列表点击事件
+     *  初始化群聊列表点击事件
      */
     void initGroupView(){
         groupListView.setOnMouseClicked(event -> {
@@ -404,7 +404,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化修改个人信息界面
+     *  初始化修改个人信息界面
      */
     void initChangeIdentity(){
         AvatarShow.setOnMouseClicked(event -> {
@@ -434,7 +434,7 @@ public class ChatAppClientController{
     }
 
     /**
-     *  @Description: 初始化搜索好友输入栏的相关事件
+     *   初始化搜索好友输入栏的相关事件
      */
     void initSearchField(){
         searchField.setOnKeyPressed(event -> {
@@ -470,7 +470,7 @@ public class ChatAppClientController{
 
     /**
      * @param message 用户输入的聊天消息
-     * @Description: 发送当前用户输入的消息
+     *  发送当前用户输入的消息
      */
     void send(String message) {
         if (message.isEmpty()) return;
@@ -480,7 +480,7 @@ public class ChatAppClientController{
 
     /**
      * @param s 搜索好友时输入的字符串
-     * @Description: 根据用户输入的字符串获得对应好友
+     *  根据用户输入的字符串获得对应好友
      */
     void searchFriend(String s){
         ArrayList<UserInfo> users=Client.getClient().searchUser(s);
@@ -489,7 +489,7 @@ public class ChatAppClientController{
 
     /**
      * @param chatAppClient 控制的主应用程序
-     * @Description: 指向应用程序
+     *  指向应用程序
      */
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
@@ -497,7 +497,7 @@ public class ChatAppClientController{
 
     /**
      * @param user 当前在线用户
-     * @Description 指向当前在线用户
+     * 指向当前在线用户
      */
     public void initUser(User user){
         this.onlineUser = user;
@@ -509,7 +509,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/8
-     * @Description: 设置好友列表的展示样式
+     * @Description:  设置好友列表的展示样式
      */
     class FriendListCell<T extends UserInfo> extends ListCell<T> {
         @Override
@@ -535,7 +535,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/19
-     * @Description: 设置群聊列表的展示样式
+     * @Description:  设置群聊列表的展示样式
      */
     class GroupListCell<T extends GroupInfo> extends ListCell<T> {
         @Override
@@ -610,7 +610,7 @@ public class ChatAppClientController{
 
     /**
      * @param friends 好友列表
-     * @Description: 初始化/更新 好友列表
+     *  初始化/更新 好友列表
      */
     public void initFriends(ArrayList<UserInfo> friends){
         if(friends==null)return;
@@ -626,7 +626,7 @@ public class ChatAppClientController{
 
     /**
      * @param groups 群聊列表
-     * @Description: 初始化/更新 群聊列表
+     *  初始化/更新 群聊列表
      */
     public void initGroups(ArrayList<GroupInfo> groups){
         if (groups==null)return;
@@ -640,7 +640,7 @@ public class ChatAppClientController{
 
     /**
      * @param friends   好友列表
-     * @Description: 初始化/更新 创建群聊时的好友列表
+     *  初始化/更新 创建群聊时的好友列表
      */
     public void initAddGroup(ArrayList<UserInfo> friends){
         if(friends==null)return;
@@ -653,7 +653,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化所有Tab
+     *  初始化所有Tab
      */
     public void initTab(){
         chooseAddGroupTab.setOnSelectionChanged(event -> {
@@ -689,7 +689,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化创建群聊界面
+     *  初始化创建群聊界面
      */
     public void initCreateGroup(){
         Image firstImage = new Image("com/BUAAChat/image/GroupImage/7.png");
@@ -700,7 +700,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化可获得的所有群聊头像（用于创建群聊）
+     *  初始化可获得的所有群聊头像（用于创建群聊）
      */
     public void initAddGroupAvatar() {
         // 获取特定文件夹内的所有图片
@@ -749,7 +749,7 @@ public class ChatAppClientController{
     /**
      * @param file 判断的文件
      * @return boolean
-     * @Description: 判断文件是否为图片
+     * 判断文件是否为图片
      */
     private boolean isImage(File file) {
         String fileName = file.getName().toLowerCase();
@@ -759,14 +759,14 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 清空当前聊天界面
+     *  清空当前聊天界面
      */
     public void clearCurrentChat(){
         currentChatVbox.getChildren().clear();
     }
 
     /**
-     * @Description: 清空所有选中的好友，更改状态为未选中
+     *  清空所有选中的好友，更改状态为未选中
      */
     public void clearAddGroupFriends() {
         selectedUserInfo.clear();
@@ -779,7 +779,7 @@ public class ChatAppClientController{
     }
 
     /**
-     * @Description: 初始化聊天界面
+     *  初始化聊天界面
      */
     public void initCurrentChat(){
         currentChatVbox = new VBox();
@@ -796,7 +796,7 @@ public class ChatAppClientController{
 
     /**
      * @param message   更新当前用户输入的消息
-     * @Description:    将当前用户输入的消息呈现出来
+     *     将当前用户输入的消息呈现出来
      */
     public void updateOnlineUserMessage(String message){
         HBox content = new HBox();
@@ -828,7 +828,7 @@ public class ChatAppClientController{
     /**
      * @param otherUser     其他用户
      * @param message       其他用户发的消息
-     * @Description:        更新其他用户传来的信息并呈现出来
+     *  更新其他用户传来的信息并呈现出来
      */
     public void updateOtherUserMessage(UserInfo otherUser,String message){
         HBox content = new HBox();
@@ -863,7 +863,7 @@ public class ChatAppClientController{
 
     /**
      * @param newFriends 好友申请
-     * @Description: 初始化/更新 好友申请
+     *  初始化/更新 好友申请
      */
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
 
@@ -947,7 +947,7 @@ public class ChatAppClientController{
 
     /**
      * @param friends 搜索到的好友信息列表
-     * @Description: 更新搜索到的好友列表
+     *  更新搜索到的好友列表
      */
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
         searchFriendListView.getItems().clear();
@@ -1028,7 +1028,7 @@ public class ChatAppClientController{
 
     /**
      * @param chatInfos 聊天消息
-     * @Description: 初始化聊天消息
+     *  初始化聊天消息
      */
     public void initChat(ArrayList<ChatInfo>chatInfos){
         currentChatVbox.getChildren().clear();
@@ -1044,7 +1044,7 @@ public class ChatAppClientController{
 
     /**
      * @param chatInfo 其他用户发送的聊天消息
-     * @Description: 判断发来的消息是否为当前聊天对象并决定是否呈现
+     *  判断发来的消息是否为当前聊天对象并决定是否呈现
      */
     public void updateChatObject(ChatInfo chatInfo){
         if(chatInfo==null) return;
@@ -1056,7 +1056,7 @@ public class ChatAppClientController{
     /**
      * @param chatInfo  其他用户在群聊中发送的消息
      * @param account   群聊账号
-     * @Description:    判断群聊是否为当前聊天对象并决定是否呈现聊天消息
+     *     判断群聊是否为当前聊天对象并决定是否呈现聊天消息
      */
     public void updateChatObject(ChatInfo chatInfo,String account){
         if(chatInfo==null || account==null) return;
@@ -1067,7 +1067,7 @@ public class ChatAppClientController{
 
     /**
      * @param string    创建群聊失败的具体错误信息
-     * @Description:    向用户反馈创建群聊失败的具体信息
+     * 向用户反馈创建群聊失败的具体信息
      */
     public void throwError(String string){
 

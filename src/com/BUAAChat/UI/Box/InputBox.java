@@ -19,7 +19,7 @@ public class InputBox extends HBox {
      */
     TextField field;
     /**
-     * @Description 更改label的风格
+     * 更改label的风格
      * @param text    设置输入框的标签
      * @param x       设置位置
      * @param y       设置位置
@@ -43,28 +43,28 @@ public class InputBox extends HBox {
                 "    -fx-background-color: #447bd4;\n");
     }
     /**
-     * @Description 更改label的风格
+     * 更改label的风格
      * @param fx    自定义的fxStyle
      **/
     public void changeLabelColour(String fx){
         label.setStyle(fx);
     }
     /**
-     * @Description 返回输入框的内容
+     *  返回输入框的内容
      * @return 输入的文本信息
      **/
     public String getMessage(){
         return field.getText();
     }
     /**
-     * @Description 设置输入框提示
+     *  设置输入框提示
      * @param hint    输入框提示内容
      **/
     public void setHint(String hint){
         field.setPromptText(hint);
     }
     /**
-     * @Description 返回field便于修改
+     *  返回field便于修改
      * @return field 该Hox的TextField
      **/
     public TextField getField() {

@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author 符观集
  * @Description:   登录和注册的界面
- * @date 2023/12/16 20:09
+ * @date 2023/11/9 20:09
  */
 
 public class LoginClient extends Application {
@@ -99,7 +99,7 @@ public class LoginClient extends Application {
 
     /**
      * @param stage 应用程序展现的stage
-     * @Description: 初始化登录注册的界面并显示
+     *  初始化登录注册的界面并显示
      */
     @Override
     public void start(Stage stage) {
@@ -132,7 +132,7 @@ public class LoginClient extends Application {
     }
 
     /**
-     * @Description: 初始化登录成功的界面
+     *  初始化登录成功的界面
      */
     public void initRegisterSuccessScene(){
         Group registerSuccesGroup = new Group();
@@ -146,7 +146,7 @@ public class LoginClient extends Application {
     }
 
     /**
-     * @Description: 初始化注册的界面
+     *  初始化注册的界面
      */
     public void initRegisterScene() {
         final String[] AvatarName = {"hutao.png"};
@@ -356,7 +356,7 @@ public class LoginClient extends Application {
     }
 
     /**
-     * @Description: 初始化注册的界面
+     *  初始化注册的界面
      */
     public void initLoginScene() {
         loginGroup = new Group();
@@ -551,7 +551,7 @@ public class LoginClient extends Application {
 
     /**
      * @param string    注册失败时抛出的错误信息
-     * @Description:    用户注册失败时反馈错误信息
+     *     用户注册失败时反馈错误信息
      */
     public void throwError(String string){
 
@@ -565,7 +565,7 @@ public class LoginClient extends Application {
 
     /**
      * @param string    登录失败时抛出的错误信息
-     * @Description:    登录失败时向用户反馈错误信息
+     *     登录失败时向用户反馈错误信息
      */
     public void throwLoginError(String string){
 
@@ -597,7 +597,7 @@ public class LoginClient extends Application {
 
     /**
      * @param file  用于判断的文件
-     * @Description: 判断文件是否为图片
+     *  判断文件是否为图片
      * @return boolean
      */
     private boolean isImage(File file) {
@@ -608,7 +608,7 @@ public class LoginClient extends Application {
     }
 
     /**
-     * @Description: 转换为注册成功界面
+     *  转换为注册成功界面
      */
     public void changeRegisterSuccess(){
         privateStage.setScene(registerSuccessScene);

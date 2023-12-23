@@ -87,7 +87,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
-     *  @Description: 初始化/更改 黑夜界面
+     *   初始化/更改 黑夜界面
      */
     public void initDark(){
         initDarkRootStyle();
@@ -101,7 +101,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
-     *  @Description: 初始化/更改 白天界面
+     *   初始化/更改 白天界面
      */
     public void initWhite(){
         initWhiteRootLayout();
@@ -116,21 +116,21 @@ public class ChatAppClient extends Application {
 
 
     /**
-     *  @Description:  将舞台转换为白天背景
+     *   将舞台转换为白天背景
      */
     public void changeWhiteStyle(){
         primaryStage.setScene(whiteScene);
     }
 
     /**
-     *  @Description:  将舞台转换为黑夜背景
+     *    将舞台转换为黑夜背景
      */
     public void changeDarkStyle(){
         primaryStage.setScene(darkScene);
     }
 
     /**
-     *  @Description: 初始化白天主题部件
+     *   初始化白天主题部件
      */
     public void initWhiteRootLayout() {
         try {
@@ -148,7 +148,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
-     * @Description: 初始化黑夜主题部件
+     *  初始化黑夜主题部件
      */
     public void initDarkRootStyle() {
         try {
@@ -177,7 +177,7 @@ public class ChatAppClient extends Application {
 
     /**
      * @param style 设置主题
-     * @Description: 更改主题
+     *  更改主题
      */
     public void setStyle(int style) {
         Style = style;
@@ -185,7 +185,7 @@ public class ChatAppClient extends Application {
 
     /**
      * @param chatInfo  传入的新的聊天消息
-     * @Description: 更新新的聊天消息
+     *  更新新的聊天消息
      */
     public void updateChat(ChatInfo chatInfo){
         if(Style==1){
@@ -216,7 +216,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
-     * @Description: 更新好友列表
+     *  更新好友列表
      */
     public void updateFriendList(){
         if(Style==1){
@@ -236,7 +236,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
-     * @Description: 更新好友请求
+     *  更新好友请求
      */
     public void updateNewFriend(){
         if(Style==1){
@@ -252,7 +252,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
-     * @Description: 更新加入的群聊
+     *  更新加入的群聊
      */
     public void updateGroupList(){
         if(Style==1){
