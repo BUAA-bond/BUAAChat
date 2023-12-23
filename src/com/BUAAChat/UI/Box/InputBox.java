@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 /**
  * @author 符观集
- * @Description: 为了便于UI设置自己定义的HBox，主要表现形式为label加TextField
+ * 为了便于UI设置自己定义的HBox，主要表现形式为label加TextField
  * @date 2023/11/9 20:13
  */
 public class InputBox extends HBox {

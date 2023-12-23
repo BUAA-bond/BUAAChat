@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * @author 符观集
- * @Description:    控制界面布局的部件
+ * 控制界面布局的部件
  * @date 2023/12/3 20:09
  */
 public class ChatAppClientController{
@@ -509,7 +509,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/8
-     * @Description:  设置好友列表的展示样式
+     * 设置好友列表的展示样式
      */
     class FriendListCell<T extends UserInfo> extends ListCell<T> {
         @Override
@@ -535,7 +535,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/19
-     * @Description:  设置群聊列表的展示样式
+     * 设置群聊列表的展示样式
      */
     class GroupListCell<T extends GroupInfo> extends ListCell<T> {
         @Override
@@ -562,7 +562,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/19
-     * @Description: 设置创建群聊时好友列表的展示样式
+     * 设置创建群聊时好友列表的展示样式
      */
     class addGroupListCell<T extends UserInfo> extends ListCell<T> {
         public final CheckBox checkBox = new CheckBox();
@@ -880,7 +880,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/17
-     * @Description: 设置好友申请呈现的样式
+     * 设置好友申请呈现的样式
      */
     class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
@@ -962,7 +962,7 @@ public class ChatAppClientController{
     /**
      * @author 符观集
      * @date 2023/12/17
-     * @Description: 设置搜索到的好友展示的样式
+     * 设置搜索到的好友展示的样式
      */
     class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();

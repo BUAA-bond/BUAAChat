@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * @author 符观集
- * @Description:   登录和注册的界面
+ * 登录和注册的界面
  * @date 2023/11/9 20:09
  */
 

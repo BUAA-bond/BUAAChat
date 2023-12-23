@@ -18,8 +18,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
+ * 应用程序主界面
  * @author 符观集
- * @Description:    应用程序主界面
  * @date 2023/11/29 19:29
  */
 public class ChatAppClient extends Application {
