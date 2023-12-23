@@ -125,8 +125,9 @@ public class Client implements Runnable {
 
     /**
      * 搜索用户
+     *
      * @param account
-     * @return ArrayList<UserInfo>
+     * @return {@link ArrayList}<{@link UserInfo}>
      */
     public ArrayList<UserInfo> searchUser(String account){
         ArrayList<UserInfo> tmp=new ArrayList<>();
@@ -188,8 +189,9 @@ public class Client implements Runnable {
 
     /**
      * 获取 好友请求信息 反馈
+     *
      * @param json
-     * @return ArrayList<RequestInfo>
+     * @return {@link ArrayList}<{@link RequestInfo}>
      */
     public ArrayList<RequestInfo> getAllRequestInfoFeedback(String json){
         System.out.println("getAllRequests:");
@@ -230,9 +232,10 @@ public class Client implements Runnable {
 
     /**
      * 获取当前用户 所有朋友信息 的反馈
+     *
      * @param json
      * @param sign
-     * @return ArrayList<UserInfo>
+     * @return {@link ArrayList}<{@link UserInfo}>
      */
     public ArrayList<UserInfo> getAllFriendsInfoFeedback(String json,int sign){
         System.out.println("getAllFriends:");
@@ -252,9 +255,10 @@ public class Client implements Runnable {
 
     /**
      * 获取当前用户 所有群信息 的反馈
+     *
      * @param json
      * @param sign
-     * @return ArrayList<GroupInfo>
+     * @return {@link ArrayList}<{@link GroupInfo}>
      */
     public ArrayList<GroupInfo> getAllGroupsInfoFeedback(String json,int sign){
         System.out.println("getAllGroups:");
@@ -341,9 +345,10 @@ public class Client implements Runnable {
 
     /**
      * 初始化朋友
+     *
      * @param jsonArray
      * @param sign
-     * @return ArrayList<UserInfo>
+     * @return {@link ArrayList}<{@link UserInfo}>
      */
     public ArrayList<UserInfo> setFriends(JsonArray jsonArray,int sign){
         ArrayList<UserInfo> tmp=new ArrayList<>();
@@ -369,9 +374,10 @@ public class Client implements Runnable {
 
     /**
      * 初始化群
+     *
      * @param jsonArray
      * @param sign
-     * @return ArrayList<GroupInfo>
+     * @return {@link ArrayList}<{@link GroupInfo}>
      */
     public ArrayList<GroupInfo> setGroups(JsonArray jsonArray,int sign){
         ArrayList<GroupInfo> tmp=new ArrayList<>();

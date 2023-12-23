@@ -314,9 +314,12 @@ public class Sender {
         Message msg = new Message(user.getAccount(), toUser,gson.toJson(jsonObject));
         send(msg);
     }
+
     /**
      * 反馈好友申请
-     * @param
+     * @param toUser
+     * @param name
+     * @param avatar
      * @param choose
      */
     public void sendRequestFeedback(String toUser,String name,String avatar,boolean choose){

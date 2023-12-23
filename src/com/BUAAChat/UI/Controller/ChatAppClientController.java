@@ -25,8 +25,8 @@ import java.util.List;
 
 
 /**
+ * 控制界面布局的部件
  * @author 符观集
- * @Description:    控制界面布局的部件
  * @date 2023/12/3 20:09
  */
 public class ChatAppClientController{
