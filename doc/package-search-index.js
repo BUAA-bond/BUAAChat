@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"com.BUAAChat"},{"l":"com.BUAAChat.Server.Config"},{"l":"com.BUAAChat.Server.Database"},{"l":"com.BUAAChat.Server.Message"},{"l":"com.BUAAChat.Server.Server"},{"l":"com.BUAAChat.Server.Util"},{"l":"所有程序包","u":"allpackages-index.html"}];updateSearchResults();
