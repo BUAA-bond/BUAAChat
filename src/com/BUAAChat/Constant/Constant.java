@@ -23,10 +23,6 @@ public class Constant {
      */
     public static final int port=10005;
     /**
-     *客户端
-     */
-    public static Client client;
-    /**
      *界面
      */
     public static ChatAppClient chatAppClient;

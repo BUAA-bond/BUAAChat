@@ -31,6 +31,14 @@ public class RequestInfo {
      */
     public int type;
 
+    /**
+     * 构造器
+     * @param from 发送者账号
+     * @param to    接收者账号
+     * @param name  发送者名字
+     * @param avatarPath    发送者头像
+     * @param type  消息的状态
+     */
     public RequestInfo(String from, String to, String name, String avatarPath, int type) {
         this.from = from;
         this.to = to;
@@ -39,6 +47,9 @@ public class RequestInfo {
         this.type = type;
     }
 
+    /**
+     *无参构造器
+     */
     public RequestInfo() {
     }
 }

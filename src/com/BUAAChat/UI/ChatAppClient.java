@@ -16,7 +16,6 @@ import javafx.stage.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import static com.BUAAChat.Constant.Constant.client;
 
 /**
  * @author 符观集
@@ -73,7 +72,7 @@ public class ChatAppClient extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("缘深");
         this.primaryStage.getIcons().add(new Image("com/BUAAChat/image/icon/icon_naxida.jpg"));
-        user = client.getUser();
+        user = Client.getClient().getUser();
         friends =  user.getFriends();
         groups =  user.getGroups();
         newFriendRequest = user.getRequests();
@@ -81,7 +80,7 @@ public class ChatAppClient extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent event) {
                 System.out.println("Window is closing...");
-                client.logout();
+                Client.getClient().logout();
             }
         });
         primaryStage.show();
@@ -222,12 +221,14 @@ public class ChatAppClient extends Application {
     public void updateFriendList(){
         if(Style==1){
             if(whiteController!=null){
+                friends=user.getFriends();
                 whiteController.initFriends(friends);
                 whiteController.initAddGroup(friends);
             }
         }
         else {
             if(darkController!=null){
+                friends=user.getFriends();
                 darkController.initFriends(friends);
                 darkController.initAddGroup(friends);
             }

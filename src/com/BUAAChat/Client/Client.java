@@ -7,7 +7,6 @@ import com.BUAAChat.Info.UserInfo;
 import com.BUAAChat.Message;
 import com.BUAAChat.MyUtil.MyUtil;
 import com.google.gson.*;
-import javafx.application.Platform;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -44,13 +43,31 @@ public class Client implements Runnable {
     /**
      *与client绑定的当前用户
      */
-    private User user=new User();
+    private User user=User.getUser();
     /**
      *每个操作规定的统一等待时间
      */
     private static int sleepTime=200;
-    public Client() {
+    /**
+     *单例模式，唯一的Client实例
+     */
+    private static Client client=null;
+
+    /**
+     *单例模式，构造器私有
+     */
+    private Client() {
     }
+
+    /**
+     * 单例模式，获取client实例
+     * @return Client
+     */
+    public static Client getClient() {
+        if(client==null) client=new Client();
+        return client;
+    }
+
     /**
      *与服务器建立连接
      */
@@ -58,7 +75,7 @@ public class Client implements Runnable {
         try {
             this.socket=new Socket(host,port);
             //有顺序要求，不然会堵塞，先os再is
-            sender=new Sender(socket,user);
+            sender=new Sender(socket);
             is=socket.getInputStream();
             ois=new ObjectInputStream(is);
         } catch (IOException e) {
@@ -91,12 +108,13 @@ public class Client implements Runnable {
         sender.getAllRequestInfoRequest(account);
         sleep(sleepTime);
     }
+
+    UserInfo tmpGetUserInfo=null;
     /**
      * 获取指定用户的信息
      * @param account
-     * @return {@link UserInfo}
+     * @return UserInfo
      */
-    UserInfo tmpGetUserInfo=null;
     public UserInfo getUserInfo(String account){
         sender.getInfoRequest(account,"401");
         System.out.println("getUserInfo:"+account);
@@ -108,7 +126,7 @@ public class Client implements Runnable {
     /**
      * 搜索用户
      * @param account
-     * @return {@link ArrayList}<{@link UserInfo}>
+     * @return ArrayList<UserInfo>
      */
     public ArrayList<UserInfo> searchUser(String account){
         ArrayList<UserInfo> tmp=new ArrayList<>();
@@ -119,7 +137,7 @@ public class Client implements Runnable {
     /**
      * 获取指定群的信息
      * @param account
-     * @return {@link GroupInfo}
+     * @return GroupInfo
      */
     public GroupInfo getGroupInfo(String account){
         sender.getGroupInfoRequest(account);
@@ -128,8 +146,8 @@ public class Client implements Runnable {
     }
 
     /**
-     * 获取某个群聊信息的反馈
-     * @return {@link GroupInfo}
+     * 获取某个群聊信息的 反馈
+     * @return GroupInfo
      */
     public GroupInfo getGroupInfoFeedback(){
         JsonObject jsonObject1=getJsonObjectFromMsg("403");
@@ -153,7 +171,7 @@ public class Client implements Runnable {
     /**
      * 获取用户信息的反馈
      * @param json
-     * @return {@link UserInfo}
+     * @return UserInfo
      */
     public UserInfo getUserInfoFeedback(String json){
         System.out.println("getUserInfoFeedback"+json);
@@ -169,24 +187,9 @@ public class Client implements Runnable {
     }
 
     /**
-     * 获取用户信息的反馈，重载
-     * @return {@link UserInfo}
-     */
-    public UserInfo getUserInfoFeedback(){
-        JsonObject jsonObject = getJsonObjectFromMsg("401");
-        if (jsonObject.get("status").getAsInt() != 9000) return null;
-        JsonObject data = jsonObject.get("data").getAsJsonObject();
-        String avatar = data.get("avatar").getAsString();
-        String account = data.get("account").getAsString();
-        String name = data.get("name").getAsString();
-        UserInfo userInfo = new UserInfo(account,name, avatar);
-        return userInfo;
-    }
-
-    /**
      * 获取 好友请求信息 反馈
      * @param json
-     * @return {@link ArrayList}<{@link RequestInfo}>
+     * @return ArrayList<RequestInfo>
      */
     public ArrayList<RequestInfo> getAllRequestInfoFeedback(String json){
         System.out.println("getAllRequests:");
@@ -205,12 +208,14 @@ public class Client implements Runnable {
                 String account_B=requestObject.get("recipient").getAsString();
                 String type=requestObject.get("status").getAsString();
                 //获取对话双方中，另一个人的信息
+                UserInfo userInfo=null;
                 if(account_A.equals(user.getAccount())){
-                    sender.getInfoRequest(account_B,"401");
+                    userInfo=getUserInfo(account_B);
+                    //sender.getInfoRequest(account_B,"401");
                 }else{
-                    sender.getInfoRequest(account_A,"401");
+                    userInfo=getUserInfo(account_A);
+                    //sender.getInfoRequest(account_A,"401");
                 }
-                UserInfo userInfo=getUserInfoFeedback();
                 requestInfo.from=account_A;
                 requestInfo.to=account_B;
                 requestInfo.name=userInfo.name;
@@ -227,7 +232,7 @@ public class Client implements Runnable {
      * 获取当前用户 所有朋友信息 的反馈
      * @param json
      * @param sign
-     * @return {@link ArrayList}<{@link UserInfo}>
+     * @return ArrayList<UserInfo>
      */
     public ArrayList<UserInfo> getAllFriendsInfoFeedback(String json,int sign){
         System.out.println("getAllFriends:");
@@ -249,7 +254,7 @@ public class Client implements Runnable {
      * 获取当前用户 所有群信息 的反馈
      * @param json
      * @param sign
-     * @return {@link ArrayList}<{@link GroupInfo}>
+     * @return ArrayList<GroupInfo>
      */
     public ArrayList<GroupInfo> getAllGroupsInfoFeedback(String json,int sign){
         System.out.println("getAllGroups:");
@@ -338,7 +343,7 @@ public class Client implements Runnable {
      * 初始化朋友
      * @param jsonArray
      * @param sign
-     * @return {@link ArrayList}<{@link UserInfo}>
+     * @return ArrayList<UserInfo>
      */
     public ArrayList<UserInfo> setFriends(JsonArray jsonArray,int sign){
         ArrayList<UserInfo> tmp=new ArrayList<>();
@@ -366,7 +371,7 @@ public class Client implements Runnable {
      * 初始化群
      * @param jsonArray
      * @param sign
-     * @return {@link ArrayList}<{@link GroupInfo}>
+     * @return ArrayList<GroupInfo>
      */
     public ArrayList<GroupInfo> setGroups(JsonArray jsonArray,int sign){
         ArrayList<GroupInfo> tmp=new ArrayList<>();
@@ -453,7 +458,7 @@ public class Client implements Runnable {
     /**
      * 根据code读取信息，如果不符合的就转发，然后一直读到符合为止
      * @param code
-     * @return {@link JsonObject}
+     * @return JsonObject
      */
     public JsonObject getJsonObjectFromMsg(String code){
         JsonObject jsonObject=null;
@@ -477,12 +482,12 @@ public class Client implements Runnable {
         return jsonObject;
     }
 
+    boolean tmpChangePassword=false;
     /**
      * 修改密码
      * @param password
      * @return boolean
      */
-    boolean tmpChangePassword=false;
     public boolean changePassword(String password){
         //发送请求
         sender.changePasswordRequest(password);
@@ -509,10 +514,10 @@ public class Client implements Runnable {
         }
     }
 
+    boolean tmpLogout=false;
     /**
      * 登出
      */
-    boolean tmpLogout=false;
     public boolean logout(){
         //发送登出请求
         sender.logoutRequest();
@@ -549,12 +554,12 @@ public class Client implements Runnable {
         }
     }
 
+    boolean tmpRemoveFriend=false;
     /**
      * 删除好友
      * @param account
      * @return boolean
      */
-    boolean tmpRemoveFriend=false;
     public boolean removeFriend(String account){
         sender.removeFriendRequest(account);
         sleep(sleepTime);
@@ -593,15 +598,15 @@ public class Client implements Runnable {
         tmpRemoveFriend=false;
         return false;
     }
-
+    boolean tmpBuildGroup=false;
     /**
+     * 建群
      * @param gAccount
      * @param name
      * @param avatar
      * @param members
      * @return boolean
      */
-    boolean tmpBuildGroup=false;
     public boolean buildGroup(String gAccount,String name,String avatar,ArrayList<UserInfo> members){
         System.out.println("buildGroup:"+gAccount+" name:"+name);
         //发送请求
@@ -641,13 +646,13 @@ public class Client implements Runnable {
         return false;
     }
 
+    boolean tmpJoinGroup=false;
     /**
      * 加入群聊
      * @param userInfo
      * @param groupAccount
      * @return boolean
      */
-    boolean tmpJoinGroup=false;
     public boolean joinGroup(UserInfo userInfo,String groupAccount){
         System.out.println(userInfo.account+" joinGroup:"+groupAccount);
         sender.joinGroupRequest(userInfo.account,groupAccount);
@@ -683,11 +688,11 @@ public class Client implements Runnable {
         return true;
     }
 
+    boolean tmpModifyUserName=false;
     /**
-     * 修改用户名
+     * 修改名字
      * @param name
      */
-    boolean tmpModifyUserName=false;
     public boolean modifyUserName(String name){
         //发送请求
         sender.modifyUserNameRequest(name);
@@ -713,11 +718,11 @@ public class Client implements Runnable {
         return true;
     }
 
+    boolean tmpModifyUserAvatar=false;
     /**
      * 修改头像
      * @return
      */
-    boolean tmpModifyUserAvatar=false;
     public boolean modifyUserAvatar(String avatarPath){
         //发送请求
         sender.modifyUserAvatarRequest(avatarPath);
@@ -750,7 +755,7 @@ public class Client implements Runnable {
     }
 
     /**
-     * 接收 消息
+     * 接收消息
      * @param json
      */
     public void receiveText(String json){
@@ -759,9 +764,13 @@ public class Client implements Runnable {
         if(jsonObject.get("status").getAsInt()==9000){
             //服务器返回的 发送信息成功与否反馈 不是好友消息
             return;
+        }else if(jsonObject.get("status").getAsInt()==9104){
+            //好友已经把你删除
+            System.out.println("你已被对方删除");
+             return;
         }else{
-            //服务器返回的 发送信息成功与否反馈 不是好友消息
             JsonObject data=jsonObject.get("data").getAsJsonObject();
+            //服务器返回的 发送信息成功与否反馈 不是好友消息
             if(data.get("from").getAsString().equals(user.getAccount())){
                 return;
             }
@@ -830,7 +839,7 @@ public class Client implements Runnable {
     }
 
     /**
-     * 处理好友申请的反馈，通过的话就将好友加入列表
+     * 处理好友申请的 反馈，通过的话就将好友加入列表
      * @param json
      * @return boolean
      */
@@ -875,7 +884,7 @@ public class Client implements Runnable {
     /**
      * 接收好友申请
      * @param json
-     * @return {@link UserInfo}
+     * @return UserInfo
      */
     public UserInfo receiveAddFriendRequest(String json){
         System.out.println("receiveAddFriendRequest:"+json);
@@ -936,6 +945,7 @@ public class Client implements Runnable {
                 break;
             case "402"://初始化朋友
                 user.setFriends(getAllFriendsInfoFeedback(json,0));
+                updateFriendList();
                 break;
             case "404"://更新群
                 user.setGroups(getAllGroupsInfoFeedback(json,0));
@@ -952,7 +962,7 @@ public class Client implements Runnable {
 
     /**
      * 接收所有的消息，后续再根据消息类型作不同处理
-     * @return {@link Message}
+     * @return Message
      */
     public Message receiveMessage(){
         try {
@@ -996,7 +1006,7 @@ public class Client implements Runnable {
     }
 
     /**
-     * 休眠，，一般用于发送请求过后，等待反馈信息
+     * 休眠，一般用于发送请求过后，等待反馈信息
      * @param time
      */
     public void sleep(int time){
@@ -1007,6 +1017,10 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+     * 设置client的登录状态
+     * @param login
+     */
     public void setLogin(boolean login) {
         isLogin = login;
     }
@@ -1019,6 +1033,10 @@ public class Client implements Runnable {
         return socket;
     }
 
+    /**
+     * 获取输出工具sender
+     * @return Sender
+     */
     public Sender getSender() {
         return sender;
     }

@@ -20,11 +20,13 @@ public class UserInfo {
      *用户账号
      */
     public String account;
-    public UserInfo(String name, String avatarPath) {
-        this.name = name;
-        this.avatarPath = avatarPath;
-    }
 
+    /**
+     * 构造器
+     * @param account 账号
+     * @param name 名字
+     * @param avatarPath 头像路径
+     */
     public UserInfo(String account,String name, String avatarPath) {
         this.name = name;
         this.avatarPath = avatarPath;

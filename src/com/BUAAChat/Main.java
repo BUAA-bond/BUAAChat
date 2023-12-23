@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static com.BUAAChat.Constant.Constant.client;
 import static com.BUAAChat.Constant.Constant.chatAppClient;
 public class Main {
     public static void main(String[] args) {
@@ -31,7 +30,8 @@ public class Main {
             LoginClient loginClient = new LoginClient();
             chatAppClient=new ChatAppClient();
             RegisterInfo registerInfo = new RegisterInfo();
-            client = new Client();
+            //单例
+            Client client = Client.getClient();
             // 启动 JavaFX 应用程序
             loginClient.start(new Stage());
             // 设置回调函数

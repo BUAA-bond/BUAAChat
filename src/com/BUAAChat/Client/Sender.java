@@ -32,17 +32,24 @@ public class Sender {
      */
     private ObjectOutputStream oos=null;
 
-    private User user;
-
-    public Sender(Socket socket,User user) {
+    /**
+     * 构造器
+     * @param socket 连接的socket
+     */
+    public Sender(Socket socket) {
         try {
+            //获取输出流实例
             os=socket.getOutputStream();
             oos=new ObjectOutputStream(os);
-            this.user=user;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * 用于发送Message，主要是为了减少每次都try-catch的麻烦
+     * @param message
+     */
     public void send(Message message){
         try {
             oos.writeObject(message);
@@ -143,6 +150,7 @@ public class Sender {
      * @param password
      */
     public void changePasswordRequest(String password){
+        User user=User.getUser();
         JsonObject jsonObject = new JsonObject();
         JsonObject data=new JsonObject();
         jsonObject.addProperty("code","103");
@@ -157,6 +165,7 @@ public class Sender {
      * 发送登出 请求
      */
     public void logoutRequest(){
+        User user=User.getUser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code","109");
         JsonObject data=new JsonObject();
@@ -171,6 +180,7 @@ public class Sender {
      * @param account
      */
     public void removeFriendRequest(String account){
+        User user=User.getUser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code","204");
         JsonObject data = new JsonObject();
@@ -188,6 +198,7 @@ public class Sender {
      * @param avatar
      */
     public void buildGroupRequest(String gAccount,String name,String avatar){
+        User user=User.getUser();
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("code","209");
         JsonObject data=new JsonObject();
@@ -220,6 +231,7 @@ public class Sender {
      * @param name
      */
     public void modifyUserNameRequest(String name){
+        User user=User.getUser();
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("code","301");
         JsonObject data=new JsonObject();
@@ -235,6 +247,7 @@ public class Sender {
      * @param avatarPath
      */
     public void modifyUserAvatarRequest(String avatarPath){
+        User user=User.getUser();
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("code","302");
         JsonObject data=new JsonObject();
@@ -252,17 +265,18 @@ public class Sender {
      * @param toUser
      */
     public void sendText(String toUser,String content){
+        User user=User.getUser();
         //501发文本，502发视频，但现在只支持发文本
         String code="501";
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code",code);
         JsonObject data=new JsonObject();
-        data.addProperty("from",user.getAccount());
+        data.addProperty("from",User.getUser().getAccount());
         data.addProperty("to",toUser);
         data.addProperty("content",content);
         jsonObject.add("data",data);
         String json=new Gson().toJson(jsonObject);
-        Message message = new Message(user.getAccount(),toUser,json);
+        Message message = new Message(User.getUser().getAccount(),toUser,json);
         //发送
         send(message);
         HashMap<String, ArrayList<ChatInfo>> map=null;
@@ -288,6 +302,7 @@ public class Sender {
      * @param avatar
      */
     public void addFriendRequest(String toUser,String name,String avatar){
+        User user=User.getUser();
         System.out.println("addFriendRequest:"+name);
         Gson gson = new Gson();
         JsonObject jsonObject = new JsonObject();
@@ -306,6 +321,7 @@ public class Sender {
      */
     public void sendRequestFeedback(String toUser,String name,String avatar,boolean choose){
         System.out.println("receiveAddFriendFeedback:"+toUser);
+        User user=User.getUser();
         JsonObject jsonObject = new JsonObject();
         ArrayList<RequestInfo> requestInfos=user.getRequests();
         if(choose){
@@ -340,6 +356,10 @@ public class Sender {
         Message msg = new Message(user.getAccount(),toUser,content);
         send(msg);
     }
+
+    /**
+     *关闭流
+     */
     public void close(){
         try {
             if(os!=null) {os.close();}

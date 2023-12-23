@@ -29,19 +29,15 @@ public class GroupInfo {
      */
     public ArrayList<UserInfo> members=new ArrayList<>();
 
+    /**
+     * 构造器
+     * @param account 群号
+     * @param name  群名
+     * @param avatarPath 群头像路径
+     */
     public GroupInfo(String account,String name, String avatarPath) {
         this.name = name;
         this.avatarPath = avatarPath;
         this.account = account;
-    }
-
-    public GroupInfo() {
-    }
-
-    public GroupInfo(String name, String avatarPath, String account, ArrayList<UserInfo> members) {
-        this.name = name;
-        this.avatarPath = avatarPath;
-        this.account = account;
-        this.members = members;
     }
 }

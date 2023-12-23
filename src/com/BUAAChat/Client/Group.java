@@ -23,12 +23,15 @@ public class Group {
      */
     private HashMap<String, UserInfo> member=new HashMap<>();
 
-    public Group(HashMap<String, UserInfo> member) {
-
-    }
-
-    public Group(String name, HashMap<String, UserInfo> member) {
+    /**
+     * 构造器
+     * @param name 群名
+     * @param account 群账号
+     * @param member  群成员
+     */
+    public Group(String name, String account, HashMap<String, UserInfo> member) {
         this.name = name;
+        this.account = account;
         this.member = member;
     }
 

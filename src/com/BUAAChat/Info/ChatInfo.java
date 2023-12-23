@@ -2,7 +2,7 @@ package com.BUAAChat.Info;
 
 /**
  * @author 西西弗
- * @Description: 保存的是每一条信息的内容，发送时间，发送人的信息
+ * @Description: 保存的是每一条信息的内容
  * @date 2023/12/7 20:57
  */
 public class ChatInfo {
@@ -20,11 +20,23 @@ public class ChatInfo {
      *信息的发送时间
      */
     public String time;
+
+    /**
+     * 构造器
+     * @param fromUser 发送者的信息
+     * @param content   发送的内容
+     */
     public ChatInfo(UserInfo fromUser, String content) {
         this.fromUser = fromUser;
         this.content = content;
     }
 
+    /**
+     * 构造器
+     * @param fromUser 发送者
+     * @param content   内容
+     * @param time  发送时间
+     */
     public ChatInfo(UserInfo fromUser, String content, String time) {
         this.fromUser = fromUser;
         this.content = content;

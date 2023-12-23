@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.BUAAChat.Constant.Constant.client;
 
 /**
  * @author 符观集
@@ -267,7 +266,7 @@ public class ChatAppClientController{
             System.out.println("gAvatar:"+newGroupAvatarPath);
             if(!account.isEmpty() && !name.isEmpty() && MyUtil.judgeGroupAccount(account)){
                 //TODO 创建群聊 被选中的好友：selectedUserInfo  群头像路径： newGroupAvatarPath
-                client.buildGroup(account,name,newGroupAvatarPath,selectedUserInfo);
+                Client.getClient().buildGroup(account,name,newGroupAvatarPath,selectedUserInfo);
                 System.out.println("创建成功");
                 clearAddGroupFriends();
                 initCreateGroup();
@@ -288,7 +287,7 @@ public class ChatAppClientController{
             //更改头像 newAvatarPath
             if(newAvatarPath!=null && !newAvatarPath.isEmpty()){
                 Image image = new Image(newAvatarPath);
-                client.modifyUserAvatar(newAvatarPath);
+                Client.getClient().modifyUserAvatar(newAvatarPath);
                 AvatarShow.setImage(image);
             }
             String newName = newNameField.getText();
@@ -297,13 +296,13 @@ public class ChatAppClientController{
             newPasswordField.clear();
             if(!newName.isEmpty()){
                 //更改名字
-                client.modifyUserName(newName);
+                Client.getClient().modifyUserName(newName);
                 onlineUserName.setText(newName);
             }
             if(!newPassword.isEmpty() && MyUtil.judgePassword(newPassword)){
                 //TODO 更改密码
                 System.out.println("newPassword: "+newPassword+" hh");
-                client.changePassword(newPassword);
+                Client.getClient().changePassword(newPassword);
             }
         });
         changeStyleButton.setOnAction(event -> {
@@ -345,7 +344,7 @@ public class ChatAppClientController{
             //处理新的好友事件
             if (selectedUser != null) {
                 if (selectedUser.account.equals("newFriend")) {
-                    initNewFriends(client.getUser().getRequests());
+                    initNewFriends(Client.getClient().getUser().getRequests());
                     newFriendScene.setVisible(true);
                     changeIdentityScene.setVisible(false);
                     friendContextMenu.hide();
@@ -380,7 +379,7 @@ public class ChatAppClientController{
         friendContextMenu.getItems().add(deleteItem);
         deleteItem.setOnAction(event -> {
             //TODO 删除好友 ：chooseFriend
-
+            Client.getClient().removeFriend(chooseFriend.account);
             System.out.println("删除该好友:"+chooseFriend.account+" "+chooseFriend.name);
             chatAppClient.updateFriendList();
         });
@@ -475,7 +474,7 @@ public class ChatAppClientController{
      */
     void send(String message) {
         if (message.isEmpty()) return;
-        client.getSender().sendText(ObjectAccount,message);
+        Client.getClient().getSender().sendText(ObjectAccount,message);
         updateOnlineUserMessage(message);
     }
 
@@ -484,7 +483,7 @@ public class ChatAppClientController{
      * @Description: 根据用户输入的字符串获得对应好友
      */
     void searchFriend(String s){
-        ArrayList<UserInfo> users=client.searchUser(s);
+        ArrayList<UserInfo> users=Client.getClient().searchUser(s);
         getSearchFriendListView(users);
     }
 
@@ -670,6 +669,7 @@ public class ChatAppClientController{
         });
         chooseFriendTab.setOnSelectionChanged(event -> {
             if(chooseFriendTab.isSelected()){
+                Client.getClient().getSender().getAllFriendsInfoRequest(onlineUser.getAccount());
                 addGroupScene.setVisible(false);
                 ChatScene.setVisible(true);
                 searchListScene.setVisible(false);
@@ -678,7 +678,7 @@ public class ChatAppClientController{
         });
         chooseGroupTab.setOnSelectionChanged(event -> {
             if(chooseGroupTab.isSelected()) {
-                client.getSender().getAllGroupsInfoRequest(onlineUser.getAccount());
+                Client.getClient().getSender().getAllGroupsInfoRequest(onlineUser.getAccount());
                 addGroupScene.setVisible(false);
                 newFriendScene.setVisible(false);
                 ChatScene.setVisible(true);
@@ -918,7 +918,7 @@ public class ChatAppClientController{
                     Button accept = new Button("接受");
                     Button reject = new Button("拒绝");
                     accept.setOnAction(event -> {
-                        client.getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, true);
+                        Client.getClient().getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, true);
                         item.type = 1;
                         Type.setText("已接受");
                         rightHbox.getChildren().clear();
@@ -926,7 +926,7 @@ public class ChatAppClientController{
                         updateItem(item,false);
                     });
                     reject.setOnAction(event -> {
-                        client.getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, false);
+                        Client.getClient().getSender().sendRequestFeedback(item.from,item.name, item.avatarPath, false);
                         item.type = -1;
                         Type.setText("已拒绝");
                         rightHbox.getChildren().clear();
@@ -1007,7 +1007,7 @@ public class ChatAppClientController{
                 else{
                     Button add = new Button("加好友");
                     add.setOnAction(event -> {
-                        client.getSender().addFriendRequest(item.account, item.name,item.avatarPath);
+                        Client.getClient().getSender().addFriendRequest(item.account, item.name,item.avatarPath);
                         type = 2;
                         Type.setText("已申请");
                         rightHbox.getChildren().clear();

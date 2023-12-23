@@ -21,6 +21,12 @@ public class Message implements Serializable {
      */
     private String content;
 
+    /**
+     * 构造器
+     * @param from 发送者账号
+     * @param to    接收者账号
+     * @param content   内容
+     */
     public Message(String from, String to, String content) {
         this.from = from;
         this.to = to;
