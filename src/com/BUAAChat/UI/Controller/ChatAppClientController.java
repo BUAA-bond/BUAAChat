@@ -801,7 +801,6 @@ public class ChatAppClientController{
     public void updateOnlineUserMessage(String message){
         HBox content = new HBox();
         content.setSpacing(10);
-        content.setAlignment(Pos.TOP_CENTER);
         Text text = new Text(message);
         text.setWrappingWidth(200); // 设置固定宽度
         text.setTextAlignment(TextAlignment.RIGHT);
@@ -820,7 +819,7 @@ public class ChatAppClientController{
         Avatar.setFitHeight(50);
         content.getChildren().add(textPane);
         content.getChildren().add(Avatar);
-        content.setAlignment(Pos.CENTER_RIGHT);
+        content.setAlignment(Pos.TOP_RIGHT);
         currentChatVbox.getChildren().add(content);
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
@@ -834,7 +833,6 @@ public class ChatAppClientController{
     public void updateOtherUserMessage(UserInfo otherUser,String message){
         HBox content = new HBox();
         content.setSpacing(10);
-        content.setAlignment(Pos.TOP_CENTER);
         VBox vBox = new VBox();
         Label name = new Label(otherUser.name);
         Text text = new Text(message);
@@ -857,7 +855,7 @@ public class ChatAppClientController{
         content.getChildren().add(Avatar);
         vBox.getChildren().addAll(name,textPane);
         content.getChildren().add(vBox);
-        content.setAlignment(Pos.CENTER_LEFT);
+        content.setAlignment(Pos.TOP_LEFT);
         currentChatVbox.getChildren().add(content);
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
