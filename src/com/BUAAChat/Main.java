@@ -1,8 +1,8 @@
 package com.BUAAChat;
 
 /**
+ * 程序主入口
  * @author 西西弗
- * @Description: 程序主入口
  * @date 2023/11/9 19:24
  */
 

@@ -3,8 +3,8 @@ package com.BUAAChat;
 import java.io.Serializable;
 
 /**
+ * 用于客户端和服务器的信息传输
  * @author 西西弗
- * @Description: 用于客户端和服务器的信息传输
  * @date 2023/11/9 20:12
  */
 public class Message implements Serializable {

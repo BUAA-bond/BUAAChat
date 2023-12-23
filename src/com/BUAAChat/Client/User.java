@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * 用户
  * @author 西西弗
- * @Description: 用户
  * @date 2023/11/17 16:48
  */
 public class User {

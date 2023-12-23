@@ -4,8 +4,8 @@ package com.BUAAChat.Info;
 import java.util.ArrayList;
 
 /**
+ * 用于描述群的信息（群号、群名、群头像）的类
  * @author 西西弗
- * @Description: 保存的是每一条信息的内容,发送时间，发送人的信息
  * @date 2023/12/7 20:57
  */
 public class GroupInfo {

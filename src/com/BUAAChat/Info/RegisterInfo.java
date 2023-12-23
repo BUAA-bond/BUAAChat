@@ -3,8 +3,8 @@ package com.BUAAChat.Info;
 import com.BUAAChat.MyUtil.MyUtil;
 
 /**
+ * 用于判断注册信息格式的类
  * @author 西西弗
- * @Description: 主要用于判断注册账号等等信息的格式
  * @date 2023/11/23 18:07
  */
 public class RegisterInfo {

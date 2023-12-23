@@ -1,8 +1,8 @@
 package com.BUAAChat.Info;
 
 /**
+ * 用于描述用户信息的类
  * @author 西西弗
- * @Description: 保存用户的信息
  * @date 2023/11/17 20:57
  */
 public class UserInfo {

@@ -15,8 +15,8 @@ import static com.BUAAChat.Constant.Constant.*;
 import static com.BUAAChat.MyUtil.MyUtil.*;
 
 /**
+ * 客户端类，用于处理各种交互
  * @author 西西弗
- * @Description: 客户端类，用于处理各种交互
  * @date 2023/11/17 10:05
  */
 public class Client implements Runnable {
