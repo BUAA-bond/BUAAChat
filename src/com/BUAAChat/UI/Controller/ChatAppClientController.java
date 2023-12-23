@@ -20,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.io.File;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,7 +202,7 @@ public class ChatAppClientController{
     /**
      *  创建群聊时选中的好友
      */
-    private static ArrayList<UserInfo> selectedUserInfo;
+    private  ArrayList<UserInfo> selectedUserInfo;
     /**
      *  当前聊天对象的账号
      */
@@ -232,7 +231,6 @@ public class ChatAppClientController{
      *  被选中的好友（删除用）
      */
     private UserInfo chooseFriend;
-
     /**
      *  初始化
      */
@@ -514,7 +512,7 @@ public class ChatAppClientController{
      * @date 2023/12/8
      * @Description: 设置好友列表的展示样式
      */
-    static class FriendListCell<T extends UserInfo> extends ListCell<T> {
+    class FriendListCell<T extends UserInfo> extends ListCell<T> {
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -535,13 +533,12 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
-
     /**
      * @author 符观集
      * @date 2023/12/19
      * @Description: 设置群聊列表的展示样式
      */
-    static class GroupListCell<T extends GroupInfo> extends ListCell<T> {
+    class GroupListCell<T extends GroupInfo> extends ListCell<T> {
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -568,7 +565,7 @@ public class ChatAppClientController{
      * @date 2023/12/19
      * @Description: 设置创建群聊时好友列表的展示样式
      */
-    static class addGroupListCell<T extends UserInfo> extends ListCell<T> {
+    class addGroupListCell<T extends UserInfo> extends ListCell<T> {
         public final CheckBox checkBox = new CheckBox();
         private final Label userInfoName = new Label();
         private final ImageView imageView = new ImageView();;
@@ -804,7 +801,7 @@ public class ChatAppClientController{
     public void updateOnlineUserMessage(String message){
         HBox content = new HBox();
         content.setSpacing(10);
-        content.setAlignment(Pos.CENTER);
+        content.setAlignment(Pos.TOP_CENTER);
         Text text = new Text(message);
         text.setWrappingWidth(200); // 设置固定宽度
         text.setTextAlignment(TextAlignment.RIGHT);
@@ -837,7 +834,7 @@ public class ChatAppClientController{
     public void updateOtherUserMessage(UserInfo otherUser,String message){
         HBox content = new HBox();
         content.setSpacing(10);
-        content.setAlignment(Pos.CENTER);
+        content.setAlignment(Pos.TOP_CENTER);
         VBox vBox = new VBox();
         Label name = new Label(otherUser.name);
         Text text = new Text(message);
@@ -871,13 +868,15 @@ public class ChatAppClientController{
      * @Description: 初始化/更新 好友申请
      */
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
+
         newFriendList.getItems().clear();
         if(newFriends==null) return;
         for (RequestInfo requestInfo : newFriends) {
             if(!requestInfo.from.equals(onlineUser.getAccount())) newFriendList.getItems().add(requestInfo);
         }
         // 设置列表的单元格工厂，以便自定义单元格显示内容
-        newFriendList.setCellFactory(param -> new newFriendListCell<RequestInfo>());
+
+        newFriendList.setCellFactory(param -> new newFriendListCell<>());
     }
 
     /**
