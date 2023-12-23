@@ -25,8 +25,8 @@ import java.util.List;
 
 
 /**
- * @author 符观集
  * 控制界面布局的部件
+ * @author 符观集
  * @date 2023/12/3 20:09
  */
 public class ChatAppClientController{
@@ -469,8 +469,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 发送当前用户输入的消息
      * @param message 用户输入的聊天消息
-     *  发送当前用户输入的消息
      */
     void send(String message) {
         if (message.isEmpty()) return;
@@ -479,8 +479,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 根据用户输入的字符串获得对应好友
      * @param s 搜索好友时输入的字符串
-     *  根据用户输入的字符串获得对应好友
      */
     void searchFriend(String s){
         ArrayList<UserInfo> users=Client.getClient().searchUser(s);
@@ -488,16 +488,16 @@ public class ChatAppClientController{
     }
 
     /**
+     * 指向应用程序
      * @param chatAppClient 控制的主应用程序
-     *  指向应用程序
      */
     public void setChatAppClient(ChatAppClient chatAppClient){
         this.chatAppClient = chatAppClient;
     }
 
     /**
-     * @param user 当前在线用户
      * 指向当前在线用户
+     * @param user 当前在线用户
      */
     public void initUser(User user){
         this.onlineUser = user;
@@ -507,9 +507,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 设置好友列表的展示样式
      * @author 符观集
      * @date 2023/12/8
-     * 设置好友列表的展示样式
      */
     class FriendListCell<T extends UserInfo> extends ListCell<T> {
         @Override
@@ -533,9 +533,9 @@ public class ChatAppClientController{
         // 可以添加其他方法和处理逻辑
     }
     /**
+     * 设置群聊列表的展示样式
      * @author 符观集
      * @date 2023/12/19
-     * 设置群聊列表的展示样式
      */
     class GroupListCell<T extends GroupInfo> extends ListCell<T> {
         @Override
@@ -560,9 +560,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 设置创建群聊时好友列表的展示样式
      * @author 符观集
      * @date 2023/12/19
-     * 设置创建群聊时好友列表的展示样式
      */
     class addGroupListCell<T extends UserInfo> extends ListCell<T> {
         public final CheckBox checkBox = new CheckBox();
@@ -609,8 +609,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 初始化/更新 好友列表
      * @param friends 好友列表
-     *  初始化/更新 好友列表
      */
     public void initFriends(ArrayList<UserInfo> friends){
         if(friends==null)return;
@@ -625,8 +625,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 初始化/更新 群聊列表
      * @param groups 群聊列表
-     *  初始化/更新 群聊列表
      */
     public void initGroups(ArrayList<GroupInfo> groups){
         if (groups==null)return;
@@ -639,8 +639,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 初始化/更新 创建群聊时的好友列表
      * @param friends   好友列表
-     *  初始化/更新 创建群聊时的好友列表
      */
     public void initAddGroup(ArrayList<UserInfo> friends){
         if(friends==null)return;
@@ -729,6 +729,7 @@ public class ChatAppClientController{
     }
 
     /**
+     * 获取指定路径下的所有图片文件
      * @param folder    文件路径
      * @return {@link List}<{@link File}> 获取到的所有图片文件
      */
@@ -747,9 +748,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 判断文件是否为图片
      * @param file 判断的文件
      * @return boolean
-     * 判断文件是否为图片
      */
     private boolean isImage(File file) {
         String fileName = file.getName().toLowerCase();
@@ -795,8 +796,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 将当前用户输入的消息呈现出来
      * @param message   更新当前用户输入的消息
-     *     将当前用户输入的消息呈现出来
      */
     public void updateOnlineUserMessage(String message){
         HBox content = new HBox();
@@ -826,9 +827,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 更新其他用户传来的信息并呈现出来
      * @param otherUser     其他用户
      * @param message       其他用户发的消息
-     *  更新其他用户传来的信息并呈现出来
      */
     public void updateOtherUserMessage(UserInfo otherUser,String message){
         HBox content = new HBox();
@@ -862,8 +863,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 初始化/更新 好友申请
      * @param newFriends 好友申请
-     *  初始化/更新 好友申请
      */
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
 
@@ -878,9 +879,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 设置好友申请呈现的样式
      * @author 符观集
      * @date 2023/12/17
-     * 设置好友申请呈现的样式
      */
     class newFriendListCell<T extends RequestInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
@@ -946,8 +947,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 更新搜索到的好友列表
      * @param friends 搜索到的好友信息列表
-     *  更新搜索到的好友列表
      */
     public void getSearchFriendListView(ArrayList<UserInfo> friends){
         searchFriendListView.getItems().clear();
@@ -960,9 +961,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 设置搜索到的好友展示的样式
      * @author 符观集
      * @date 2023/12/17
-     * 设置搜索到的好友展示的样式
      */
     class searchFriendListCell<T extends UserInfo> extends ListCell<T> {
         private final Label userInfoName = new Label();
@@ -1027,8 +1028,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 初始化聊天消息
      * @param chatInfos 聊天消息
-     *  初始化聊天消息
      */
     public void initChat(ArrayList<ChatInfo>chatInfos){
         currentChatVbox.getChildren().clear();
@@ -1043,8 +1044,8 @@ public class ChatAppClientController{
     }
 
     /**
+     * 判断发来的消息是否为当前聊天对象并决定是否呈现
      * @param chatInfo 其他用户发送的聊天消息
-     *  判断发来的消息是否为当前聊天对象并决定是否呈现
      */
     public void updateChatObject(ChatInfo chatInfo){
         if(chatInfo==null) return;
@@ -1054,9 +1055,9 @@ public class ChatAppClientController{
     }
 
     /**
+     * 判断群聊是否为当前聊天对象并决定是否呈现聊天消息
      * @param chatInfo  其他用户在群聊中发送的消息
      * @param account   群聊账号
-     *     判断群聊是否为当前聊天对象并决定是否呈现聊天消息
      */
     public void updateChatObject(ChatInfo chatInfo,String account){
         if(chatInfo==null || account==null) return;
@@ -1066,8 +1067,8 @@ public class ChatAppClientController{
     }
 
     /**
-     * @param string    创建群聊失败的具体错误信息
      * 向用户反馈创建群聊失败的具体信息
+     * @param string    创建群聊失败的具体错误信息
      */
     public void throwError(String string){
 

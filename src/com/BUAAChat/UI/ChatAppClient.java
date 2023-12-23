@@ -65,6 +65,7 @@ public class ChatAppClient extends Application {
     private int Style;
 
     /**
+     * 启动主程序
      * @param primaryStage  展现的舞台
      */
     @Override
@@ -169,6 +170,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
+     * 获得主程序舞台
      * @return {@link Stage}    应用给程序主舞台
      */
     public Stage getPrimaryStage() {
@@ -176,16 +178,16 @@ public class ChatAppClient extends Application {
     }
 
     /**
+     * 更改主题
      * @param style 设置主题
-     *  更改主题
      */
     public void setStyle(int style) {
         Style = style;
     }
 
     /**
+     * 更新新的聊天消息
      * @param chatInfo  传入的新的聊天消息
-     *  更新新的聊天消息
      */
     public void updateChat(ChatInfo chatInfo){
         if(Style==1){
@@ -200,6 +202,7 @@ public class ChatAppClient extends Application {
     }
 
     /**
+     * 更新群聊消息
      * @param chatInfo  新的群聊聊天信息
      * @param account   群聊的群号
      */
@@ -268,6 +271,12 @@ public class ChatAppClient extends Application {
             }
         }
     }
+
+    /**
+     * 测试用main函数（便于设置布局）
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         launch(args);
     }

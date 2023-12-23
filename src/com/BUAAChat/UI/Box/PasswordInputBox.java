@@ -5,8 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.layout.HBox;
 /**
- * @author 符观集
  * 为了便于UI设置自己定义的HBox，主要表现形式为label加PasswordField
+ * @author 符观集
  * @date 2023/12/1 20:15
  */
 public class PasswordInputBox extends HBox {

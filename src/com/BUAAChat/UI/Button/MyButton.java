@@ -2,8 +2,8 @@ package com.BUAAChat.UI.Button;
 
 import javafx.scene.control.Button;
 /**
- * @author 符观集
  * 为方便开发自定义的Button类
+ * @author 符观集
  * @date 2023/11/9 20:10
  */
 public class MyButton extends Button {

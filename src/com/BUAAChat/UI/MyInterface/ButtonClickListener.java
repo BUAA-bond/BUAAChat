@@ -7,6 +7,7 @@ package com.BUAAChat.UI.MyInterface;
  */
 public interface ButtonClickListener {
     /**
+     * 传递信息
      * @param messages 传递的信息
      */
     void onLoginButtonClick(String[] messages);

@@ -127,6 +127,10 @@ public class LoginClient extends Application {
         return loginPasswordBox.getMessage();
     }
 
+    /**
+     * 初始化
+     * @throws Exception
+     */
     public void init() throws Exception{
         super.init();
     }
