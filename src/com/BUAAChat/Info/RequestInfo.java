@@ -1,8 +1,8 @@
 package com.BUAAChat.Info;
 
 /**
+ * 用于描述加好友申请信息的类
  * @author 西西弗
- * @Description: 保存加好友申请的相关信息
  * @date 2023/12/13 10:05
  */
 public class RequestInfo {

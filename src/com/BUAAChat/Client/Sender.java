@@ -17,8 +17,8 @@ import java.util.HashMap;
 import static com.BUAAChat.MyUtil.MyUtil.*;
 
 /**
+ * 专门用于发送请求的类
  * @author 西西弗
- * @Description:
  * @date 2023/11/17 10:08
  */
 public class Sender {
@@ -314,9 +314,12 @@ public class Sender {
         Message msg = new Message(user.getAccount(), toUser,gson.toJson(jsonObject));
         send(msg);
     }
+
     /**
      * 反馈好友申请
-     * @param
+     * @param toUser
+     * @param name
+     * @param avatar
      * @param choose
      */
     public void sendRequestFeedback(String toUser,String name,String avatar,boolean choose){

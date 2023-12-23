@@ -5,8 +5,8 @@ import com.BUAAChat.Info.UserInfo;
 import java.util.HashMap;
 
 /**
+ * 群
  * @author 西西弗
- * @Description: 群
  * @date 2023/11/17 16:48
  */
 public class Group {

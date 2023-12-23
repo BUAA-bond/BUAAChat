@@ -6,8 +6,8 @@ import javafx.application.Platform;
 import static com.BUAAChat.Constant.Constant.chatAppClient;
 
 /**
+ * 工具类
  * @author 西西弗
- * @Description: 工具类
  * @date 2023/11/9 19:24
  */
 @SuppressWarnings({"all"})

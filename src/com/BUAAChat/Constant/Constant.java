@@ -4,8 +4,8 @@ import com.BUAAChat.Client.Client;
 import com.BUAAChat.UI.ChatAppClient;
 
 /**
+ * 用来记录public的静态变量
  * @author 西西弗
- * @Description: 用来记录public的静态变量
  * @date 2023/11/25 16:26
  */
 public class Constant {

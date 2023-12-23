@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * 用户
  * @author 西西弗
- * @Description: 用户
  * @date 2023/11/17 16:48
  */
 public class User {
@@ -123,7 +123,7 @@ public class User {
 
     /**
      * 获取 好友申请记录的数组
-     * @return ArrayList< RequestInfo>
+     * @return {@link ArrayList}<{@link RequestInfo}>
      */
     public ArrayList<RequestInfo> getRequests() {
         return requests;
@@ -139,7 +139,7 @@ public class User {
 
     /**
      * 获取用于记录用户与好友聊天的集合
-     * @return HashMap<String,ArrayList<ChatInfo>>
+     * @return {@link HashMap}<{@link String}, {@link ArrayList}<{@link ChatInfo}>>
      */
     public HashMap<String, ArrayList<ChatInfo>> getMessagesF() {
         return messagesF;
@@ -163,7 +163,9 @@ public class User {
 
     /**
      * 获取 朋友集合
-     * @return ArrayList<UserInfo>
+     *
+     * @return {@link ArrayList}<{@link UserInfo}>
+     * @retu
      */
     public ArrayList<UserInfo> getFriends() {
         return friends;
@@ -171,7 +173,8 @@ public class User {
 
     /**
      * 获取 群集合
-     * @return ArrayList<GroupInfo>
+     *
+     * @return {@link ArrayList}<{@link GroupInfo}>
      */
     public ArrayList<GroupInfo> getGroups() {
         return groups;
@@ -179,7 +182,8 @@ public class User {
 
     /**
      * 获取用于记录 用户在群中聊天信息的集合
-     * @return HashMap<String, ArrayList<ChatInfo>>
+     *
+     * @return {@link HashMap}<{@link String}, {@link ArrayList}<{@link ChatInfo}>>
      */
     public HashMap<String, ArrayList<ChatInfo>> getMessagesG() {
         return messagesG;
