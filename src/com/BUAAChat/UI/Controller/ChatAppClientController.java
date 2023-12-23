@@ -20,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.io.File;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,7 +202,7 @@ public class ChatAppClientController{
     /**
      *  创建群聊时选中的好友
      */
-    private static ArrayList<UserInfo> selectedUserInfo;
+    private  ArrayList<UserInfo> selectedUserInfo;
     /**
      *  当前聊天对象的账号
      */
@@ -224,7 +223,14 @@ public class ChatAppClientController{
      *  控制器所对应的主题
      */
     private int Style;
-
+    /**
+     * 右键选择好友时显示的菜单栏
+     */
+    private ContextMenu friendContextMenu;
+    /**
+     *  被选中的好友（删除用）
+     */
+    private UserInfo chooseFriend;
     /**
      *  初始化
      */
@@ -330,17 +336,21 @@ public class ChatAppClientController{
     /**
      *  @Description: 初始化好友列表点击事件
      */
-    void initFriendList(){
+    void initFriendList() {
+        friendContextMenu = new ContextMenu();
+        initFriendContextMenu();
+        friendListView.setContextMenu(friendContextMenu);
         friendListView.setOnMouseClicked(event -> {
             UserInfo selectedUser = friendListView.getSelectionModel().getSelectedItem();
             //处理新的好友事件
-            if (selectedUser!=null){
-                if(selectedUser.account.equals("newFriend")){
+            if (selectedUser != null) {
+                if (selectedUser.account.equals("newFriend")) {
                     initNewFriends(client.getUser().getRequests());
                     newFriendScene.setVisible(true);
                     changeIdentityScene.setVisible(false);
-                }
-                else{
+                    friendContextMenu.hide();
+                } else {
+                    chooseFriend = selectedUser;
                     sendToObjectName.setText(selectedUser.name);
                     changeIdentityScene.setVisible(false);
                     sendMessage.setEditable(true);
@@ -348,12 +358,33 @@ public class ChatAppClientController{
                     ObjectAccount = selectedUser.account;
                     ArrayList<ChatInfo> chatInfos = onlineUser.getMessagesF().get(ObjectAccount);
                     initChat(chatInfos);
-                    System.out.println("Selected Item: " + selectedUser.account+" "+selectedUser.name);
+                    System.out.println("Selected Item: " + selectedUser.account + " " + selectedUser.name);
                 }
+            }
+        });
+        friendListView.setOnContextMenuRequested(event -> {
+            // 检查所选对象
+            UserInfo selectedItem = friendListView.getSelectionModel().getSelectedItem();
+            if (selectedItem != null && selectedItem.account.equals("newFriend")) {
+                friendContextMenu.hide();
+                event.consume(); // 消耗事件，防止显示 ContextMenu
             }
         });
     }
 
+    /**
+     * @Description: 初始化右键点击好友列表时显示的菜单栏
+     */
+    public void initFriendContextMenu(){
+        MenuItem deleteItem = new MenuItem("删除好友");
+        friendContextMenu.getItems().add(deleteItem);
+        deleteItem.setOnAction(event -> {
+            //TODO 删除好友 ：chooseFriend
+
+            System.out.println("删除该好友:"+chooseFriend.account+" "+chooseFriend.name);
+            chatAppClient.updateFriendList();
+        });
+    }
     /**
      * @Description: 初始化群聊列表点击事件
      */
@@ -481,7 +512,7 @@ public class ChatAppClientController{
      * @date 2023/12/8
      * @Description: 设置好友列表的展示样式
      */
-    static class FriendListCell<T extends UserInfo> extends ListCell<T> {
+    class FriendListCell<T extends UserInfo> extends ListCell<T> {
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -502,13 +533,12 @@ public class ChatAppClientController{
         }
         // 可以添加其他方法和处理逻辑
     }
-
     /**
      * @author 符观集
      * @date 2023/12/19
      * @Description: 设置群聊列表的展示样式
      */
-    static class GroupListCell<T extends GroupInfo> extends ListCell<T> {
+    class GroupListCell<T extends GroupInfo> extends ListCell<T> {
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
@@ -535,7 +565,7 @@ public class ChatAppClientController{
      * @date 2023/12/19
      * @Description: 设置创建群聊时好友列表的展示样式
      */
-    static class addGroupListCell<T extends UserInfo> extends ListCell<T> {
+    class addGroupListCell<T extends UserInfo> extends ListCell<T> {
         public final CheckBox checkBox = new CheckBox();
         private final Label userInfoName = new Label();
         private final ImageView imageView = new ImageView();;
@@ -771,7 +801,6 @@ public class ChatAppClientController{
     public void updateOnlineUserMessage(String message){
         HBox content = new HBox();
         content.setSpacing(10);
-        content.setAlignment(Pos.CENTER);
         Text text = new Text(message);
         text.setWrappingWidth(200); // 设置固定宽度
         text.setTextAlignment(TextAlignment.RIGHT);
@@ -790,7 +819,7 @@ public class ChatAppClientController{
         Avatar.setFitHeight(50);
         content.getChildren().add(textPane);
         content.getChildren().add(Avatar);
-        content.setAlignment(Pos.CENTER_RIGHT);
+        content.setAlignment(Pos.TOP_RIGHT);
         currentChatVbox.getChildren().add(content);
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
@@ -804,7 +833,6 @@ public class ChatAppClientController{
     public void updateOtherUserMessage(UserInfo otherUser,String message){
         HBox content = new HBox();
         content.setSpacing(10);
-        content.setAlignment(Pos.CENTER);
         VBox vBox = new VBox();
         Label name = new Label(otherUser.name);
         Text text = new Text(message);
@@ -827,7 +855,7 @@ public class ChatAppClientController{
         content.getChildren().add(Avatar);
         vBox.getChildren().addAll(name,textPane);
         content.getChildren().add(vBox);
-        content.setAlignment(Pos.CENTER_LEFT);
+        content.setAlignment(Pos.TOP_LEFT);
         currentChatVbox.getChildren().add(content);
         chatAppClient.getPrimaryStage().show();
         currentChat.setVvalue(1.0);
@@ -838,13 +866,15 @@ public class ChatAppClientController{
      * @Description: 初始化/更新 好友申请
      */
     public void initNewFriends(ArrayList<RequestInfo> newFriends){
+
         newFriendList.getItems().clear();
         if(newFriends==null) return;
         for (RequestInfo requestInfo : newFriends) {
             if(!requestInfo.from.equals(onlineUser.getAccount())) newFriendList.getItems().add(requestInfo);
         }
         // 设置列表的单元格工厂，以便自定义单元格显示内容
-        newFriendList.setCellFactory(param -> new newFriendListCell<RequestInfo>());
+
+        newFriendList.setCellFactory(param -> new newFriendListCell<>());
     }
 
     /**
